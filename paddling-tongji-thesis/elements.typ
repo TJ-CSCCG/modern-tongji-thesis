@@ -2,6 +2,7 @@
 #import "@preview/tablex:0.0.9": cellx, tablex, gridx, hlinex, vlinex, colspanx, rowspanx
 #import "@preview/algo:0.3.5": algo, i, d, comment, code
 #import "@preview/gb7714-bilingual:0.2.3": multicite
+#import "@preview/wordometer:0.1.5": word-count-of
 
 #import "utils.typ": *
 
