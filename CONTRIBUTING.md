@@ -1,44 +1,48 @@
-# CONTRIBUTING
+# 贡献指南 | Contributing
 
-## Contents
+## 仓库结构 | Repository Structure
 
-- source files: as a template repository, "source files" are ".typ", ".bib" and some related files with other extension names.
-- doc files: including all ".typ" files and even "main.typ", which show how to use "source files".
-- config files: These files make our development and use of templates more standardlized (e.g. .gitignore).
+- **源文件**：`paddling-tongji-thesis/` 目录下的 `.typ` 模板文件。
+- **文档文件**：`init-files/` 目录下的 `.typ` 文件（包括 `main.typ`），用于展示模板的使用方法。
+- **配置文件**：规范开发与使用的文件（如 `.gitignore`、`typst.toml`、`.editorconfig`）。
 
-## How to contribute
+## 如何贡献 | How to Contribute
 
-### How to ask for help?
+### 寻求帮助 | Asking for Help
 
-Providing conditions where people ask for help and solve problems is also part of community. We hope to provide technique support in [Discussions](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst/discussions).
+我们通过 [Discussions](https://github.com/TJ-CSCCG/TongjiThesis-typst/discussions) 提供技术支持。
 
-It has to be **NOTICED** that: **DO NOT CONTACT WITH ANY CONTRIBUTOR THROUGH IM**!
+**请勿通过即时通讯工具直接联系贡献者。**
 
-### How to report a bug?
+### 反馈 Bug | Reporting a Bug
 
-If a bug is confirmed, you can raise it in the [Issues](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst/issues).
+如确认存在 Bug，请通过 [Issue](https://github.com/TJ-CSCCG/TongjiThesis-typst/issues) 模板提交反馈。
 
-### How to pull request?
+### 提交 Pull Request
 
-We recommend to follow this workflow step by step:
+1. Fork 本仓库。
+2. 将 Fork 后的仓库克隆到本地。
+3. 创建一个新分支进行修改。
+4. 提交更改到新分支。
+5. 将分支推送到你的 Fork 仓库。
+6. 从你的分支向本仓库发起 Pull Request。
 
-1. Fork this repository as upstream repository.
-2. Clone the repository forked from remote to local.
-3. Create a new local branch as a work branch.
-4. Commit some changes on the work branch.
-5. Push the new local branch to remote with commits.
-6. Pull request, from the new remote branch to any branch of upstream repository.
+### Pull Request 前的检查清单 | Before Your PR
 
-### Before your pull request
-
-Remember to check whether you have added, renamed or removed file in `init-files/`. If so, please update the `.github/patches/package_release.diff` and commit it along with your pull request.
-
-如果你新增、移动或删除了`init-files/`目录下的文件，请检查是否需要更新`.github/patches/package_release.diff`，并将其随PR一同提出。
+如果你新增、移动或删除了 `init-files/` 目录下的文件，请更新 `.github/patches/package_release.diff` 并随 PR 一同提交。
 
 > [!TIP]
-> You can use `git diff HEAD~1 HEAD > package_release.diff` to generate a patch that can be accepted.
+> 可以使用 `git diff HEAD~1 HEAD > .github/patches/package_release.diff` 生成补丁文件。
 
 > [!IMPORTANT]
-> We use `git apply` to apply the patch and generate a package-release branch. Please check if your patch can be applied successfully. If not, we may not be able to merge your branch.
->
-> 请务必确保patch可以被`git apply`命令应用。如果patch未更新或无法被正确应用，我们可能将无法合并您的分支。
+> 我们使用 `git apply` 应用补丁生成 `package` 分支用于 Typst Universe 发布。请确保补丁可以被正确应用，否则可能无法合并你的分支。
+
+## 项目历史 | Project History
+
+| 日期    | 贡献者                                      | 贡献内容                                                                                                         |
+| ------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 2024.06 | [FeO3](https://github.com/seashell11234455) | 项目起源，创建初始 Typst 模板                                                                                    |
+| 2024.07 | [RizhongLin](https://github.com/RizhongLin) | 开始贡献，完善模板格式、增加 Typst 教程，持续维护更新                                                            |
+| 2025.05 | —                                           | 全面对齐 LaTeX 模板：字体集系统、信息说明页、定理环境、附录、gb7714-bilingual 参考文献、双学科模式、CI/CD 工作流 |
+
+我们非常感谢以上贡献者的付出。如果您觉得本项目对您的毕业设计或论文有所帮助，希望您可以在致谢部分提及。

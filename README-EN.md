@@ -1,121 +1,165 @@
-# :page_facing_up: Tongji University Undergraduate Thesis Typst Template (STEM)
-
-[中文](README.md) | English
-
-> [!CAUTION]
-> Since the Typst project is still in the development stage and support for some features is not perfect, there may be some issues with this template. If you encounter problems while using it, please feel free to submit an issue or PR and we will try our best to solve it.
->
-> In the mean time, we also welcome you to use [our $\LaTeX$ template](https://github.com/TJ-CSCCG/tongji-undergrad-thesis).
-
-## Sample Display
-
-Below are displayed in order the "Cover", "Chinese Abstract", "Table of Contents", "Main Content", "References", and "Acknowledgments".
+# TongjiThesis Typst
 
 <p align="center">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0001.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0002.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0004.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0005.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0019.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0020.jpg" width="30%">
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/actions/workflows/test.yml"><img src="https://github.com/TJ-CSCCG/TongjiThesis-typst/actions/workflows/test.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis-typst?label=Release" alt="Release"></a>
+  <a href="https://typst.app/universe/package/paddling-tongji-thesis"><img src="https://img.shields.io/badge/Typst%20Universe-paddling--tongji--thesis-239dae" alt="Typst Universe"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/blob/dev/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="License"></a>
+  <img src="https://img.shields.io/badge/Typst-0.14+-239dae" alt="Typst 0.14+">
 </p>
 
-## Usage Instructions
+<p align="center">
+  <a href="README.md">中文</a> | English
+</p>
 
-### Online Web App
+Typst template for Tongji University undergraduate thesis (final project).
 
-#### Create Project
+> [!CAUTION]
+> This template is still in beta. Formatting and features may change with Typst updates. The Typst project itself is under rapid development and some typographic details (CJK font rendering, spacing, etc.) are not yet fully stable.
+>
+> **For formal use, please prefer the [LaTeX template](https://github.com/TJ-CSCCG/TongjiThesis)**, which has been validated by multiple cohorts of students and strictly aligns with official formatting requirements. The Typst template is kept in sync but is currently for preview and testing only.
 
-- Open [![svg of typst-tongjithesis](https://img.shields.io/badge/Typst-paddling--tongji--thesis-239dae)](https://www.overleaf.com/latex/templates/tongji-university-undergraduate-thesis-template/tfvdvyggqybn) and click `Create project in app`.
+---
 
-- Or select `Start from a template` in the [Typst Web App](https://typst.app), then choose `paddling-tongji-thesis`.
+## Features
 
-#### Upload Fonts
+- Cover, info page, bilingual abstracts, TOC, body, bibliography, acknowledgments
+- Dual discipline: `field: "science"` / `field: "humanities"`
+- Theorem environments (theorem, corollary, lemma, proposition, conjecture, assumption, definition, example, remark, proof)
+- Appendix (lettered sections A, B, C...)
+- GB/T 7714-2015 bilingual bibliography (`gb7714-bilingual` package)
+- Three-line tables (`tablex` + booktabs-style rules)
+- Algorithm typesetting (`algo` package)
+- Cross-references (`i-figured` package, chapter-prefixed numbering)
+- Circled number footnotes ①②③ (Unicode 1-50 + drawn circles 51+)
+- Six fontsets: `fandol` (default), `windows`, `mac`, `adobe`, `founder`, `noto` (Web App zero-config)
+- Character-level justification + optimized line breaks
 
-Download all font files from the [`fonts` branch](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst/tree/fonts) and upload them to the root directory of the project in the Typst Web App. You can then start using the template.
+---
+
+## Quick Start
+
+### Typst Web App
+
+Select `Start from a template` in the [Typst Web App](https://typst.app) and search for `paddling-tongji-thesis`.
+
+> **Web App users**: set `fontset: "noto"` in `metadata.typ` for zero-config usage.
 
 ### Local Usage
 
 #### 1. Install Typst
 
-Follow the [Typst official documentation](https://github.com/typst/typst?tab=readme-ov-file#installation) to install Typst.
-
-#### 2. Download Fonts
-
-Download all font files from the [`fonts` branch](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst/tree/fonts) and **install them on your system**.
-
-#### Initialization using `typst`
-
-##### Initialize Project
-
 ```bash
-typst init @preview/paddling-tongji-thesis
+# macOS
+brew install typst
+
+# See official docs for other platforms
+# https://github.com/typst/typst#installation
 ```
 
-##### Compile
+#### 2. Choose Font Set
+
+Set the `fontset` parameter in `init-files/metadata.typ`:
+
+| Platform | Recommended | Notes                                                                              |
+| -------- | ----------- | ---------------------------------------------------------------------------------- |
+| macOS    | `"mac"`     | Songti SC / Heiti SC system fonts                                                  |
+| Windows  | `"windows"` | SimSun / SimHei system fonts                                                       |
+| Linux    | `"fandol"`  | Install `fonts-fandol` package                                                     |
+| Web App  | `"noto"`    | Zero config, Noto CJK built-in                                                     |
+| Founder  | `"founder"` | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
+
+#### 3. Compile
 
 ```bash
-typst compile main.typ
-```
-
-#### Initialization using `git clone`
-
-##### Git Clone Project
-
-```bash
-git clone https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst.git
-cd tongji-undergrad-thesis-typst
-```
-
-##### Compile
-
-```bash
+git clone https://github.com/TJ-CSCCG/TongjiThesis-typst.git
+cd TongjiThesis-typst
 typst compile init-files/main.typ --root .
 ```
 
-> [!TIP]
-> If you don't want to install the fonts used by the project on your system, you can specify the font path during compilation, for example:
->
-> ```bash
-> typst compile init-files/main.typ --root . --font-path {YOUR_FONT_PATH}
-> ```
+---
 
-## How to Contribute to This Project?
+## Template Configuration
 
-Please see [How to pull request](CONTRIBUTING.md/#how-to-pull-request).
+### Document Options
 
-## Open Source License
+Configure in `init-files/main.typ`:
 
-This project is licensed under the [MIT License](LICENSE).
+```typ
+#show: thesis.with(
+  field: "science",      // "science" or "humanities"
+  fontset: "auto",       // fandol / windows / mac / adobe / founder / noto / auto
+  bib-content: read("bib/note.bib"),
+)
+```
 
-### Disclaimer
+> `field: "humanities"` enables humanities numbering: 一、/（一）/ 1. / （1） / ①②③
 
-This project uses fonts from the FounderType font library, with copyright belonging to FounderType. This project is for learning and communication purposes only and must not be used for commercial purposes.
+### Metadata
 
-## Acknowledgments for Outstanding Contributions
+All user information goes in `init-files/metadata.typ` (matches LaTeX's `chapters/metadata.tex`):
 
-- This project originated from [FeO3](https://github.com/seashell11234455)'s initial version project [tongji-undergrad-thesis-typst](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst/tree/lky).
-- Later, [RizhongLin](https://github.com/RizhongLin) improved the template to better meet the requirements of Tongji University undergraduate thesis, and added basic tutorials for Typst.
+```typ
+// Cover
+#let school = "School of Computer Science"
+#let major = "Computer Science"
+#let id = "2654321"
+#let student = "Zhang Tongzhou"
+#let advisor = "Li Gongji  Professor"
+#let title = "Thesis Title"
+#let subtitle = "Subtitle"
+#let title-english = "Thesis Title"
+#let subtitle-english = "Subtitle"
 
-We are very grateful to the above contributors for their efforts, which have provided convenience and help to more students.
+// Info page
+#let infotype = "thesis"        // "thesis" / "design" / "engineering"
+#let infoabstract = [Brief description...]
+#let infothesiswords = "12345"
 
-When using this template, if you find this project helpful for your graduation project or thesis, we hope you can express your thanks and respect in your acknowledgments section.
+// Abstracts
+#let abstract = [Abstract content...]
+#let keywords = ("keyword1", "keyword2", "keyword3")
+#let abstract-english = [Abstract...]
+#let keywords-english = ("Keyword1", "Keyword2", "Keyword3")
+```
 
-## Acknowledgments for Open Source Projects
+### Theorem Environments
 
-We have learned a lot from the excellent open-source projects of top universities:
+```typ
+#thm[Theorem content]
+#cor[Corollary content]
+#lem[Lemma content]
+#pf[Proof content]
+```
 
-- [lucifer1004/pkuthss-typst](https://github.com/lucifer1004/pkuthss-typst)
-- [werifu/HUST-typst-template](https://github.com/werifu/HUST-typst-template)
+### Appendix
+
+```typ
+#appendix[
+  = Appendix A Title
+  Appendix content...
+]
+```
+
+### PDF/A Export
+
+```bash
+typst compile init-files/main.typ thesis.pdf --pdf-standard a-2b
+```
+
+---
+
+## License
+
+MIT License.
+
+## Acknowledgments
+
+This project originated from [FeO3](https://github.com/seashell11234455)'s initial version and was refined by [RizhongLin](https://github.com/RizhongLin). Inspired by [pkuthss-typst](https://github.com/lucifer1004/pkuthss-typst) and [HUST-typst-template](https://github.com/werifu/HUST-typst-template).
+
+Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Contact
 
-```python
-# Python
-[
-    'rizhonglin@$.%'.replace('$', 'epfl').replace('%', 'ch'),
-]
-```
-### QQ Group
-
-- TJ-CSCCG Communication Group: `1013806782`
+- [Discussions](https://github.com/TJ-CSCCG/TongjiThesis-typst/discussions)
+- QQ Group: `1013806782`

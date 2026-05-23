@@ -6,50 +6,50 @@ index 9d382fa..7ae7825 100644
 -#import "../paddling-tongji-thesis/tongjithesis.typ": *
 +#import "@preview/paddling-tongji-thesis:0.1.1": *
  
-diff --git a/init-files/sections/01_intro.typ b/init-files/sections/01_intro.typ
+diff --git a/init-files/chapters/01_intro.typ b/init-files/chapters/01_intro.typ
 index 11a6b70..3b71298 100644
---- a/init-files/sections/01_intro.typ
-+++ b/init-files/sections/01_intro.typ
+--- a/init-files/chapters/01_intro.typ
++++ b/init-files/chapters/01_intro.typ
 @@ -1,2 +1,2 @@
 -#import "../../paddling-tongji-thesis/tongjithesis.typ": *
 +#import "@preview/paddling-tongji-thesis:0.1.1": *
  
-diff --git a/init-files/sections/02_math.typ b/init-files/sections/02_math.typ
+diff --git a/init-files/chapters/02_math.typ b/init-files/chapters/02_math.typ
 index 53aba17..d90ba0a 100644
---- a/init-files/sections/02_math.typ
-+++ b/init-files/sections/02_math.typ
+--- a/init-files/chapters/02_math.typ
++++ b/init-files/chapters/02_math.typ
 @@ -1,2 +1,2 @@
 -#import "../../paddling-tongji-thesis/tongjithesis.typ": *
 +#import "@preview/paddling-tongji-thesis:0.1.1": *
  
-diff --git a/init-files/sections/03_reference.typ b/init-files/sections/03_reference.typ
+diff --git a/init-files/chapters/03_reference.typ b/init-files/chapters/03_reference.typ
 index 9388431..4d8bf7a 100644
---- a/init-files/sections/03_reference.typ
-+++ b/init-files/sections/03_reference.typ
+--- a/init-files/chapters/03_reference.typ
++++ b/init-files/chapters/03_reference.typ
 @@ -1,2 +1,2 @@
 -#import "../../paddling-tongji-thesis/tongjithesis.typ": *
 +#import "@preview/paddling-tongji-thesis:0.1.1": *
  
-diff --git a/init-files/sections/04_figure.typ b/init-files/sections/04_figure.typ
+diff --git a/init-files/chapters/04_figure.typ b/init-files/chapters/04_figure.typ
 index ae430cb..6db57e2 100644
---- a/init-files/sections/04_figure.typ
-+++ b/init-files/sections/04_figure.typ
+--- a/init-files/chapters/04_figure.typ
++++ b/init-files/chapters/04_figure.typ
 @@ -1,2 +1,2 @@
 -#import "../../paddling-tongji-thesis/tongjithesis.typ": *
 +#import "@preview/paddling-tongji-thesis:0.1.1": *
  
-diff --git a/init-files/sections/05_conclusion.typ b/init-files/sections/05_conclusion.typ
+diff --git a/init-files/chapters/05_conclusion.typ b/init-files/chapters/05_conclusion.typ
 index 13f77d3..bbf6b54 100644
---- a/init-files/sections/05_conclusion.typ
-+++ b/init-files/sections/05_conclusion.typ
+--- a/init-files/chapters/05_conclusion.typ
++++ b/init-files/chapters/05_conclusion.typ
 @@ -1,2 +1,2 @@
 -#import "../../paddling-tongji-thesis/tongjithesis.typ": *
 +#import "@preview/paddling-tongji-thesis:0.1.1": *
  
-diff --git a/init-files/sections/acknowledgments.typ b/init-files/sections/acknowledgments.typ
+diff --git a/init-files/chapters/acknowledgments.typ b/init-files/chapters/acknowledgments.typ
 index 58a6d24..13dce10 100644
---- a/init-files/sections/acknowledgments.typ
-+++ b/init-files/sections/acknowledgments.typ
+--- a/init-files/chapters/acknowledgments.typ
++++ b/init-files/chapters/acknowledgments.typ
 @@ -1,2 +1,2 @@
 -#import "../../paddling-tongji-thesis/tongjithesis.typ": *
 +#import "@preview/paddling-tongji-thesis:0.1.1": *

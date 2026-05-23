@@ -1,0 +1,16 @@
+{
+  "name": "TongjiThesis-typst",
+  "version": "0.1.1",
+  "description": "Typst template for Tongji University undergraduate thesis",
+  "author": "TJ-CSCCG",
+  "email": "TJ_CSCCG@163.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TJ-CSCCG/TongjiThesis-typst"
+  },
+  "contributors": [
+    "FeO3 (original author)",
+    "RizhongLin"
+  ],
+  "license": "MIT"
+}

@@ -1,123 +1,174 @@
-# :page_facing_up: 同济大学本科生毕业设计论文 Typst 模板（理工类）
-
-中文 | [English](README-EN.md)
-
-> [!CAUTION]
-> 由于 Typst 项目仍处于密集发展阶段，且对某些功能的支持不完善，因此本模板可能存在一些问题。如果您在使用过程中遇到了问题，欢迎提交 issue 或 PR，我们会尽力解决。
->
-> 在此期间，欢迎大家使用[我们的 LaTeX 模板](https://github.com/TJ-CSCCG/tongji-undergrad-thesis)。
-
-## 样例展示
-
-以下依次展示 “封面”、“中文摘要”、“目录”、“主要内容”、“参考文献” 与 “谢辞”。
+# TongjiThesis Typst
 
 <p align="center">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0001.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0002.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0004.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0005.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0019.jpg" width="30%">
-      <img src="https://media.githubusercontent.com/media/TJ-CSCCG/TJCS-Images/tongji-undergrad-thesis-typst/preview/main_page-0020.jpg" width="30%">
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/actions/workflows/test.yml"><img src="https://github.com/TJ-CSCCG/TongjiThesis-typst/actions/workflows/test.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis-typst?label=Release" alt="Release"></a>
+  <a href="https://typst.app/universe/package/paddling-tongji-thesis"><img src="https://img.shields.io/badge/Typst%20Universe-paddling--tongji--thesis-239dae" alt="Typst Universe"></a>
+  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/blob/dev/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="License"></a>
+  <img src="https://img.shields.io/badge/Typst-0.14+-239dae" alt="Typst 0.14+">
 </p>
 
-## 使用方法
+<p align="center">
+  中文 | <a href="README-EN.md">English</a>
+</p>
+
+同济大学本科毕业设计（论文）Typst 模板。
+
+> [!CAUTION]
+> 本模板仍处于测试阶段，格式与功能可能随 Typst 版本更新而变动。Typst 项目本身也在快速迭代中，部分排版细节（如中文字体渲染、CJK 间距等）尚未完全稳定。
+>
+> **正式使用请优先选择 [LaTeX 模板](https://github.com/TJ-CSCCG/TongjiThesis)**，该模板经过多届学生验证，格式严格对齐官方规范。Typst 模板同步更新，但目前仅供体验与测试。
+
+---
+
+## 特性
+
+- 封面、信息说明页、中英文摘要、目录、正文、参考文献、谢辞
+- 理工科（`field: "science"`）/ 文科（`field: "humanities"`）双模式
+- 定理环境（定理、推论、引理、命题、猜想、假设、定义、例、注、证明）
+- 附录（字母编号 A, B, C...）
+- GB/T 7714-2015 双语参考文献（`gb7714-bilingual` 宏包）
+- 三线表（`tablex` + `booktabs` 风格）
+- 算法排版（`algo` 宏包）
+- 交叉引用（`i-figured` 宏包，图/表/公式/算法按章节编号）
+- ①②③ 脚注编号（Unicode 1-50 + 绘制圆圈 51+）
+- 六种字体集：`fandol`（默认）、`windows`、`mac`、`adobe`、`founder`、`noto`（Web App 零配置）
+- 字符级两端对齐 + 优化换行
+
+---
+
+## 快速开始
 
 ### 在线 Web App
 
-#### 创建项目
+在 [Typst Web App](https://typst.app) 中选择 `Start from a template`，搜索 `paddling-tongji-thesis`。
 
-- 打开 Typst Universe 中的 [![svg of typst-tongjithesis](https://img.shields.io/badge/Typst-paddling--tongji--thesis-239dae)](https://typst.app/universe/package/paddling-tongji-thesis)
-并点击 `Create project in app`。
-
-- 或在 [Typst Web App](https://typst.app) 中选择 `Start from a template`，然后选择 `paddling-tongji-thesis`。
-
-#### 上传字体
-
-从[`fonts` 分支](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst/tree/fonts)下载所有字体文件，上传到该项目的根目录。即可开始使用。
+> **Web App 用户**：在 `metadata.typ` 中设置 `fontset: "noto"` 即可零配置使用。
 
 ### 本地使用
 
 #### 1. 安装 Typst
 
-参照 [Typst](https://github.com/typst/typst?tab=readme-ov-file#installation) 官方文档安装 Typst。
-
-#### 2. 下载字体
-
-从[`fonts` 分支](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst/tree/fonts)下载所有字体文件，并**安装到系统中**。
-
-#### 使用 `typst` 初始化
-
-##### 初始化项目
-
 ```bash
-typst init @preview/paddling-tongji-thesis
+# macOS
+brew install typst
+
+# 或参照官方文档安装
+# https://github.com/typst/typst#installation
 ```
 
-##### 编译
+#### 2. 选择字体集
+
+在 `init-files/metadata.typ` 中设置 `fontset` 参数：
+
+| 平台     | 推荐 fontset | 说明                                                                         |
+| -------- | ------------ | ---------------------------------------------------------------------------- |
+| macOS    | `"mac"`      | Songti SC / Heiti SC 系统字体                                                |
+| Windows  | `"windows"`  | SimSun / SimHei 系统字体                                                     |
+| Linux    | `"fandol"`   | 安装 `fonts-fandol` 包                                                       |
+| Web App  | `"noto"`     | 零配置，Noto CJK 内建                                                        |
+| 方正字库 | `"founder"`  | 从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 |
+
+#### 3. 编译
 
 ```bash
-typst compile main.typ
-```
-
-#### 使用 `git clone` 初始化
-
-##### Git Clone 项目
-
-```bash
-git clone https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst.git
-cd tongji-undergrad-thesis-typst
-```
-
-##### 编译
-
-```bash
+git clone https://github.com/TJ-CSCCG/TongjiThesis-typst.git
+cd TongjiThesis-typst
 typst compile init-files/main.typ --root .
 ```
 
-> [!TIP]
-> 若你不想把项目使用的字体安装到系统中，可以在编译时指定字体路径，例如：
->
-> ```bash
-> typst compile init-files/main.typ --root . --font-path {YOUR_FONT_PATH}
-> ```
+---
 
-## 如何为该项目贡献代码？
+## 模板配置
 
-还请查看 [How to pull request](CONTRIBUTING.md/#how-to-pull-request)。
+### 文档类选项
 
-## 开源协议
+在 `init-files/main.typ` 的 `thesis.with()` 中配置：
 
-该项目使用 [MIT License](LICENSE) 开源协议。
+```typ
+#show: thesis.with(
+  field: "science",      // "science" 理工科 / "humanities" 文科
+  fontset: "auto",       // fandol / windows / mac / adobe / founder / noto / auto
+  bib-content: read("bib/note.bib"),
+)
+```
 
-### 免责声明
+> `field: "humanities"` 启用文科格式：章节编号 一、/（一）/ 1. / （1） / ①②③
 
-本项目使用了方正字库中的字体，版权归方正字库所有。本项目仅用于学习交流，不得用于商业用途。
+### 元数据
 
-## 有关突出贡献的说明
+所有个人信息在 `init-files/metadata.typ` 中填写（与 LaTeX 模板的 `chapters/metadata.tex` 对应）：
 
-- 该项目起源于 [FeO3](https://github.com/seashell11234455) 的初始版本项目 [tongji-undergrad-thesis-typst](https://github.com/TJ-CSCCG/tongji-undergrad-thesis-typst/tree/lky)。
-- 后来 [RizhongLin](https://github.com/RizhongLin) 对模板进行了完善，使其更加符合同济大学本科生毕业设计论文的要求，并增加了针对 Typst 的基础教程。
+```typ
+// 封面信息
+#let school = "计算机科学与技术学院"
+#let major = "计算机科学与技术"
+#let id = "2654321"
+#let student = "张同舟"
+#let advisor = "李共济  教授"
+#let title = "论文题目"
+#let subtitle = "副标题"
+#let title-english = "Thesis Title"
+#let subtitle-english = "Subtitle"
 
-我们非常感谢以上贡献者的付出，他们的工作为更多同学提供了方便和帮助。
+// 信息说明页
+#let infotype = "thesis"        // "thesis" / "design" / "engineering"
+#let infoabstract = [内容简述...]
+#let infothesiswords = "12345"  // 毕业论文字数
 
-在使用本模板时，如果您觉得本项目对您的毕业设计或论文有所帮助，我们希望您可以在您的致谢部分感谢并致以敬意。
+// 中英文摘要
+#let abstract = [摘要内容...]
+#let keywords = ("关键词1", "关键词2", "关键词3")
+#let abstract-english = [Abstract...]
+#let keywords-english = ("Keyword1", "Keyword2", "Keyword3")
+```
 
-## 致谢
+### 定理环境
 
-我们从顶尖高校的优秀开源项目中学到了很多：
+```typ
+#thm[这是定理内容]
+#cor[这是推论内容]
+#lem[这是引理内容]
+#pf[这是证明内容]
+```
 
-- [lucifer1004/pkuthss-typst](https://github.com/lucifer1004/pkuthss-typst)
-- [werifu/HUST-typst-template](https://github.com/werifu/HUST-typst-template)
+### 交叉引用
 
-## 联系方式
+```typ
+#chapref(<label>)   // 第X章
+#figref(<label>)    // 图X
+#tabref(<label>)    // 表X
+#eqref(<label>)     // 式X
+```
 
-```python
-# Python
-[
-    'rizhonglin@$.%'.replace('$', 'epfl').replace('%', 'ch'),
+### 附录
+
+```typ
+#appendix[
+  = 附录A标题
+  附录内容...
 ]
 ```
 
-### QQ 群
+### PDF/A 导出
 
-- TJ-CSCCG 交流群：`1013806782`
+```bash
+typst compile init-files/main.typ thesis.pdf --pdf-standard a-2b
+```
+
+---
+
+## 开源协议
+
+MIT License。
+
+## 贡献与致谢
+
+该项目起源于 [FeO3](https://github.com/seashell11234455) 的初始版本，后由 [RizhongLin](https://github.com/RizhongLin) 完善。感谢 [pkuthss-typst](https://github.com/lucifer1004/pkuthss-typst)、[HUST-typst-template](https://github.com/werifu/HUST-typst-template) 等项目的启发。
+
+欢迎提交 Issue 或 PR。详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 联系方式
+
+- [Discussions](https://github.com/TJ-CSCCG/TongjiThesis-typst/discussions)
+- QQ 群：`1013806782`

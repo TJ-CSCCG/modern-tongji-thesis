@@ -1,25 +1,31 @@
 ---
-name: Docs 反馈
-about: 通过该 Issue 模板反馈目前 tongji-undergrad-thesis-typst 文档的不足之处
-labels: 'type/docs'
+name: Docs 反馈 | Documentation Feedback
+about: 反馈文档的不足或改进建议 | Suggest documentation improvements
+labels: "type/docs"
 ---
 
-### 文档不足之处
+## 文档不足之处 | Area
 
-<!--在你认为存在缺陷的部分打勾-->
+在对应部分打勾 | Check the relevant area:
 
-* 平台相关
-  * [ ] 在线平台：Typst App
-  * [ ] 本地平台：Typst
-* 使用过程
-  * [ ] 模版编译（编译配置、依赖安装等）
-  * [ ] 最佳实践（Typst 基础知识、模版使用教学、工作流等）
-* [ ] 不，我需要其他文档：_________
+- [ ] Typst Web App 使用相关 | Typst Web App usage
+- [ ] 本地编译相关 | Local compilation（配置、依赖等）
+- [ ] 模板使用教学 | Usage guide（Typst 基础、最佳实践等）
+- [ ] 其他 | Other：**\_\_**
 
-### 对文档的期望
+## 期望内容 | Expected Content
 
-<!--如果可以的话，还希望你能够在下方提供你期望中的文档大纲-->
+描述你期望的文档内容或改进方向。
+Describe the documentation content or improvements you expect.
 
-### 其他信息
+## 其他信息 | Additional Context
 
-<!--这里用于写有关于上述 docs 的其他信息-->
+其他与该建议相关的信息。
+Any other relevant information.
+
+## 是否计划自行改进？| Do you plan to improve this yourself?
+
+- [ ] 是，我计划提交 PR 改进文档 | Yes, I plan to submit a PR to improve the documentation
+
+如勾选，请在提交 PR 时在描述中写明 `Closes #<issue-number>` 以关联本 Issue，方便维护者追踪。
+If checked, please include `Closes #<issue-number>` in your PR description to link it to this issue.

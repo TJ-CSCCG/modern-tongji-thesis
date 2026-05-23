@@ -22,7 +22,7 @@
                         <supplement>,
                       )
                       ```, caption: [Typst的#raw("#figure()", lang: "typ") 参数列表], placement: none, kind: raw,
-) <floatcode>
+) <lst:floatcode>
 
 其中，`content` 是浮动体的具体内容，如图片、表格、代码等；`placement` 是浮动体的位置：`none` 表示不浮动，`auto`
 表示自动浮动，`top` 表示浮动到页面顶部，`bottom` 表示浮动到页面底部；`caption` 是浮动体的标题；`kind`
@@ -80,13 +80,13 @@
     image(example-image),
     image(example-image),
     image(example-image),
-  ), caption: [多个插图示例1]) <multifigure1>
+  ), caption: [多个插图示例1]) <fig:multifigure1>
   ```, [
     #figure(
       grid(
         columns: 2, rows: 2, gutter: 5pt, image(example-image), image(example-image), image(example-image), image(example-image),
       ), caption: [多个插图示例1],
-    ) <multifigure1>
+    ) <fig:multifigure1>
   ],
 )
 
@@ -104,15 +104,15 @@
     columns: 2,
     rows: 2,
     gutter: 5pt,
-    [#figure(image(example-image), caption: [示例2]) <multifigure2>],
-    [#figure(image(example-image), caption: [示例3]) <multifigure3>],
-    [#figure(image(example-image), caption: [示例4]) <multifigure4>],
-    [#figure(image(example-image), caption: [示例5]) <multifigure5>],
+    [#figure(image(example-image), caption: [示例2]) <fig:multifigure2>],
+    [#figure(image(example-image), caption: [示例3]) <fig:multifigure3>],
+    [#figure(image(example-image), caption: [示例4]) <fig:multifigure4>],
+    [#figure(image(example-image), caption: [示例5]) <fig:multifigure5>],
   ))
   ```, [
     #figure(
       grid(
-        columns: 2, rows: 2, gutter: 5pt, [#figure(image(example-image), caption: [示例2]) <multifigure2>], [#figure(image(example-image), caption: [示例3]) <multifigure3>], [#figure(image(example-image), caption: [示例4]) <multifigure4>], [#figure(image(example-image), caption: [示例5]) <multifigure5>],
+        columns: 2, rows: 2, gutter: 5pt, [#figure(image(example-image), caption: [示例2]) <fig:multifigure2>], [#figure(image(example-image), caption: [示例3]) <fig:multifigure3>], [#figure(image(example-image), caption: [示例4]) <fig:multifigure4>], [#figure(image(example-image), caption: [示例5]) <fig:multifigure5>],
       ),
     )
   ],
@@ -138,15 +138,15 @@
           [*_y_*], [0.3s], [0.4s], [0.8s],
         ),
         caption: [计时结果],
-    ) <table1>
+    ) <tbl:table1>
       ```, [
     #figure(
       table(columns: 4, [*_t_*], [1], [2], [3], [*_y_*], [0.3s], [0.4s], [0.8s]), caption: [计时结果],
-    ) <table1>
+    ) <tbl:table1>
   ],
 )
 
-在 Typst 中，还没有像 #LaTeX 里的 `booktabs` 宏包那样的专门用于排版三线表的宏包。但我们引入了 `tablex` 宏包，可以手动实现三线表的排版。在本模板中，我们定制了 `toprule`、`midrule` 和 `bottomrule` 三个命令，用于绘制三线表的上中下三条线。我们还定制了 `cmidrule` 命令，用于绘制三线表的中间线。下面是一个例子。
+Typst 现已拥有 `booktabs` 宏包（`@preview/booktabs`），提供与 #LaTeX `booktabs` 相同的 `toprule`、`midrule`、`bottomrule` 和 `cmidrule` 命令，配合 `tablex` 宏包可以轻松排版三线表。本模板已集成 `booktabs` 和 `tablex`，可以直接使用。
 
 #table(
   columns: (1fr, 1fr), [
@@ -228,7 +228,7 @@
     let $y <- z$#d\
     \
     return $x+y$
-  ], caption: [计算斐波那契数列], kind: "algo", supplement: "算法") <fib>
+  ], caption: [计算斐波那契数列], kind: "algo", supplement: "算法") <algo:fib>
   ```, [
     #figure(
       algo(
@@ -250,7 +250,7 @@
         \
         return $x+y$
       ], caption: [计算斐波那契数列], kind: "algo", supplement: "算法",
-    ) <fib>
+    ) <algo:fib>
   ],
 )
 
@@ -282,7 +282,7 @@
           return 1
       return fibonacci(n - 1) + fibonacci(n - 2)
   ```, caption: [计算斐波那契数列的Python实现], kind: raw,
-) <fibpy>
+) <lst:fibpy>
 
 == 浮动体和公式的交叉引用 <floats>
 
@@ -309,6 +309,10 @@
 在引用公式时，我们也需要给出公式的类型（`eqt`），用冒号 `:` 与公式的标签分隔。在Typst中，我们可以使用 `@eqt:xxx` 的形式引用公式。在渲染时，Typst会自动将 `@eqt:xxx` 转换为
 “公式~(X.X)” 的形式。下面是一个例子。
 
+$
+  A = pi r^2
+$ <eqt-demo>
+
 #table(columns: (1fr, 1fr), [
   #set align(center)
   #strong[代码]
@@ -316,7 +320,7 @@
   #set align(center)
   #strong[渲染结果]
 ], ```typ
-如@eqt:pir2 所示。
+如@eqt:eqt-demo 所示。
   ```, [
-  如@eqt:pir2 所示。
+  如@eqt:eqt-demo 所示。
 ])
