@@ -111,7 +111,10 @@
     #v(1.5em)
   ]
   let h = if heading-override != none { heading-override } else { prompt.at(0) }
-  heading(h, numbering: none, outlined: false)
+
+  align(center)[
+    #text(font: f.hei, size: TJFONT_HEADING, weight: "bold", h)
+  ]
 
   set par(first-line-indent: 2em)
   abstract

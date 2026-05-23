@@ -271,7 +271,7 @@
   let cn-subtitle = if abstract-subtitle != none { abstract-subtitle } else { subtitle }
   let en-title = if abstract-title-english != none { abstract-title-english } else { title-english }
   let en-subtitle = if abstract-subtitle-english != none { abstract-subtitle-english } else { subtitle-english }
-  let cn-heading = if infotype == "engineering" { "设计总说明" } else { "摘要" }
+  let cn-heading = if infotype == "engineering" { "设计总说明" } else { "摘" + h(0.5em) + "要" }
 
   make-abstract(
     title: cn-title, subtitle: cn-subtitle, abstract: abstract, keywords: keywords,
