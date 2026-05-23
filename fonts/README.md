@@ -35,5 +35,5 @@ fc-cache -fv
 
 ## 其他字体集
 
-- `founder` / `adobe`：从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载
+- `adobe` / `founder`：从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载
 - 详见 [README.md](../README.md#字体选择)

@@ -74,8 +74,7 @@ Set the `fontset` parameter in `init-files/metadata.typ`:
 | macOS    | `"mac"`             | Songti SC / Heiti SC system fonts                                          |
 | Windows  | `"windows"`         | SimSun / SimHei system fonts                                               |
 | Linux    | `"fandol"`          | Fandol + TeX Gyre Termes ([CTAN download](fonts/README.md))                |
-| Adobe    | `"adobe"`           | Requires Adobe fonts                                                       |
-| Founder  | `"founder"`         | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
+| Adobe / Founder | `"adobe"` / `"founder"` | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
 
 #### 3. Compile
 
