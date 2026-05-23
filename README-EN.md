@@ -99,49 +99,7 @@ Configure in `init-files/main.typ`:
 
 ### Metadata
 
-All user information goes in `init-files/metadata.typ` (matches LaTeX's `chapters/metadata.tex`):
-
-```typ
-// Cover
-#let school = "School of Computer Science"
-#let major = "Computer Science"
-#let id = "2654321"
-#let student = "Zhang Tongzhou"
-#let advisor = "Li Gongji  Professor"
-#let title = "Thesis Title"
-#let subtitle = "Subtitle"
-#let title-english = "Thesis Title"
-#let subtitle-english = "Subtitle"
-
-// Info page
-#let infotype = "thesis"        // "thesis" / "design" / "engineering"
-#let infoabstract = [Brief description...]
-#let infothesiswords = "12345"
-
-// Abstracts
-#let abstract = [Abstract content...]
-#let keywords = ("keyword1", "keyword2", "keyword3")
-#let abstract-english = [Abstract...]
-#let keywords-english = ("Keyword1", "Keyword2", "Keyword3")
-```
-
-### Theorem Environments
-
-```typ
-#thm[Theorem content]
-#cor[Corollary content]
-#lem[Lemma content]
-#pf[Proof content]
-```
-
-### Appendix
-
-```typ
-#appendix[
-  = Appendix A Title
-  Appendix content...
-]
-```
+All user information goes in `init-files/metadata.typ` (matches LaTeX's `chapters/metadata.tex`). See comments in that file.
 
 ### PDF/A Export
 
@@ -154,10 +112,6 @@ typst compile init-files/main.typ thesis.pdf --pdf-standard a-2b
 ## License
 
 MIT License.
-
-## Acknowledgments
-
-This project originated from [FeO3](https://github.com/seashell11234455)'s initial version and was refined by [RizhongLin](https://github.com/RizhongLin). Inspired by [pkuthss-typst](https://github.com/lucifer1004/pkuthss-typst) and [HUST-typst-template](https://github.com/werifu/HUST-typst-template).
 
 Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 

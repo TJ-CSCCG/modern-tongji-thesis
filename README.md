@@ -97,58 +97,7 @@ typst compile init-files/main.typ --root .
 
 ### 元数据
 
-所有个人信息在 `init-files/metadata.typ` 中填写（与 LaTeX 模板的 `chapters/metadata.tex` 对应）：
-
-```typ
-// 封面信息
-#let school = "计算机科学与技术学院"
-#let major = "计算机科学与技术"
-#let id = "2654321"
-#let student = "张同舟"
-#let advisor = "李共济  教授"
-#let title = "论文题目"
-#let subtitle = "副标题"
-#let title-english = "Thesis Title"
-#let subtitle-english = "Subtitle"
-
-// 信息说明页
-#let infotype = "thesis"        // "thesis" / "design" / "engineering"
-#let infoabstract = [内容简述...]
-#let infothesiswords = "12345"  // 毕业论文字数
-
-// 中英文摘要
-#let abstract = [摘要内容...]
-#let keywords = ("关键词1", "关键词2", "关键词3")
-#let abstract-english = [Abstract...]
-#let keywords-english = ("Keyword1", "Keyword2", "Keyword3")
-```
-
-### 定理环境
-
-```typ
-#thm[这是定理内容]
-#cor[这是推论内容]
-#lem[这是引理内容]
-#pf[这是证明内容]
-```
-
-### 交叉引用
-
-```typ
-#chapref(<label>)   // 第X章
-#figref(<label>)    // 图X
-#tabref(<label>)    // 表X
-#eqref(<label>)     // 式X
-```
-
-### 附录
-
-```typ
-#appendix[
-  = 附录A标题
-  附录内容...
-]
-```
+所有个人信息在 `init-files/metadata.typ` 中填写（与 LaTeX 模板的 `chapters/metadata.tex` 对应）。详见该文件内注释。
 
 ### PDF/A 导出
 
@@ -161,10 +110,6 @@ typst compile init-files/main.typ thesis.pdf --pdf-standard a-2b
 ## 开源协议
 
 MIT License。
-
-## 贡献与致谢
-
-该项目起源于 [FeO3](https://github.com/seashell11234455) 的初始版本，后由 [RizhongLin](https://github.com/RizhongLin) 完善。感谢 [pkuthss-typst](https://github.com/lucifer1004/pkuthss-typst)、[HUST-typst-template](https://github.com/werifu/HUST-typst-template) 等项目的启发。
 
 欢迎提交 Issue 或 PR。详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 

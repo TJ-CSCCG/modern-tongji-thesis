@@ -13,7 +13,7 @@
 #let major = "计算机科学与技术"
 #let id = "2654321"
 #let student = "张同舟"
-#let advisor = "李共济  教授"
+#let advisor = "李共济" + h(1em) + "教授"
 #let title = "同济大学本科毕业设计（论文）模板与Typst排版技术应用"
 #let subtitle = "模板排版功能示例、学术写作规范与格式设置指南"
 #let title-english = "Template and Typst Typesetting for Tongji University Undergraduate Thesis"
