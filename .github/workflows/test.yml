@@ -57,12 +57,6 @@ jobs:
           unzip -q tgt.zip -d fonts
           find fonts -name "texgyretermes*.otf" -exec mv {} fonts/ \;
           rm -rf fonts/tex-gyre tgt.zip
-        run: |
-          mkdir -p fonts
-          curl -sL "https://mirrors.ctan.org/fonts/fandol.zip" -o fandol.zip
-          unzip -q fandol.zip -d fonts
-          find fonts -name "*.otf" -exec mv {} fonts/ \;
-          rm -rf fonts/fandol fandol.zip
 
       - name: Configure humanities variant
         if: matrix.field == 'humanities'
