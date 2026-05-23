@@ -42,6 +42,7 @@
 #let infowordcount = ""
 
 // 毕业论文：正文总字数（成果类型为 thesis 时填写）
+// 在正文末尾插入 #wordcount() 可显示自动统计的字数作为参考
 #let infothesiswords = "12345"
 
 // 随附资料（每条一个字符串；留空数组 [] 则显示空白行）
