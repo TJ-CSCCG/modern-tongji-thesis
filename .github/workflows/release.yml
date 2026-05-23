@@ -57,8 +57,6 @@ jobs:
           rm -rf fonts/fandol fandol.zip
 
       - name: Configure humanities variant
-
-      - name: Configure humanities variant
         if: matrix.field == 'humanities'
         run: |
           sed -i 's/field: "science"/field: "humanities"/' init-files/main.typ
