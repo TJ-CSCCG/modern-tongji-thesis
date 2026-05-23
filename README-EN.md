@@ -60,6 +60,8 @@ brew install typst
 
 Set the `fontset` parameter in `init-files/metadata.typ`:
 
+
+> All font presets use **TeX Gyre Termes** (free, open-source TNR clone; built into Typst Web App; Linux: `apt install fonts-texgyre`) as the Latin serif font for Chinese-English mixed typesetting.
 | Platform | Recommended | Notes                                                                              |
 | -------- | ----------- | ---------------------------------------------------------------------------------- |
 | macOS    | `"mac"`     | Songti SC / Heiti SC system fonts                                                  |
