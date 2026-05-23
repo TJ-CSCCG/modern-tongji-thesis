@@ -56,75 +56,42 @@
   box()
 }
 
-// Three-condition cover field underline — mirrors LaTeX \ulinecentered.
-// max-width = 20em (underline span); column is 22em (1em margin each side).
-//   Case 1: natural-width ≤ 20em  → centre in 20em underlined box (single line)
-//   Case 2: 20em < width ≤ 39em  → wrap to 20em, compressed leading
-//   Case 3: width > 39em         → set at 0.53× natural width, scale horizontally to 20em
-#let uline-centered(content, max-width: 20em) = context {
-  let natural-width = measure(content).width
-  // Resolve em to absolute pt in the current font context
-  let mw = measure(box(width: max-width, height: 0pt)).width
-
-  let body = if natural-width <= 1.95 * mw {
-    // Cases 1 & 2: fit (or wrap) within max-width
-    {
-      set par(leading: 0.5em)
-      block(width: mw, breakable: false, align(center, content))
-    }
-  } else {
-    // Case 3: text too long even when wrapped — scale horizontally to fit
-    let par-width = 0.53 * natural-width
-    let scale-ratio = (mw / par-width) * 100%
-    let wb = {
-      set par(leading: 0.5em)
-      block(width: par-width, breakable: false, align(center, content))
-    }
-    let h = measure(wb).height
-    box(
-      width: mw, height: h,
-      place(left + top, scale(x: scale-ratio, origin: left + top, wb)),
-    )
-  }
-
-  box(width: mw, stroke: (bottom: 1pt + black), body)
-}
-
 #let make-cover(cover, cover-text: "毕业设计（论文）", fonts: none) = {
   let f = if fonts != none { fonts } else { font-family }
-
-  set text(font: f.hei, size: font-size.at("-2"))
-
   align(center)[
-    #v(1fr)
+  #image("figures/tongji.svg", height: 2.5cm)
+  #text(
+    "TONGJI UNIVERSITY",
+    font: f.hei,
+    size: font-size.at("-2"),
+    weight: "bold",
+  )
 
-    #image("figures/tongji.svg", height: 2.5cm)
+  #v(30pt)
+  #text(cover-text, font: f.hei, size: font-size.at("-0"))
+  #v(60pt)
 
-    #text(weight: "bold")[TONGJI UNIVERSITY]
-
-    #text(size: font-size.at("-0"))[#cover-text]
-    #v(60pt)
-
-    #grid(
-      columns: (5em, 22em),
-      column-gutter: 16pt,
-      row-gutter: 9pt,
-      ..cover.enumerate().map(((idx, value)) => {
-        if calc.even(idx) {
-          // Label: space characters to fill 4-char width (matches LaTeX \quad/\enskip)
-          let arr = value.clusters()
-          let k = if arr.len() > 1 { (4 - arr.len()) / (arr.len() - 1) } else { 0 }
-          align(center, arr.join([#h(1em * k)]))
-        } else {
-          // Value: centred in 22em column; underline spans 20em with three-condition shrinking
-          align(center, uline-centered(value))
-        }
-      }),
-    )
-
-    #v(1fr)
-  ]
-}
+  #set text(font: f.hei, size: font-size.at("-2"))
+  #grid(
+    columns: (5em, auto),
+    gutter: 16pt,
+    ..cover.enumerate().map(((idx, value)) => {
+      set text(size: font-size.at("-2"))
+      if calc.even(idx) {
+        let arr = value.clusters()
+        let k = (4 - arr.len()) / (arr.len() - 1)
+        arr.join([#h(1em * k)])
+      } else {
+        block(
+          width: 100%,
+          inset: 4pt,
+          stroke: (bottom: 1pt + black),
+          align(center, value),
+        )
+      }
+    }),
+  )
+]}
 
 #let make-abstract(
   title: "", subtitle: none, abstract: "", keywords: (), prompt: (), is-english: false,
