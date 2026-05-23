@@ -115,9 +115,9 @@
 
   set par(first-line-indent: 2em)
   abstract
-  v(1.0em)
+  v(1.2em)
   set par(first-line-indent: 0em)
-  text(font: f.hei, weight: "bold", prompt.at(1))
+  text(weight: "bold", prompt.at(1))
   let keywords-string = if is-english { keywords.join(", ") } else { keywords.join("，") }
   text(keywords-string)
 }
