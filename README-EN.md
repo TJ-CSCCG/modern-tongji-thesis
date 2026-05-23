@@ -82,8 +82,7 @@ Set the `fontset` parameter in `init-files/metadata.typ`:
 ```bash
 git clone https://github.com/TJ-CSCCG/TongjiThesis-typst.git
 cd TongjiThesis-typst
-typst compile init-files/main.typ --root .             # outputs main.pdf
-typst compile init-files/main.typ thesis.pdf --root .  # custom output name
+typst compile init-files/main.typ thesis.pdf --root .
 ```
 
 ---

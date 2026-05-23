@@ -80,8 +80,7 @@ brew install typst
 ```bash
 git clone https://github.com/TJ-CSCCG/TongjiThesis-typst.git
 cd TongjiThesis-typst
-typst compile init-files/main.typ --root .        # 输出 main.pdf
-typst compile init-files/main.typ thesis.pdf --root .  # 指定输出文件名
+typst compile init-files/main.typ thesis.pdf --root .
 ```
 
 ---
