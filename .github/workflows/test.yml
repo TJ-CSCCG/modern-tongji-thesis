@@ -46,17 +46,18 @@ jobs:
         with:
           typst-version: '^0.14.0'
 
-      - name: Download fonts (Fandol + TeX Gyre Termes)
+      - name: Install system fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-texgyre
+
+      - name: Download Fandol fonts
         run: |
           mkdir -p fonts
           curl -sL "https://mirrors.ctan.org/fonts/fandol.zip" -o fandol.zip
           unzip -q fandol.zip -d fonts
           find fonts -name "*.otf" -exec mv {} fonts/ \;
           rm -rf fonts/fandol fandol.zip
-          curl -sL "https://mirrors.ctan.org/fonts/tex-gyre-termes.zip" -o tgt.zip
-          unzip -q tgt.zip -d fonts
-          find fonts -name "*.otf" -exec mv {} fonts/ \;
-          rm -rf fonts/tex-gyre-termes tgt.zip
 
       - name: Configure humanities variant
         if: matrix.field == 'humanities'
@@ -65,7 +66,7 @@ jobs:
 
       - name: Compile thesis
         run: |
-          typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
+          typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts:/usr/share/fonts
 
       - name: Show log on failure
         if: failure()
