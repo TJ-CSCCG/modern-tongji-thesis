@@ -46,13 +46,17 @@ jobs:
         with:
           typst-version: '^0.14.0'
 
-      - name: Download Fandol fonts
+      - name: Download fonts (Fandol + TeX Gyre Termes)
         run: |
           mkdir -p fonts
           curl -sL "https://mirrors.ctan.org/fonts/fandol.zip" -o fandol.zip
           unzip -q fandol.zip -d fonts
           find fonts -name "*.otf" -exec mv {} fonts/ \;
           rm -rf fonts/fandol fandol.zip
+          curl -sL "https://mirrors.ctan.org/fonts/tex-gyre-termes.zip" -o tgt.zip
+          unzip -q tgt.zip -d fonts
+          find fonts -name "*.otf" -exec mv {} fonts/ \;
+          rm -rf fonts/tex-gyre-termes tgt.zip
 
       - name: Configure humanities variant
         if: matrix.field == 'humanities'
