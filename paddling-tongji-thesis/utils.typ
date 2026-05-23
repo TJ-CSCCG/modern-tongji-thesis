@@ -32,10 +32,24 @@
   ),
   // Windows — SimSun, SimHei, KaiTi, FangSong
   windows: (
-    song: ((name: "Times New Roman", covers: "latin-in-cjk"), "SimSun", "Noto Serif CJK SC"),
-    hei:  ((name: "Times New Roman", covers: "latin-in-cjk"), "SimHei", "Noto Sans CJK SC"),
-    kai:  ((name: "Times New Roman", covers: "latin-in-cjk"), "KaiTi", "Noto Serif CJK SC"),
-    fang: ((name: "Times New Roman", covers: "latin-in-cjk"), "FangSong", "Noto Serif CJK SC"),
+    song: ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "SimSun"),
+    hei:  ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "SimHei"),
+    kai:  ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "KaiTi"),
+    fang: ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "FangSong"),
+  ),
+  // macOS — Songti SC, Heiti SC, Kaiti SC, STFangsong
+  mac: (
+    song: ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "Songti SC"),
+    hei:  ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "Heiti SC"),
+    kai:  ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "Kaiti SC"),
+    fang: ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "STFangsong"),
+  ),
+  // Adobe — AdobeSongStd, AdobeHeitiStd, AdobeKaitiStd, AdobeFangsongStd
+  adobe: (
+    song: ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "AdobeSongStd-Light"),
+    hei:  ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "AdobeHeitiStd-Regular"),
+    kai:  ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "AdobeKaitiStd-Regular"),
+    fang: ((name: "TeX Gyre Termes", covers: "latin-in-cjk"), "AdobeFangsongStd-Regular"),
   ),
   // macOS — Songti SC, Heiti SC, Kaiti SC, STFangsong
   mac: (
