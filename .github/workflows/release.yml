@@ -48,10 +48,14 @@ jobs:
         with:
           typst-version: '^0.14.0'
 
-      - name: Install Fandol fonts
+      - name: Install Noto CJK fonts
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq fonts-fandol
+          sudo apt-get install -y -qq fonts-noto-cjk
+
+      - name: Configure fontset for CI
+        run: |
+          sed -i 's/fontset: "auto"/fontset: "noto"/' init-files/main.typ
 
       - name: Configure humanities variant
         if: matrix.field == 'humanities'
