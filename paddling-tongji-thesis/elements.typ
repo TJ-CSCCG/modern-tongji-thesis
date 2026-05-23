@@ -68,7 +68,7 @@
     weight: "bold",
   )
 
-  #v(30pt)
+  // #v(30pt)
   #text(cover-text, font: f.hei, size: font-size.at("-0"))
   #v(60pt)
 
