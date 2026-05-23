@@ -79,7 +79,7 @@ jobs:
 
       - name: Upload PDF
         if: success()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: release-pdf-${{ matrix.field }}
           path: TongjiThesis-typst-v*.pdf
@@ -139,7 +139,7 @@ jobs:
 
       - name: Download release PDFs
         if: steps.check.outputs.exists == 'false'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: release-pdf-*
           merge-multiple: true

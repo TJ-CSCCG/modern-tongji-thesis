@@ -73,7 +73,7 @@ jobs:
 
       - name: Upload PDF
         if: success()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: document-${{ matrix.field }}
           path: TongjiThesis-typst-${{ matrix.field }}.pdf
@@ -99,7 +99,7 @@ jobs:
     if: always() && !cancelled()
     steps:
       - name: Download all PDF artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: document-*
           merge-multiple: true
@@ -108,7 +108,7 @@ jobs:
         run: ls -la *.pdf
 
       - name: Upload consolidated PDFs
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: all-compiled-documents
           path: '*.pdf'
