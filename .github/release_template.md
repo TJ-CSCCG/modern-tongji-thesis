@@ -26,8 +26,8 @@
 
 #### 预编译示例 | Compiled Examples
 
-- `tongji-thesis-typst-vVERSION_TOKEN-science.pdf` — 理工科 (science/engineering)
-- `tongji-thesis-typst-vVERSION_TOKEN-humanities.pdf` — 文科 (humanities)
+- `TongjiThesis-typst-vVERSION_TOKEN-science.pdf` — 理工科 (science/engineering)
+- `TongjiThesis-typst-vVERSION_TOKEN-humanities.pdf` — 文科 (humanities)
 
 ### 快速开始 | Quick Start
 

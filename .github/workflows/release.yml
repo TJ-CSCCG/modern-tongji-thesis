@@ -76,14 +76,14 @@ jobs:
       - name: Rename PDF
         if: success()
         run: |
-          mv thesis.pdf tongji-thesis-typst-v${{ steps.version.outputs.version }}-${{ matrix.field }}.pdf
+          mv thesis.pdf TongjiThesis-typst-v${{ steps.version.outputs.version }}-${{ matrix.field }}.pdf
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v6
         with:
           name: release-pdf-${{ matrix.field }}
-          path: tongji-thesis-typst-v*.pdf
+          path: TongjiThesis-typst-v*.pdf
           retention-days: 90
 
   prepare-package:
@@ -189,8 +189,8 @@ jobs:
           name: "paddling-tongji-thesis v${{ steps.version.outputs.version }}"
           body: ${{ steps.template.outputs.body }}
           files: |
-            tongji-thesis-typst-v${{ steps.version.outputs.version }}-science.pdf
-            tongji-thesis-typst-v${{ steps.version.outputs.version }}-humanities.pdf
+            TongjiThesis-typst-v${{ steps.version.outputs.version }}-science.pdf
+            TongjiThesis-typst-v${{ steps.version.outputs.version }}-humanities.pdf
             paddling-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz
           draft: true
           prerelease: false

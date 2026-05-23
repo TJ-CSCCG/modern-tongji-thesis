@@ -70,14 +70,14 @@ jobs:
 
       - name: Rename PDF
         if: success()
-        run: mv thesis.pdf tongji-thesis-typst-${{ matrix.field }}.pdf
+        run: mv thesis.pdf TongjiThesis-typst-${{ matrix.field }}.pdf
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v6
         with:
           name: document-${{ matrix.field }}
-          path: tongji-thesis-typst-${{ matrix.field }}.pdf
+          path: TongjiThesis-typst-${{ matrix.field }}.pdf
           retention-days: 30
 
   test-summary:
