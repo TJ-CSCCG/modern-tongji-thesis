@@ -1,6 +1,14 @@
 # TongjiThesis Typst
 
 <p align="center">
+  <img src="init-files/figures/tongjithesis.svg" alt="TongjiThesis" width="550">
+</p>
+
+<p align="center">
+  <em>同济大学本科生毕业设计（论文）· Typst 模板</em>
+</p>
+
+<p align="center">
   <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/actions/workflows/test.yml"><img src="https://github.com/TJ-CSCCG/TongjiThesis-typst/actions/workflows/test.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis-typst?label=Release" alt="Release"></a>
   <a href="https://typst.app/universe/package/paddling-tongji-thesis"><img src="https://img.shields.io/badge/Typst%20Universe-paddling--tongji--thesis-239dae" alt="Typst Universe"></a>
