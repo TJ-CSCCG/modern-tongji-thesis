@@ -1,5 +1,3 @@
-# TongjiThesis Typst
-
 <p align="center">
   <img src="init-files/figures/tongjithesis.svg" alt="TongjiThesis" width="550">
 </p>
