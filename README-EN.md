@@ -82,7 +82,8 @@ Set the `fontset` parameter in `init-files/metadata.typ`:
 ```bash
 git clone https://github.com/TJ-CSCCG/TongjiThesis-typst.git
 cd TongjiThesis-typst
-typst compile init-files/main.typ --root .
+typst compile init-files/main.typ --root .             # outputs main.pdf
+typst compile init-files/main.typ thesis.pdf --root .  # custom output name
 ```
 
 ---
@@ -107,11 +108,6 @@ Configure in `init-files/main.typ`:
 
 All user information goes in `init-files/metadata.typ` (matches LaTeX's `chapters/metadata.tex`). See comments in that file.
 
-### PDF/A Export
-
-```bash
-typst compile init-files/main.typ thesis.pdf --pdf-standard a-2b
-```
 
 ---
 

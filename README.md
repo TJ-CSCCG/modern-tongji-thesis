@@ -80,7 +80,8 @@ brew install typst
 ```bash
 git clone https://github.com/TJ-CSCCG/TongjiThesis-typst.git
 cd TongjiThesis-typst
-typst compile init-files/main.typ --root .
+typst compile init-files/main.typ --root .        # 输出 main.pdf
+typst compile init-files/main.typ thesis.pdf --root .  # 指定输出文件名
 ```
 
 ---
@@ -104,12 +105,6 @@ typst compile init-files/main.typ --root .
 ### 元数据
 
 所有个人信息在 `init-files/metadata.typ` 中填写（与 LaTeX 模板的 `chapters/metadata.tex` 对应）。详见该文件内注释。
-
-### PDF/A 导出
-
-```bash
-typst compile init-files/main.typ thesis.pdf --pdf-standard a-2b
-```
 
 ---
 
