@@ -8,7 +8,7 @@
 
 | 平台 | 安装方式 |
 |------|---------|
-| Linux | `sudo apt install fonts-texgyre` |
+| Linux | `sudo apt install fonts-texgyre` 或从 [CTAN](https://mirrors.ctan.org/fonts/tex-gyre.zip) 下载 |
 | macOS / Windows | 从 [CTAN](https://mirrors.ctan.org/fonts/tex-gyre.zip) 下载 OTF 文件（解压后的 `tex-gyre-termes` 目录） |
 | Typst Web App | 内置，无需上传 |
 

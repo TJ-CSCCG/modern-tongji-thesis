@@ -59,7 +59,7 @@ brew install typst
 
 在 `init-files/metadata.typ` 中设置 `fontset` 参数：
 
-> 所有字体集均使用 **TeX Gyre Termes**（Times New Roman 的开源替代，Typst Web App 内置，Linux: `apt install fonts-texgyre`）作为中英文混排的 Latin 衬线字体。
+> 所有字体集均使用 **TeX Gyre Termes**（Times New Roman 的开源替代，Typst Web App 内置，Linux: `apt install fonts-texgyre` 或下载 ZIP）作为中英文混排的 Latin 衬线字体。
 
 | 平台     | 推荐 fontset | 说明                                                                         |
 | -------- | ------------ | ---------------------------------------------------------------------------- |
