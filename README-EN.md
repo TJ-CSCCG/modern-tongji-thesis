@@ -61,13 +61,15 @@ brew install typst
 Set the `fontset` parameter in `init-files/metadata.typ`:
 
 
-> All font presets use **TeX Gyre Termes** (free, open-source TNR clone; built into Typst Web App; Linux: `apt install fonts-texgyre`) as the Latin serif font for Chinese-English mixed typesetting.
-| Platform | Recommended | Notes                                                                              |
-| -------- | ----------- | ---------------------------------------------------------------------------------- |
-| macOS    | `"mac"`     | Songti SC / Heiti SC system fonts                                                  |
-| Windows  | `"windows"` | SimSun / SimHei system fonts                                                       |
-| Linux    | `"fandol"`  | Install `fonts-fandol` package                                                     |
-| Founder  | `"founder"` | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
+> All font presets use **TeX Gyre Termes** (free, open-source TNR clone; built into Typst Web App; Linux: `apt install fonts-texgyre` or download ZIP) as the Latin serif font for Chinese-English mixed typesetting.
+
+| Platform | Recommended fontset | Notes                                                                      |
+| -------- | ------------------- | -------------------------------------------------------------------------- |
+| macOS    | `"mac"`             | Songti SC / Heiti SC system fonts                                          |
+| Windows  | `"windows"`         | SimSun / SimHei system fonts                                               |
+| Linux    | `"fandol"`          | Fandol + TeX Gyre Termes ([CTAN download](fonts/README.md))                |
+| Adobe    | `"adobe"`           | Requires Adobe fonts                                                       |
+| Founder  | `"founder"`         | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
 
 #### 3. Compile
 

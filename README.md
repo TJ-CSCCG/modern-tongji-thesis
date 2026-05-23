@@ -65,7 +65,7 @@ brew install typst
 | -------- | ------------ | ---------------------------------------------------------------------------- |
 | macOS    | `"mac"`      | Songti SC / Heiti SC 系统字体                                                |
 | Windows  | `"windows"`  | SimSun / SimHei 系统字体                                                     |
-| Linux    | `"fandol"`   | 安装 Fandol（TeX Live 或 `apt install fonts-fandol`）                        |
+| Linux    | `"fandol"`   | Fandol + TeX Gyre Termes（[CTAN 下载](fonts/README.md)）                     |
 | Adobe    | `"adobe"`    | 需安装 Adobe 字体                                                            |
 | 方正字库 | `"founder"`  | 从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 |
 
