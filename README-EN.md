@@ -32,7 +32,7 @@ Typst template for Tongji University undergraduate thesis (final project).
 - Algorithm typesetting (`algo` package)
 - Cross-references (`i-figured` package, chapter-prefixed numbering)
 - Circled number footnotes ①②③ (Unicode 1-50 + drawn circles 51+)
-- Six fontsets: `fandol` (default), `windows`, `mac`, `adobe`, `founder`, `noto` (Web App zero-config)
+- Five fontsets: `fandol` (default), `windows`, `mac`, `adobe`, `founder`
 - Character-level justification + optimized line breaks
 
 ---
@@ -43,7 +43,6 @@ Typst template for Tongji University undergraduate thesis (final project).
 
 Select `Start from a template` in the [Typst Web App](https://typst.app) and search for `paddling-tongji-thesis`.
 
-> **Web App users**: set `fontset: "noto"` in `metadata.typ` for zero-config usage.
 
 ### Local Usage
 
@@ -66,7 +65,6 @@ Set the `fontset` parameter in `init-files/metadata.typ`:
 | macOS    | `"mac"`     | Songti SC / Heiti SC system fonts                                                  |
 | Windows  | `"windows"` | SimSun / SimHei system fonts                                                       |
 | Linux    | `"fandol"`  | Install `fonts-fandol` package                                                     |
-| Web App  | `"noto"`    | Zero config, Noto CJK built-in                                                     |
 | Founder  | `"founder"` | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
 
 #### 3. Compile
@@ -88,7 +86,7 @@ Configure in `init-files/main.typ`:
 ```typ
 #show: thesis.with(
   field: "science",      // "science" or "humanities"
-  fontset: "auto",       // fandol / windows / mac / adobe / founder / noto / auto
+  fontset: "fandol",   // fandol / windows / mac / adobe / founder
   bib-content: read("bib/note.bib"),
 )
 ```

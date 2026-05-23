@@ -32,7 +32,7 @@
 - 算法排版（`algo` 宏包）
 - 交叉引用（`i-figured` 宏包，图/表/公式/算法按章节编号）
 - ①②③ 脚注编号（Unicode 1-50 + 绘制圆圈 51+）
-- 六种字体集：`fandol`（默认）、`windows`、`mac`、`adobe`、`founder`、`noto`（Web App 零配置）
+- 五种字体集：`fandol`（默认）、`windows`、`mac`、`adobe`、`founder`
 - 字符级两端对齐 + 优化换行
 
 ---
@@ -42,8 +42,6 @@
 ### 在线 Web App
 
 在 [Typst Web App](https://typst.app) 中选择 `Start from a template`，搜索 `paddling-tongji-thesis`。
-
-> **Web App 用户**：在 `metadata.typ` 中设置 `fontset: "noto"` 即可零配置使用。
 
 ### 本地使用
 
@@ -65,8 +63,8 @@ brew install typst
 | -------- | ------------ | ---------------------------------------------------------------------------- |
 | macOS    | `"mac"`      | Songti SC / Heiti SC 系统字体                                                |
 | Windows  | `"windows"`  | SimSun / SimHei 系统字体                                                     |
-| Linux    | `"fandol"`   | 安装 `fonts-fandol` 包                                                       |
-| Web App  | `"noto"`     | 零配置，Noto CJK 内建                                                        |
+| Linux    | `"fandol"`   | 安装 Fandol（TeX Live 或 `apt install fonts-fandol`）                        |
+| Adobe    | `"adobe"`    | 需安装 Adobe 字体                                                            |
 | 方正字库 | `"founder"`  | 从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 |
 
 #### 3. 编译
@@ -88,7 +86,7 @@ typst compile init-files/main.typ --root .
 ```typ
 #show: thesis.with(
   field: "science",      // "science" 理工科 / "humanities" 文科
-  fontset: "auto",       // fandol / windows / mac / adobe / founder / noto / auto
+  fontset: "fandol",   // fandol / windows / mac / adobe / founder
   bib-content: read("bib/note.bib"),
 )
 ```

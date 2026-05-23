@@ -111,7 +111,7 @@
 //  字体与参考文献
 // ============================================================
 // 字体集：auto（自动） / noto（Web App） / fandol / mac / windows / adobe / founder
-#let fontset = "auto"
+#let fontset = "fandol"
 
 // 参考文献数据库文件路径
 #let bib-path = "bib/note.bib"
