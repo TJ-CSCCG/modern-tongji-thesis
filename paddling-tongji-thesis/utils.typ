@@ -17,6 +17,19 @@
   "-7": 5pt,
 )
 
+// Named font size constants — matching LaTeX template's \tjfont* macros.
+#let TJFONT_COVER         = font-size.at("-0")  // 封面大标题：小初号 36pt
+#let TJFONT_TITLE         = font-size.at("-2")  // 课题名称：小二号 18pt
+#let TJFONT_CHAPTER       = font-size.at("-3")  // 章标题：小三号 15pt
+#let TJFONT_HEADING       = font-size.at("4")   // 摘要/目录/参考/谢辞标题：四号 14pt
+#let TJFONT_INFO          = font-size.at("3")   // 信息说明页标题：三号 16pt
+#let TJFONT_BODY          = font-size.at("-4")  // 正文：小四号 12pt
+#let TJFONT_CAPTION       = font-size.at("5")   // 表题/图题：五号 10.5pt
+#let TJFONT_TABLE         = font-size.at("-5")  // 表内文字：小五号 9pt
+#let TJFONT_COVER_FIELD   = font-size.at("-2")  // 封面表格字段：小二号 18pt
+#let TJFONT_ABSTRACT      = font-size.at("-2")  // 摘要标题：小二号 18pt
+#let TJFONT_ABSTRACT_SUB  = font-size.at("3")   // 摘要副标题：三号 16pt
+
 // Font presets — exactly matching LaTeX template's fontset options.
 // All presets use TeX Gyre Termes as Latin cover (free, open-source TNR clone).
 // Each defines the core four CJK families: song, hei, kai, fang.

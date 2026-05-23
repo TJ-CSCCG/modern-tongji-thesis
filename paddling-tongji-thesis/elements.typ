@@ -64,20 +64,20 @@
   #text(
     "TONGJI UNIVERSITY",
     font: f.hei,
-    size: font-size.at("-2"),
+    size: TJFONT_COVER_FIELD,
     weight: "bold",
   )
 
   // #v(30pt)
-  #text(cover-text, font: f.hei, size: font-size.at("-0"))
+  #text(cover-text, font: f.hei, size: TJFONT_COVER)
   #v(60pt)
 
-  #set text(font: f.hei, size: font-size.at("-2"))
+  #set text(font: f.hei, size: TJFONT_COVER_FIELD)
   #grid(
     columns: (5em, auto),
     gutter: 16pt,
     ..cover.enumerate().map(((idx, value)) => {
-      set text(size: font-size.at("-2"))
+      set text(size: TJFONT_COVER_FIELD)
       if calc.even(idx) {
         let arr = value.clusters()
         let k = (4 - arr.len()) / (arr.len() - 1)
@@ -101,11 +101,11 @@
   let f = if fonts != none { fonts } else { font-family }
   align(center)[
     #v(1em)
-    #text(font: f.hei, size: font-size.at("-2"), weight: "bold", title)
+    #text(font: f.hei, size: TJFONT_COVER_FIELD, weight: "bold", title)
     #if subtitle != none and subtitle != "" {
       [
         #v(0.2em)
-        #text(font: f.hei, size: font-size.at("3"), weight: "bold", subtitle)
+        #text(font: f.hei, size: TJFONT_INFO, weight: "bold", subtitle)
       ]
     }
     #v(1.5em)
@@ -169,12 +169,12 @@
 ) = {
   let f = if fonts != none { fonts } else { font-family }
   set align(center)
-  text(font: f.hei, size: font-size.at("3"))[同济大学本科#header-text 信息说明页]
+  text(font: f.hei, size: TJFONT_INFO)[同济大学本科#header-text 信息说明页]
   v(1em)
 
   set align(left)
   set par(first-line-indent: 0pt, leading: 1.2em)
-  set text(font: f.song, size: font-size.at("4"))
+  set text(font: f.song, size: TJFONT_HEADING)
 
   let field-line(key, value) = {
     [#key： #value]
@@ -206,7 +206,7 @@
   // 内容简述 (300字以内)
   field-line("内容简述（请用300字以内简要概述）", {
     v(0.2em)
-    set text(size: font-size.at("-4"))
+    set text(size: TJFONT_BODY)
     set par(first-line-indent: 2em, leading: 0.65em)
     infoabstract
   })

@@ -75,7 +75,7 @@
   set page(
     paper: "a4", margin: (top: 4.0cm, bottom: 2.7cm, left: 3.3cm, right: 1.8cm), binding: left,
   )
-  set text(font-size.at("-4"), font: ff.song, lang: "zh", region: "cn")
+  set text(TJFONT_BODY, font: ff.song, lang: "zh", region: "cn")
 
   make-cover(
     (
@@ -97,7 +97,7 @@
   set par(justify: true, first-line-indent: (amount: 2em, all: true), leading: 1.2em, spacing: 1.2em)
   set par(justification-limits: (tracking: (min: -0.01em, max: 0.02em)), linebreaks: "optimized")
   set math.equation(numbering: "(1)")
-  show strong: it => text(font: ff.hei, weight: "bold", it.body)
+  show strong: it => text(font: ff.hei, it.body)
   show emph: it => text(font: ff.kai, style: "italic", it.body)
   show raw: set text(font: ff.code)
   show math.equation: set text(font: ff.math)
@@ -141,8 +141,8 @@
     set par(first-line-indent: 0pt)
     if it.level == 1 {
       set align(center)
-      let heading-size = if it.numbering != none { font-size.at("-3") } else { font-size.at("4") }
-      set text(font: ff.hei, size: heading-size, weight: "bold")
+      let heading-size = if it.numbering != none { TJFONT_CHAPTER } else { TJFONT_HEADING }
+      set text(font: ff.hei, size: heading-size)
       v(16pt)
       if it.numbering != none {
         numbering(it.numbering, ..counter(heading).get())
@@ -153,7 +153,7 @@
       }
       v(0.6em)
     } else if it.level == 2 {
-      set text(font: ff.hei, size: font-size.at("-4"), weight: "bold")
+      set text(font: ff.hei, size: TJFONT_BODY)
       v(0.6em)
       if it.numbering != none {
         numbering(it.numbering, ..counter(heading).get())
@@ -164,7 +164,7 @@
       }
       v(0.6em)
     } else if it.level == 3 {
-      set text(font: ff.hei, size: font-size.at("-4"), weight: "bold")
+      set text(font: ff.hei, size: TJFONT_BODY)
       v(0.6em)
       if it.numbering != none {
         h(2em)
@@ -177,7 +177,7 @@
       }
       v(0.6em)
     } else if it.level == 4 {
-      set text(font: ff.hei, size: font-size.at("-4"), weight: "bold")
+      set text(font: ff.hei, size: TJFONT_BODY)
       v(0.6em)
       if it.numbering != none {
         h(2em)
@@ -190,7 +190,7 @@
       }
       v(0.6em)
     } else if it.level == 5 {
-      set text(font: ff.hei, size: font-size.at("-4"), weight: "bold")
+      set text(font: ff.hei, size: TJFONT_BODY)
       v(0.6em)
       if it.numbering != none {
         h(2em)
@@ -218,7 +218,7 @@
 
   // Code blocks: line numbers, frame, tab size, smaller font
   show raw.where(block: true): it => {
-    set text(size: font-size.at("-5"))
+    set text(size: TJFONT_TABLE)
     set par(leading: 0.8em)
     block(
       fill: luma(250),
@@ -231,14 +231,14 @@
 
   // Captions: 五号(10.5pt) 宋体, no indent
   show figure.caption: it => {
-    set text(font: ff.song, size: font-size.at("5"))
+    set text(font: ff.song, size: TJFONT_CAPTION)
     set par(first-line-indent: 0pt)
     it
   }
 
   // Table text: 小五号(9pt)
   show figure.where(kind: table): it => {
-    set text(size: font-size.at("-5"))
+    set text(size: TJFONT_TABLE)
     it
   }
 
@@ -249,11 +249,11 @@
 
   set page(
     numbering: "I", header: {
-      set text(font: ff.song, size: font-size.at("-4"))
+      set text(font: ff.song, size: TJFONT_BODY)
       grid(
         columns: (1cm, 1fr, auto, 0.5em), [],
         image("figures/tongji-header.svg", height: 1.14cm),
-        align(horizon, block(height: 1.14cm, align(center + horizon, text(font: ff.song, size: font-size.at("-4"), header-text)))),
+        align(horizon, block(height: 1.14cm, align(center + horizon, text(font: ff.song, size: TJFONT_BODY, header-text)))),
         [],
       )
       v(-0.5em)
@@ -261,7 +261,7 @@
       draw-binding()
     }, header-ascent: 20%, footer: context {
       set align(center)
-      set text(font: ff.song, size: font-size.at("-4"))
+      set text(font: ff.song, size: TJFONT_BODY)
       numbering("I", counter(page).get().first())
     },
   )
@@ -291,7 +291,7 @@
   set page(numbering: "1", footer: context {
     line(stroke: 1.8pt, length: 100%)
     set align(right)
-    set text(font: ff.song, size: font-size.at("-4"))
+    set text(font: ff.song, size: TJFONT_BODY)
     v(-0.6em)
     [
       共#h(1em)
