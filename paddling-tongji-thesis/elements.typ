@@ -1,5 +1,4 @@
-#import "@preview/theorion:0.6.0": *
-#import cosmos.simple: *
+#import "@preview/theorion:0.6.0": make-frame, theorion-i18n-map, set-inherited-levels, set-theorion-numbering, set-qed-symbol
 #import "@preview/algo:0.3.6": algo, i, d, comment, code
 #import "@preview/gb7714-bilingual:0.2.3": multicite
 #import "@preview/wordometer:0.1.5": word-count-of

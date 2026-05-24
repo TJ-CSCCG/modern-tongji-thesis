@@ -100,20 +100,20 @@ $ <eq:piecewise>
 命题、猜想、假设、定义、例、注和证明共十种定理环境，按章编号。
 本 Typst 模板通过 `theorion` 宏包实现了完全对应的环境。
 
-#theorem[素数有无穷多个。] <thm:infinite-primes>
+#thm[素数有无穷多个。] <thm:infinite-primes>
 
-#proof[
+#pf[
   假设素数只有有限个，记为 $p_1, p_2, dots, p_n$。令 $N = p_1 p_2 dots p_n + 1$，
   则 $N > 1$，且 $N$ 除以任何 $p_i$ 都余 $1$，因此 $N$ 不能被任何 $p_i$ 整除。
   但 $N$ 必有素因子，该素因子不在 $p_1, dots, p_n$ 中，与假设矛盾。
   故素数有无穷多个。
 ]
 
-#corollary[
+#cor[
   如果 $a$ 和 $b$ 是正实数，则 $a + b >= 2 sqrt(a b)$。
 ] <cor:am-gm>
 
-#proof[
+#pf[
   具体地，我们有：
   $
     sqrt(a b) &<= (a + b)/2 \
@@ -122,12 +122,12 @@ $ <eq:piecewise>
   因此，$a + b >= 2 sqrt(a b)$，定理成立。
 ]
 
-#lemma[
+#lem[
   设 $f$ 是一个在 $[a, b]$ 上的可微函数，则 $f$ 在 $[a, b]$ 上一定有一点使得
   $f'(c) = (f(b) - f(a))/(b - a)$。
 ] <lem:mvt>
 
-#proof[
+#pf[
   定义辅助函数 $g(x) = f(x) - (f(b) - f(a))/(b - a) (x - a)$。
   易验证 $g(a) = f(a)$，$g(b) = f(b) - (f(b) - f(a)) = f(a)$，故 $g(a) = g(b)$。
   由罗尔定理，存在 $c in (a, b)$ 使得 $g'(c) = 0$，即
@@ -137,11 +137,11 @@ $ <eq:piecewise>
   因此 $f'(c) = (f(b) - f(a))/(b - a)$，定理得证。
 ]
 
-#proposition[
+#prop[
   设 $f$ 和 $g$ 是两个单调递增的函数，则 $f + g$ 也是一个单调递增函数。
 ] <prop:monotonic>
 
-#proof[
+#pf[
   我们需要证明对于任意的 $x, y in RR$，如果 $x < y$，
   则 $f(x) + g(x) < f(y) + g(y)$。
   由于 $f$ 和 $g$ 都是单调递增的，所以有 $f(x) < f(y)$ 和 $g(x) < g(y)$，
@@ -149,17 +149,17 @@ $ <eq:piecewise>
   因此，$f + g$ 是单调递增的，定理得证。
 ]
 
-#conjecture[孪生素数猜想][
+#conj[孪生素数猜想][
   存在无穷多对素数 $(p, p + 2)$，使得 $p$ 和 $p + 2$ 均为素数。
   例如 $(3, 5)$、$(5, 7)$、$(11, 13)$、$(17, 19)$ 等。
   该猜想至今尚未被证明。
 ] <conj:twin-primes>
 
-#assumption[
+#assume[
   假设 $A$ 和 $B$ 是两个集合，则它们的笛卡尔积 $A times B$ 的基数为 $|A| dot |B|$。
 ] <assume:cartesian>
 
-#proof[
+#pf[
   我们可以使用等势关系来证明，即构造一个双射
   $f: A times B -> {1, 2, dots, |A| dot |B|}$。
   具体地，我们可以按照以下方式定义 $f$：
@@ -170,28 +170,28 @@ $ <eq:piecewise>
   定理得证。
 ]
 
-#definition[
+#dfn[
   一个有向无环图是拓扑排序的，当且仅当它的所有顶点都可以按照某个顺序进行编号，
   使得对于任意一条有向边 $(u, v)$，$u$ 的编号都小于 $v$ 的编号。
 ] <dfn:topological-sort>
 
-#example[
+#exmp[
   考虑一个任务调度问题，其中有 $n$ 个任务需要按照一定的顺序执行。
   如果任务之间存在依赖关系，即某些任务必须在其他任务执行完毕之后才能开始执行，
   那么我们可以将这些任务和它们之间的依赖关系表示成一个有向无环图，
   并通过拓扑排序来确定任务的执行顺序。
 ] <exmp:task-scheduling>
 
-#remark-block[
+#rem[
   在数学中，定义和定理是数学推理的基础，而引理和命题则通常作为定理证明的中间步骤。
   而且在数学研究中，猜想和猜测往往需要大量的证明和反证，才能得到确定的结论。
 ] <rem:note>
 
-#theorem[
+#thm[
   对于任意正整数 $n$，有 $sum_(i=1)^n i = (n (n + 1))/2$。
 ] <thm:arithmetic-series>
 
-#proof[
+#pf[
   设 $n$ 是任意正整数，则存在一个双射
   $f: {1, 2, dots, n} -> {n, n - 1, dots, 1}$，
   即将 ${1, 2, dots, n}$ 中的元素按照相反的顺序重新编号，使得 $f(i) = n - i + 1$。

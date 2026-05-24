@@ -127,6 +127,52 @@
 // Word count (auto-tracked, CJK characters)
 #let wordcount() = context state("total-words-cjk").final()
 
+// Theorem render — title + body inline (same paragraph), matching SJTUThesis & LaTeX
+#let thm-render(prefix: none, title: "", full-title: auto, body) = {
+  if full-title != "" {
+    strong[#full-title] + sym.space
+  }
+  body
+}
+
+// Proof render — inline QED, matching SJTUThesis
+#let pf-render(prefix: none, title: "", full-title: auto, body) = {
+  strong[证明] + sym.space + body + box(width: 0em) + h(1fr) + sym.wj + $square$
+}
+
+// Theorem environments — module-level so chapter files can access them.
+// Each type has an independent counter, matching LaTeX's \newtheorem{}.
+#let (thm-ctr, thm-box, thm, show-thm) = make-frame(
+  "theorem", theorion-i18n-map.at("theorem"), inherited-levels: 1, render: thm-render,
+)
+#let (cor-ctr, cor-box, cor, show-cor) = make-frame(
+  "corollary", theorion-i18n-map.at("corollary"), inherited-levels: 1, render: thm-render,
+)
+#let (lem-ctr, lem-box, lem, show-lem) = make-frame(
+  "lemma", theorion-i18n-map.at("lemma"), inherited-levels: 1, render: thm-render,
+)
+#let (prop-ctr, prop-box, prop, show-prop) = make-frame(
+  "proposition", theorion-i18n-map.at("proposition"), inherited-levels: 1, render: thm-render,
+)
+#let (conj-ctr, conj-box, conj, show-conj) = make-frame(
+  "conjecture", theorion-i18n-map.at("conjecture"), inherited-levels: 1, render: thm-render,
+)
+#let (assume-ctr, assume-box, assume, show-assume) = make-frame(
+  "assumption", theorion-i18n-map.at("assumption"), inherited-levels: 1, render: thm-render,
+)
+#let (dfn-ctr, dfn-box, dfn, show-dfn) = make-frame(
+  "definition", theorion-i18n-map.at("definition"), inherited-levels: 1, render: thm-render,
+)
+#let (exmp-ctr, exmp-box, exmp, show-exmp) = make-frame(
+  "example", theorion-i18n-map.at("example"), inherited-levels: 1, render: thm-render,
+)
+#let (rem-ctr, rem-box, rem, show-rem) = make-frame(
+  "remark", theorion-i18n-map.at("remark"), inherited-levels: 1, render: thm-render,
+)
+#let (pf-ctr, pf-box, pf, show-pf) = make-frame(
+  "proof", theorion-i18n-map.at("proof"), render: pf-render,
+)
+
 #let thesis(
   school: "某学院", major: "某专业", id: "0000000", student: "某某某", advisor: "某某某", title: "某标题", subtitle: "某副标题", title-english: "Some Title", subtitle-english: "Some Subtitle", date: datetime.today(), abstract: "慧枫尚萍氢，驳展妙棚端梦称委竞励。绘象臂淬人壳闭营风混仓、问抬兽村蜡胡锹挤污艰烃伏惧派宝既抓章住蓟棒褶均谭穿谴属；羟贮银…钓郭曾牙记氢硝巍仰蒲邀趟。革旅剑撞压单施宵饼狼将售烷贸问术粮洞魔。却烟陕倍且隘框糟秩板商，宙刚疮顿表羽楞景哺驯邮戒歌溜著聪峻忙劈左绩卖卫萨讯完读百釉好仔帜纽龟玉炒脂衍蛴瓦副冯查索桐梁；轴派？蝗丸朝保岂搅搞燕挫品休礼倾玻黑李宽列邮苦仔汛鳙物己弱寸栓孝哄俭牙敬厄搬吨楞干捧原趋息…善！", keywords: ("关键词1", "关键词2", "关键词3"), abstract-english: lorem(300), keywords-english: ("Keyword1", "keyword2", "keyword3"), doc,
   field: "science",
@@ -311,11 +357,21 @@
     }
   }
 
-  // Theorem environments — matching LaTeX \theoremstyle{definition}
-  show: show-theorion
+  // Theorem environments — matching LaTeX's independent per-type counters
   set-inherited-levels(1)
   set-theorion-numbering("1.1")
   set-qed-symbol[#sym.wj]
+
+  show: show-thm
+  show: show-cor
+  show: show-lem
+  show: show-prop
+  show: show-conj
+  show: show-assume
+  show: show-dfn
+  show: show-exmp
+  show: show-rem
+  show: show-pf
 
   show list: it => it
   show enum: it => it
