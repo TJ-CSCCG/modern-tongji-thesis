@@ -211,7 +211,3 @@ In Typst, *bold*, _italic_ and `monospace` are supported.
   ```, [
   #underline[中Lorem文ipsum中dolor文]
 ])
-
-=== 生僻字支持
-
-由于本模板使用的是方正字库GBK字体，我们可以直接使用生僻字#footnote[此处的生僻字指：GBK编码中有，但GB2312编码中没有的字。]：丂丄丅丆丏丒丗丟丠両丣並丩丮丯丱丳丵丷丼乀乁乂乄乆乊乑乕乗乚乛乢乣乤乥乧乨乪乫乬乭乮乯。

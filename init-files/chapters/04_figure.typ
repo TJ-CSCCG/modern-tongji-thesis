@@ -134,19 +134,31 @@
     #figure(
         table(
           columns: 4,
+          stroke: none,
+          toprule(), midrule(),
           [*_t_*], [1], [2], [3],
+          midrule(),
           [*_y_*], [0.3s], [0.4s], [0.8s],
+          bottomrule(),
         ),
         caption: [计时结果],
     ) <tbl:table1>
       ```, [
     #figure(
-      table(columns: 4, [*_t_*], [1], [2], [3], [*_y_*], [0.3s], [0.4s], [0.8s]), caption: [计时结果],
+      table(
+        columns: 4,
+        stroke: none,
+        toprule(), midrule(),
+        [*_t_*], [1], [2], [3],
+        midrule(),
+        [*_y_*], [0.3s], [0.4s], [0.8s],
+        bottomrule(),
+      ), caption: [计时结果],
     ) <tbl:table1>
   ],
 )
 
-Typst 现已拥有 `booktabs` 宏包（`@preview/booktabs`），提供与 #LaTeX `booktabs` 相同的 `toprule`、`midrule`、`bottomrule` 和 `cmidrule` 命令，配合 `tablex` 宏包可以轻松排版三线表。本模板已集成 `booktabs` 和 `tablex`，可以直接使用。
+Typst 内置 `table` 已支持三线表所需的所有功能（`table.hline`、`table.cell` 的 `colspan`/`rowspan`、`stroke: none` 等）。本模板已集成三线表辅助命令 `toprule`、`midrule`、`bottomrule` 和 `cmidrule`：
 
 #table(
   columns: (1fr, 1fr), [
@@ -157,21 +169,21 @@ Typst 现已拥有 `booktabs` 宏包（`@preview/booktabs`），提供与 #LaTeX
     #strong[渲染结果]
   ], ```typ
   #figure(
-    tablex(
+    table(
       columns: 3,
-      auto-lines: false,
+      stroke: none,
       align: center + horizon,
 
       toprule(),
-      colspanx(2)[*Item*], (),  rowspanx(2)[*Price* (\$)],
+      table.cell(colspan: 2)[*Item*], [],  table.cell(rowspan: 2)[*Price* (\$)],
       cmidrule(start: 0, end: 2, ),
-      [*Animal*], [*Description*], (),
+      [*Animal*], [*Description*], [],
       midrule(),
-      rowspanx(2)[Gnat], [per gram], cellx(align: right)[13.65],
-      (), [each], cellx(align: right)[0.01],
-      [Gnu], [stuffed], cellx(align: right)[92.50],
-      [Emu], [stuffed], cellx(align: right)[33.33],
-      [Armadillo], [frozen], cellx(align: right)[8.99],
+      table.cell(rowspan: 2)[Gnat], [per gram], table.cell(align: right)[13.65],
+      [], [each], table.cell(align: right)[0.01],
+      [Gnu], [stuffed], table.cell(align: right)[92.50],
+      [Emu], [stuffed], table.cell(align: right)[33.33],
+      [Armadillo], [frozen], table.cell(align: right)[8.99],
       bottomrule(),
     ),
     caption: [三线表示例],
@@ -179,15 +191,92 @@ Typst 现已拥有 `booktabs` 宏包（`@preview/booktabs`），提供与 #LaTeX
   )
   ```, [
     #figure(
-      tablex(
-        columns: 3, auto-lines: false, align: center + horizon, toprule(), colspanx(2)[*Item*], (), rowspanx(2)[*Price* (\$)], cmidrule(start: 0, end: 2), [*Animal*], [*Description*], (), midrule(), rowspanx(2)[Gnat], [per gram], cellx(align: right)[13.65], (), [each], cellx(align: right)[0.01], [Gnu], [stuffed], cellx(align: right)[92.50], [Emu], [stuffed], cellx(align: right)[33.33], [Armadillo], [frozen], cellx(align: right)[8.99], bottomrule(),
+      table(
+        columns: 3,
+        stroke: none,
+        align: center + horizon,
+
+        toprule(),
+        table.cell(colspan: 2)[*Item*], [],  table.cell(rowspan: 2)[*Price* (\$)],
+        cmidrule(start: 0, end: 2, ),
+        [*Animal*], [*Description*], [],
+        midrule(),
+        table.cell(rowspan: 2)[Gnat], [per gram], table.cell(align: right)[13.65],
+        [], [each], table.cell(align: right)[0.01],
+        [Gnu], [stuffed], table.cell(align: right)[92.50],
+        [Emu], [stuffed], table.cell(align: right)[33.33],
+        [Armadillo], [frozen], table.cell(align: right)[8.99],
+        bottomrule(),
       ), caption: [三线表示例], kind: table,
     )
   ],
 )
 
-`tablex` 宏包也实现了跨页表格。然而，关于带有 “续表X.X”
-说明文字的跨页表格，Typst目前还没有很好的解决方案。因此，我们建议在Typst实现这一功能之前，不要使用跨页表格，以免造成与官方模板的不一致。
+关于跨页表格，Typst 0.11 起内置 `table` 已支持 `table.header()` 跨页重复表头。下面是一个跨页表格的完整示例：
+
+```typ
+#figure(
+  table(
+    columns: 4,
+    align: center,
+    stroke: none,
+    inset: 8pt,
+    table.header(
+      toprule(),
+      [*项目*], [*值*], [*单位*], [*备注*],
+      midrule(),
+    ),
+    [Alpha], [23.05], [ms], [],
+    [Beta], [15.06], [ms], [注1],
+    ...range(1, 40).map(i => ([#i], [#i * 3.14], [ms], [])),
+    midrule(),
+    bottomrule(),
+  ),
+  kind: table,
+  caption: [跨页表格（表头重复）],
+)
+```
+
+下面是一个跨页表格的实际渲染效果：
+
+#figure(
+  table(
+    columns: 4,
+    align: center,
+    stroke: none,
+    inset: 8pt,
+    table.header(
+      toprule(),
+      [*测试程序*], [*运行时间 (s)*], [*同步时间 (s)*], [*检查点时间 (s)*],
+      midrule(),
+    ),
+    [CG.C.2], [23.05], [0.002], [0.116],
+    [CG.A.4], [15.06], [0.003], [0.067],
+    [CG.A.8], [13.38], [0.004], [0.072],
+    [MG.A.2], [9.72], [0.002], [0.015],
+    [MG.B.4], [31.44], [0.003], [0.009],
+    [MG.C.8], [41.20], [0.001], [0.055],
+    [EP.C.2], [495.49], [0.001], [0.009],
+    [EP.C.4], [397.69], [0.002], [0.015],
+    [EP.C.8], [196.74], [0.003], [0.018],
+    [1], [3.14], [ms], [],   [2], [6.28], [ms], [],   [3], [9.42], [ms], [],
+    [4], [12.56], [ms], [],  [5], [15.70], [ms], [],  [6], [18.84], [ms], [],
+    [7], [21.98], [ms], [],  [8], [25.12], [ms], [],  [9], [28.26], [ms], [],
+    [10], [31.40], [ms], [], [11], [34.54], [ms], [], [12], [37.68], [ms], [],
+    [13], [40.82], [ms], [], [14], [43.96], [ms], [], [15], [47.10], [ms], [],
+    [16], [50.24], [ms], [], [17], [53.38], [ms], [], [18], [56.52], [ms], [],
+    [19], [59.66], [ms], [], [20], [62.80], [ms], [], [21], [65.94], [ms], [],
+    [22], [69.08], [ms], [], [23], [72.22], [ms], [], [24], [75.36], [ms], [],
+    [25], [78.50], [ms], [], [26], [81.64], [ms], [], [27], [84.78], [ms], [],
+    [28], [87.92], [ms], [], [29], [91.06], [ms], [], [30], [94.20], [ms], [],
+    [31], [97.34], [ms], [], [32], [100.48], [ms], [], [33], [103.62], [ms], [],
+    [34], [106.76], [ms], [], [35], [109.90], [ms], [], [36], [113.04], [ms], [],
+    midrule(),
+    bottomrule(),
+  ),
+  kind: table,
+  caption: [计时结果],
+)
 
 === 算法
 
@@ -286,13 +375,13 @@ Typst 现已拥有 `booktabs` 宏包（`@preview/booktabs`），提供与 #LaTeX
 
 == 浮动体和公式的交叉引用 <floats>
 
-在论文中，我们经常需要引用浮动体，如 “见图1.1”、“见表2.2”、“见算法3.3”
-等。由于在Typst中，浮动体的编号没有预设好的 “章节号.浮动体序号”
-的形式，我们引入了 `i-figured` 宏包，以实现我们需要的浮动体的交叉引用格式。
+在论文中，我们经常需要引用浮动体，如 "见图1.1"、"见表2.2"、"见算法3.3"
+等。本模板通过 Typst 内置的 `figure` 编号系统，
+按章节自动为浮动体分配 "章节号.浮动体序号" 格式的编号。
 
 在引用@floats-class 提到的浮动体类型时，我们需要给出浮动体的类型，如 `fig`（图）、`tbl`（表）、`algo`（算法）、`lst`（代码）
 等，用冒号 `:` 与浮动体的标签分隔。在Typst中，我们可以使用 `@fig:xxx` 的形式引用浮动体。在渲染时，Typst会自动将 `@fig:xxx` 转换为
-“见图X.X” 的形式。下面是一个例子。
+"图X.X" 的形式。下面是一个例子。
 
 #table(columns: (1fr, 1fr), [
   #set align(center)
@@ -306,8 +395,7 @@ Typst 现已拥有 `booktabs` 宏包（`@preview/booktabs`），提供与 #LaTeX
   如@fig:multifigure1、@tbl:table1、@algo:fib 和@lst:fibpy 所示。
 ])
 
-在引用公式时，我们也需要给出公式的类型（`eqt`），用冒号 `:` 与公式的标签分隔。在Typst中，我们可以使用 `@eqt:xxx` 的形式引用公式。在渲染时，Typst会自动将 `@eqt:xxx` 转换为
-“公式~(X.X)” 的形式。下面是一个例子。
+在引用公式时，我们可以直接用 `@eqt-demo` 的形式引用公式。在渲染时，Typst 会自动显示为 "(X.X)" 的编号。下面是一个例子。
 
 $
   A = pi r^2
@@ -320,7 +408,7 @@ $ <eqt-demo>
   #set align(center)
   #strong[渲染结果]
 ], ```typ
-如@eqt:eqt-demo 所示。
+如@eqt-demo 所示。
   ```, [
-  如@eqt:eqt-demo 所示。
+  如@eqt-demo 所示。
 ])

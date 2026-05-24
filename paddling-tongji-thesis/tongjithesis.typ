@@ -4,6 +4,8 @@
 
 #set pagebreak(weak: true)
 
+#let newpage(twoside: false) = if twoside { pagebreak(to: "odd") } else { pagebreak() }
+
 #let chinese-numeral(n) = {
   let digits = ("零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十")
   if n <= 10 {
@@ -64,6 +66,67 @@
   })
 }
 
+// Appendix — matches LaTeX
+#let appendix(humanities: false, body) = {
+  heading(level: 1, numbering: none, outlined: true)[附录]
+  set heading(numbering: (..nums) => {
+    let pos = nums.pos()
+    let lv = pos.len()
+    let letter(n) = numbering("A", n)
+    if humanities {
+      if lv == 2 { "（" + letter(pos.at(1)) + "）" }
+      else if lv == 3 { str(pos.at(2)) + "." }
+    } else {
+      if lv == 2 { letter(pos.at(1)) + "." }
+      else if lv == 3 { letter(pos.at(1)) + "." + str(pos.at(2)) }
+    }
+  })
+  counter(heading).update(1)
+
+  // Reset appendix figure/table counters at each H2 section
+  show heading: it => {
+    if it.level == 2 {
+      counter(figure.where(kind: table)).update(0)
+      counter(figure.where(kind: image)).update(0)
+      counter(figure.where(kind: raw)).update(0)
+      counter(figure.where(kind: "algo")).update(0)
+    }
+    it
+  }
+
+  // Appendix figure/table numbering: letter-based per-kind (A.1, A.2; 表 A.1, 表 A.2 …)
+  show figure: it => {
+    if it.numbering != none { it } else {
+      let suppl = if it.kind == table { [表] } else if it.kind == image { [图] } else if it.kind == raw { [代码] } else { it.supplement }
+      context {
+        let hc = counter(heading).get()
+        let sec = hc.at(1, default: 1)
+        let letter = numbering("A", sec)
+        figure(
+          it.body,
+          kind: it.kind,
+          supplement: suppl,
+          caption: it.caption,
+          numbering: n => letter + "." + str(n),
+        )
+      }
+    }
+  }
+
+  body
+}
+
+// Cross-reference convenience commands
+#let chapref(label) = [第@label章]
+#let secref(label) = [第@label节]
+#let figref(label) = [图@label]
+#let tabref(label) = [表@label]
+#let eqref(label) = [式@label]
+#let algoref(label) = [算法@label]
+
+// Word count (auto-tracked, CJK characters)
+#let wordcount() = context state("total-words-cjk").final()
+
 #let thesis(
   school: "某学院", major: "某专业", id: "0000000", student: "某某某", advisor: "某某某", title: "某标题", subtitle: "某副标题", title-english: "Some Title", subtitle-english: "Some Subtitle", date: datetime.today(), abstract: "慧枫尚萍氢，驳展妙棚端梦称委竞励。绘象臂淬人壳闭营风混仓、问抬兽村蜡胡锹挤污艰烃伏惧派宝既抓章住蓟棒褶均谭穿谴属；羟贮银…钓郭曾牙记氢硝巍仰蒲邀趟。革旅剑撞压单施宵饼狼将售烷贸问术粮洞魔。却烟陕倍且隘框糟秩板商，宙刚疮顿表羽楞景哺驯邮戒歌溜著聪峻忙劈左绩卖卫萨讯完读百釉好仔帜纽龟玉炒脂衍蛴瓦副冯查索桐梁；轴派？蝗丸朝保岂搅搞燕挫品休礼倾玻黑李宽列邮苦仔汛鳙物己弱寸栓孝哄俭牙敬厄搬吨楞干捧原趋息…善！", keywords: ("关键词1", "关键词2", "关键词3"), abstract-english: lorem(300), keywords-english: ("Keyword1", "keyword2", "keyword3"), doc,
   field: "science",
@@ -111,7 +174,7 @@
     cover-text: cover-text,
     fonts: ff,
   )
-  if twoside { pagebreak(to: "odd") } else { pagebreak() }
+  newpage(twoside: twoside)
 
   make-info-page(
     title: title, subtitle: subtitle, school: school, major: major,
@@ -119,11 +182,10 @@
     infowordcount: infowordcount, infothesiswords: infothesiswords,
     infomaterials: infomaterials, header-text: header-text, fonts: ff,
   )
-  if twoside { pagebreak(to: "odd") } else { pagebreak() }
+  newpage(twoside: twoside)
 
   set par(justify: true, first-line-indent: (amount: 2em, all: true), leading: 1.2em, spacing: 1.2em)
   set par(justification-limits: (tracking: (min: -0.01em, max: 0.02em)), linebreaks: "optimized")
-  set math.equation(numbering: "(1)")
   show strong: it => text(font: ff.hei, it.body)
   show emph: it => text(font: ff.kai, style: "italic", it.body)
   show raw: set text(font: ff.code)
@@ -284,9 +346,21 @@
     it
   }
 
-  show heading: i-figured.reset-counters.with(extra-kinds: ("algo",))
-  show figure: i-figured.show-figure.with(extra-prefixes: (algo: "algo:"))
-  show math.equation.where(block: true): i-figured.show-equation
+  show heading: it => {
+    counter(figure.where(kind: image)).update(0)
+    counter(figure.where(kind: table)).update(0)
+    counter(figure.where(kind: raw)).update(0)
+    counter(figure.where(kind: "algo")).update(0)
+    it
+  }
+  set figure(numbering: n => context {
+    let ch = counter(heading).get().first()
+    str(ch) + "." + str(n)
+  })
+  show math.equation.where(block: true): set math.equation(numbering: n => context {
+    let ch = counter(heading).get().first()
+    numbering("(1.1)", ch, n)
+  })
   show figure.where(kind: table): set figure.caption(position: top)
 
   let make-page-header() = context {
@@ -337,7 +411,7 @@
   pagebreak()
 
   make-outline()
-  if twoside { pagebreak(to: "odd") } else { pagebreak() }
+  newpage(twoside: twoside)
 
   set page(margin: page-margin, binding: left, numbering: "1", header: make-page-header(), header-ascent: 20%, footer: context {
     line(stroke: 1.8pt, length: 100%)
@@ -394,68 +468,7 @@
 
   let body = word-count-tracked(body-with-bib)
 
-  // Theorem environments
-  let make-thm-env(name, ctr-name) = {
-    let c = counter(ctr-name)
-    (body) => context {
-      c.step()
-      let ch = counter(heading).get().first()
-      let n = c.get().first()
-      [*#name #ch.#n* #body]
-    }
-  }
-  let thm = make-thm-env("定理", "thm")
-  let cor = make-thm-env("推论", "cor")
-  let lem = make-thm-env("引理", "lem")
-  let prop = make-thm-env("命题", "prop")
-  let conj = make-thm-env("猜想", "conj")
-  let assume = make-thm-env("假设", "assume")
-  let dfn = make-thm-env("定义", "dfn")
-  let exmp = make-thm-env("例", "exmp")
-  let rem = make-thm-env("注", "rem")
-  let pf(body) = context { [*证明* #body □] }
-
-  // Appendix — matches LaTeX: \chapter*{附录} (unnumbered H1), then
-  // \section (H2) = A/B/C (science) or （A）/（B）/（C） (humanities),
-  // \subsection (H3) = A.1/A.2 (science) or 1./2. (humanities).
-  // Floats are numbered within section (图 A.1, 表 A.2, (A.1), 算法 A.1, …).
-  let appendix(body) = {
-    heading(level: 1, numbering: none, outlined: true)[附录]
-    set heading(numbering: (..nums) => {
-      let pos = nums.pos()
-      let lv = pos.len()
-      let letter(n) = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(n - 1)
-      if is-humanities {
-        if lv == 2 { "（" + letter(pos.at(1)) + "）" }
-        else if lv == 3 { str(pos.at(2)) + "." }
-      } else {
-        if lv == 2 { letter(pos.at(1)) + "." }
-        else if lv == 3 { letter(pos.at(1)) + "." + str(pos.at(2)) }
-      }
-    })
-    counter(heading).update(0)
-
-    // i-figured overrides: reset at section level (H2) and number with letters
-    show heading: i-figured.reset-counters.with(level: 2, extra-kinds: ("algo",))
-    show figure: i-figured.show-figure.with(
-      level: 2, leading-zero: false, zero-fill: true,
-      numbering: nums => {
-        let sec = nums.first()
-        let fig = nums.last()
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(sec - 1) + "." + str(fig)
-      },
-      extra-prefixes: (algo: "algo:"),
-    )
-    show math.equation.where(block: true): i-figured.show-equation.with(
-      level: 2, leading-zero: false, zero-fill: true,
-      numbering: nums => {
-        let sec = nums.first()
-        let eq = nums.last()
-        "(" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(sec - 1) + "." + str(eq) + ")"
-      },
-    )
-
-    body
+  body
   }
 
   // Cross-reference convenience commands

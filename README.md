@@ -34,9 +34,9 @@
 - 定理环境（定理、推论、引理、命题、猜想、假设、定义、例、注、证明）
 - 附录（字母编号 A, B, C...）
 - GB/T 7714-2015 双语参考文献（`gb7714-bilingual` 宏包）
-- 三线表（`tablex` + `booktabs` 风格）
+- 三线表（Typst 原生 `table` + `table.hline`）
 - 算法排版（`algo` 宏包）
-- 交叉引用（`i-figured` 宏包，图/表/公式/算法按章节编号）
+- 浮动体按章节编号（Typst 原生 `figure` 计数系统，图/表/公式/算法）
 - ①②③ 脚注编号（Unicode 1-50 + 绘制圆圈 51+）
 - 五种字体集：`fandol`（默认）、`windows`、`mac`、`adobe`、`founder`
 - 字符级两端对齐 + 优化换行

@@ -1,20 +1,18 @@
-#import "@preview/i-figured:0.2.2"
-#import "@preview/tablex:0.0.9": cellx, tablex, gridx, hlinex, vlinex, colspanx, rowspanx
-#import "@preview/algo:0.3.5": algo, i, d, comment, code
+#import "@preview/algo:0.3.6": algo, i, d, comment, code
 #import "@preview/gb7714-bilingual:0.2.3": multicite
 #import "@preview/wordometer:0.1.5": word-count-of
 
 #import "utils.typ": *
 
-// Three-line table rules (booktabs-style, compatible with tablex)
+// Three-line table rules (booktabs-style, using native table.hline)
 #let heavyrulewidth = .08em
 #let lightrulewidth = .05em
 #let cmidrulewidth = .03em
 
-#let toprule(stroke: heavyrulewidth) = { hlinex(stroke: stroke) }
-#let midrule(stroke: lightrulewidth) = { hlinex(stroke: stroke) }
-#let bottomrule(stroke: heavyrulewidth) = { hlinex(stroke: stroke) }
-#let cmidrule(start: 0, end: -1, stroke: cmidrulewidth) = { hlinex(start: start, end: end, stroke: stroke) }
+#let toprule(stroke: heavyrulewidth) = { table.hline(stroke: stroke) }
+#let midrule(stroke: lightrulewidth) = { table.hline(stroke: stroke) }
+#let bottomrule(stroke: heavyrulewidth) = { table.hline(stroke: stroke) }
+#let cmidrule(start: 0, end: -1, stroke: cmidrulewidth) = { table.hline(start: start, end: end, stroke: stroke) }
 
 #let draw-binding(twoside: false) = {
   context {

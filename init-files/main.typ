@@ -23,21 +23,26 @@
 )
 
 #include "chapters/01_intro.typ"
-#pagebreak()
+#newpage(twoside: twoside)
 
 #include "chapters/02_math.typ"
-#pagebreak()
+#newpage(twoside: twoside)
 
 #include "chapters/03_reference.typ"
-#pagebreak()
+#newpage(twoside: twoside)
 
 #include "chapters/04_figure.typ"
-#pagebreak()
+#newpage(twoside: twoside)
 
 #include "chapters/05_conclusion.typ"
-#pagebreak()
+#newpage(twoside: twoside)
 
 #makereferences()
-#pagebreak()
+#newpage(twoside: twoside)
+
+#appendix(humanities: field == "humanities")[
+  #include "chapters/appendix.typ"
+]
+#newpage(twoside: twoside)
 
 #include "chapters/acknowledgments.typ"
