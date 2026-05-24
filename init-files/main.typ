@@ -1,6 +1,5 @@
 #import "../paddling-tongji-thesis/tongjithesis.typ": *
 #import "metadata.typ": *
-#import "@preview/gb7714-bilingual:0.2.3": gb7714-bibliography
 
 #set pagebreak(weak: true)
 
@@ -32,7 +31,7 @@
 #include "chapters/05_conclusion.typ"
 #pagebreak()
 
-#gb7714-bibliography()
+#makereferences()
 #pagebreak()
 
 #include "chapters/acknowledgments.typ"
