@@ -2,26 +2,8 @@ name: Release
 
 on:
   push:
-    branches: [main, dev]
-    paths:
-      - 'paddling-tongji-thesis/**'
-      - 'init-files/**'
-      - 'figures/**'
-      - '.github/workflows/release.yml'
-      - '.github/patches/**'
-      - '.github/bin/**'
-      - 'typst.toml'
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
-  pull_request:
-    branches: [main, dev]
-    paths:
-      - 'paddling-tongji-thesis/**'
-      - 'init-files/**'
-      - '.github/workflows/release.yml'
-      - '.github/patches/**'
-      - '.github/bin/**'
-      - 'typst.toml'
   workflow_dispatch:
 
 permissions:
@@ -56,11 +38,11 @@ jobs:
       - name: Configure humanities variant
         if: matrix.field == 'humanities'
         run: |
-          sed -i 's/field: "science"/field: "humanities"/' init-files/main.typ
+          sed -i 's/field: "science"/field: "humanities"/' template/main.typ
 
       - name: Compile thesis
         run: |
-          typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
+          typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 
       - name: Extract version
         id: version
@@ -72,21 +54,21 @@ jobs:
       - name: Rename PDF
         if: success()
         run: |
-          mv thesis.pdf TongjiThesis-typst-v${{ steps.version.outputs.version }}-${{ matrix.field }}.pdf
+          mv thesis.pdf modern-tongji-thesis-v${{ steps.version.outputs.version }}-${{ matrix.field }}.pdf
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v7
         with:
           name: release-pdf-${{ matrix.field }}
-          path: TongjiThesis-typst-v*.pdf
+          path: modern-tongji-thesis-v*.pdf
           retention-days: 90
 
   prepare-package:
-    # On every push to main: create a patched 'package' branch for Typst Universe submission.
-    # Replaces local imports (../paddling-tongji-thesis/) with @preview imports,
+    # On tag push: create a patched 'package' branch for Typst Universe submission.
+    # Replaces local imports (../lib.typ) with @preview imports,
     # then force-pushes to the 'package' branch.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -107,9 +89,6 @@ jobs:
 
   release:
     needs: build-release
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -157,7 +136,7 @@ jobs:
         run: |
           EXCLUDES=".git .github patches bin fonts"
           for e in $EXCLUDES; do EXC="$EXC --exclude=$e"; done
-          tar -czf "paddling-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz" $EXC .
+          tar -czf "modern-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz" $EXC .
           echo "Source archive created"
 
       - name: Read release template
@@ -182,12 +161,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
-          name: "paddling-tongji-thesis v${{ steps.version.outputs.version }}"
+          name: "modern-tongji-thesis v${{ steps.version.outputs.version }}"
           body: ${{ steps.template.outputs.body }}
           files: |
-            TongjiThesis-typst-v${{ steps.version.outputs.version }}-science.pdf
-            TongjiThesis-typst-v${{ steps.version.outputs.version }}-humanities.pdf
-            paddling-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz
+            modern-tongji-thesis-v${{ steps.version.outputs.version }}-science.pdf
+            modern-tongji-thesis-v${{ steps.version.outputs.version }}-humanities.pdf
+            modern-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz
           draft: true
           prerelease: false
           fail_on_unmatched_files: false

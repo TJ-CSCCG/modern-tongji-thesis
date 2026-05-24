@@ -54,11 +54,11 @@ jobs:
       - name: Configure humanities variant
         if: matrix.field == 'humanities'
         run: |
-          sed -i 's/field: "science"/field: "humanities"/' init-files/main.typ
+          sed -i 's/field: "science"/field: "humanities"/' template/main.typ
 
       - name: Compile thesis
         run: |
-          typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
+          typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 
       - name: Show log on failure
         if: failure()
@@ -66,14 +66,14 @@ jobs:
 
       - name: Rename PDF
         if: success()
-        run: mv thesis.pdf TongjiThesis-typst-${{ matrix.field }}.pdf
+        run: mv thesis.pdf modern-tongji-thesis-${{ matrix.field }}.pdf
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v7
         with:
           name: document-${{ matrix.field }}
-          path: TongjiThesis-typst-${{ matrix.field }}.pdf
+          path: modern-tongji-thesis-${{ matrix.field }}.pdf
           retention-days: 30
 
   test-summary:
