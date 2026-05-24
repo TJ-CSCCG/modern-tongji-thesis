@@ -140,7 +140,7 @@
     if it.level == 1 {
       set align(center)
       let heading-size = if it.numbering != none { TJFONT_CHAPTER } else { TJFONT_HEADING }
-      set text(font: ff.hei, size: heading-size)
+      set text(font: ff.hei, size: heading-size, weight: "regular")
       v(16pt)
       if it.numbering != none {
         numbering(it.numbering, ..counter(heading).get())
@@ -151,7 +151,7 @@
       }
       v(0.6em)
     } else if it.level == 2 {
-      set text(font: ff.hei, size: TJFONT_BODY)
+      set text(font: ff.hei, size: TJFONT_BODY, weight: "regular")
       v(0.6em)
       if it.numbering != none {
         numbering(it.numbering, ..counter(heading).get())
@@ -162,7 +162,7 @@
       }
       v(0.6em)
     } else if it.level == 3 {
-      set text(font: ff.hei, size: TJFONT_BODY)
+      set text(font: ff.hei, size: TJFONT_BODY, weight: "regular")
       v(0.6em)
       if it.numbering != none {
         h(2em)
@@ -175,7 +175,7 @@
       }
       v(0.6em)
     } else if it.level == 4 {
-      set text(font: ff.hei, size: TJFONT_BODY)
+      set text(font: ff.hei, size: TJFONT_BODY, weight: "regular")
       v(0.6em)
       if it.numbering != none {
         h(2em)
@@ -188,7 +188,7 @@
       }
       v(0.6em)
     } else if it.level == 5 {
-      set text(font: ff.hei, size: TJFONT_BODY)
+      set text(font: ff.hei, size: TJFONT_BODY, weight: "regular")
       v(0.6em)
       if it.numbering != none {
         h(2em)
