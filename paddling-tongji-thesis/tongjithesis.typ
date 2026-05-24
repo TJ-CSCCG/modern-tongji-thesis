@@ -28,14 +28,16 @@
   } else if n >= 36 and n <= 50 {
     "㊱㊲㊳㊴㊵㊶㊷㊸㊹㊺㊻㊼㊽㊾㊿".clusters().at(n - 36)
   } else {
+    // >50: TikZ-style circle matching LaTeX — square box + radius:50% = perfect circle
     let w = str(n).len()
-    let s = if w <= 1 { 1.0 } else if w == 2 { 0.72 } else if w == 3 { 0.55 } else { 0.45 }
+    let s = if w <= 2 { 0.65 } else if w == 3 { 0.50 } else { 0.40 }
     box(
+      width: 0.93em, height: 0.93em,
       stroke: 0.5pt,
       radius: 50%,
-      inset: (x: 1.5pt, y: 0pt),
-      baseline: 0pt,
-      scale(x: s * 100%, y: s * 100%, text(size: 1em, str(n))),
+      inset: 0.2pt,
+      baseline: 0.1em,
+      align(center + horizon, scale(x: s * 100%, y: s * 100%, text(size: 1em, str(n)))),
     )
   }
 }
