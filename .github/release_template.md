@@ -1,8 +1,8 @@
-## paddling-tongji-thesis vVERSION_TOKEN
+## modern-tongji-thesis vVERSION_TOKEN
 
 [EDIT: 编写本版本的更新日志 | Write the changelog for this release]
 
-[完整对比 PREV_VERSION_TOKEN...VERSION_TOKEN | Full changelog PREV_VERSION_TOKEN...VERSION_TOKEN](https://github.com/TJ-CSCCG/TongjiThesis-typst/compare/PREV_VERSION_TOKEN...VERSION_TOKEN)
+[完整对比 PREV_VERSION_TOKEN...VERSION_TOKEN | Full changelog PREV_VERSION_TOKEN...VERSION_TOKEN](https://github.com/TJ-CSCCG/modern-tongji-thesis/compare/PREV_VERSION_TOKEN...VERSION_TOKEN)
 
 ### 新增 | New Features
 
@@ -26,17 +26,17 @@
 
 #### 预编译示例 | Compiled Examples
 
-- `TongjiThesis-typst-vVERSION_TOKEN-science.pdf` — 理工科 (science/engineering)
-- `TongjiThesis-typst-vVERSION_TOKEN-humanities.pdf` — 文科 (humanities)
+- `modern-tongji-thesis-vVERSION_TOKEN-science.pdf` — 理工科 (science/engineering)
+- `modern-tongji-thesis-vVERSION_TOKEN-humanities.pdf` — 文科 (humanities)
 
 ### 快速开始 | Quick Start
 
 ```shell
-typst init @preview/paddling-tongji-thesis:VERSION_TOKEN
+typst init @preview/modern-tongji-thesis:VERSION_TOKEN
 typst compile main.typ
 ```
 
-或通过 [Typst Web App](https://typst.app/universe/package/paddling-tongji-thesis) 选择 `Start from a template` 零配置使用。| Or use the [Typst Web App](https://typst.app/universe/package/paddling-tongji-thesis) to start from the template for zero-config setup.
+或通过 [Typst Web App](https://typst.app/universe/package/modern-tongji-thesis) 选择 `Start from a template` 零配置使用。| Or use the [Typst Web App](https://typst.app/universe/package/modern-tongji-thesis) to start from the template for zero-config setup.
 
 ### 系统要求 | Requirements
 
@@ -46,8 +46,8 @@ typst compile main.typ
 
 ### 链接 | Links
 
-- [GitHub](https://github.com/TJ-CSCCG/TongjiThesis-typst)
-- [Typst Universe](https://typst.app/universe/package/paddling-tongji-thesis)
+- [GitHub](https://github.com/TJ-CSCCG/modern-tongji-thesis)
+- [Typst Universe](https://typst.app/universe/package/modern-tongji-thesis)
 - [LaTeX 模板](https://github.com/TJ-CSCCG/tongji-undergrad-thesis)
 
 ---

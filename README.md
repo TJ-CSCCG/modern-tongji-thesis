@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="init-files/figures/tongjithesis.svg" alt="TongjiThesis" width="550">
+  <img src="template/figures/tongjithesis.svg" alt="TongjiThesis" width="550">
 </p>
 
 <p align="center">
@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/actions/workflows/test.yml"><img src="https://github.com/TJ-CSCCG/TongjiThesis-typst/actions/workflows/test.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/TongjiThesis-typst?label=Release" alt="Release"></a>
-  <a href="https://typst.app/universe/package/paddling-tongji-thesis"><img src="https://img.shields.io/badge/Typst%20Universe-paddling--tongji--thesis-239dae" alt="Typst Universe"></a>
-  <a href="https://github.com/TJ-CSCCG/TongjiThesis-typst/blob/dev/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="License"></a>
+  <a href="https://github.com/TJ-CSCCG/modern-tongji-thesis/actions/workflows/test.yml"><img src="https://github.com/TJ-CSCCG/modern-tongji-thesis/actions/workflows/test.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/TJ-CSCCG/modern-tongji-thesis/releases"><img src="https://img.shields.io/github/v/release/TJ-CSCCG/modern-tongji-thesis?label=Release" alt="Release"></a>
+  <a href="https://typst.app/universe/package/modern-tongji-thesis"><img src="https://img.shields.io/badge/Typst%20Universe-modern--tongji--thesis-239dae" alt="Typst Universe"></a>
+  <a href="https://github.com/TJ-CSCCG/modern-tongji-thesis/blob/dev/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="License"></a>
   <img src="https://img.shields.io/badge/Typst-0.14+-239dae" alt="Typst 0.14+">
 </p>
 
@@ -47,7 +47,7 @@
 
 ### 在线 Web App
 
-在 [Typst Web App](https://typst.app) 中选择 `Start from a template`，搜索 `paddling-tongji-thesis`。
+在 [Typst Web App](https://typst.app) 中选择 `Start from a template`，搜索 `modern-tongji-thesis`。
 
 ### 本地使用
 
@@ -63,7 +63,7 @@ brew install typst
 
 #### 2. 选择字体集
 
-在 `init-files/chapters/metadata.typ` 中填写封面与信息说明页信息，在 `init-files/chapters/00_abstract.typ` 中填写中英文摘要与关键词。其他选项在 `init-files/main.typ` 中设置。
+在 `template/chapters/metadata.typ` 中填写封面与信息说明页信息，在 `template/chapters/00_abstract.typ` 中填写中英文摘要与关键词。其他选项在 `template/main.typ` 中设置。
 
 > 所有字体集均使用 **TeX Gyre Termes**（Times New Roman 的开源替代，Typst Web App 内置，Linux: `apt install fonts-texgyre` 或下载 ZIP）作为中英文混排的 Latin 衬线字体。
 
@@ -81,7 +81,7 @@ brew install typst
 ./fonts/download-fonts.sh
 
 # 编译
-typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
+typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 ```
 
 ---
@@ -92,18 +92,18 @@ typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
 
 与 LaTeX 模板保持一致的目录结构：
 
-| 文件                                  | 用途                                                                     |
-| ------------------------------------- | ------------------------------------------------------------------------ |
-| `init-files/main.typ`                 | 编译入口，配置文档类选项（`field`、`fontset`、`twoside`、`bib-path` 等） |
-| `init-files/chapters/metadata.typ`    | 封面信息、信息说明页数据、摘要页标题覆盖（可选）                         |
-| `init-files/chapters/00_abstract.typ` | 中英文摘要内容与关键词                                                   |
+| 文件                                | 用途                                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------ |
+| `template/main.typ`                 | 编译入口，配置文档类选项（`field`、`fontset`、`twoside`、`bib-path` 等） |
+| `template/chapters/metadata.typ`    | 封面信息、信息说明页数据、摘要页标题覆盖（可选）                         |
+| `template/chapters/00_abstract.typ` | 中英文摘要内容与关键词                                                   |
 
 ### 文档类选项
 
-在 `init-files/main.typ` 中配置：
+在 `template/main.typ` 中配置：
 
 ```typ
-#import "../paddling-tongji-thesis/tongjithesis.typ": *
+#import "../modern-tongji-thesis/tongjithesis.typ": *
 #import "chapters/metadata.typ": *
 #import "chapters/00_abstract.typ": *
 
@@ -160,5 +160,5 @@ MIT License。
 
 ## 联系方式
 
-- [Discussions](https://github.com/TJ-CSCCG/TongjiThesis-typst/discussions)
+- [Discussions](https://github.com/TJ-CSCCG/modern-tongji-thesis/discussions)
 - QQ 群：`1013806782`

@@ -1,4 +1,4 @@
-#import "../../paddling-tongji-thesis/tongjithesis.typ": *
+#import "../../lib.typ": *
 
 = 数学环境 <math>
 

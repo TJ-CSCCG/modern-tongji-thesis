@@ -1,177 +1,18 @@
-#import "elements.typ": *
-#import "utils.typ": font-presets
-#import "@preview/gb7714-bilingual:0.2.3": init-gb7714-impl, gb7714-bibliography
-
-#set pagebreak(weak: true)
-
-#let newpage(twoside: false) = if twoside { pagebreak(to: "odd") } else { pagebreak() }
-
-#let chinese-numeral(n) = {
-  let digits = ("零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十")
-  if n <= 10 {
-    digits.at(n)
-  } else if n < 20 {
-    "十" + digits.at(n - 10)
-  } else if n < 30 {
-    digits.at(calc.quo(n, 10)) + "十" + if calc.rem(n, 10) != 0 { digits.at(calc.rem(n, 10)) }
-  } else {
-    str(n)
-  }
-}
-
-#let circled-number(n) = {
-  // Dedicated font for circled numbers 1-50 — matching LaTeX's HaranoAjiMincho strategy.
-  // Apple SD Gothic Neo (macOS system) and HaranoAjiMincho (TeX Live) have full coverage.
-  set text(font: ("Apple SD Gothic Neo", "HaranoAjiMincho"), fallback: true)
-  if n >= 1 and n <= 20 {
-    "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳".clusters().at(n - 1)
-  } else if n >= 21 and n <= 35 {
-    "㉑㉒㉓㉔㉕㉖㉗㉘㉙㉚㉛㉜㉝㉞㉟".clusters().at(n - 21)
-  } else if n >= 36 and n <= 50 {
-    "㊱㊲㊳㊴㊵㊶㊷㊸㊹㊺㊻㊼㊽㊾㊿".clusters().at(n - 36)
-  } else {
-    // >50: TikZ-style circle matching LaTeX — square box + radius:50% = perfect circle
-    let w = str(n).len()
-    let s = if w <= 2 { 0.65 } else if w == 3 { 0.50 } else { 0.40 }
-    box(
-      width: 0.93em, height: 0.93em,
-      stroke: 0.5pt,
-      radius: 50%,
-      inset: 0.2pt,
-      baseline: 0.1em,
-      align(center + horizon, scale(x: s * 100%, y: s * 100%, text(size: 1em, str(n)))),
-    )
-  }
-}
-
-// Bibliography — matches LaTeX \defbibenvironment (0.74cm min label, right-aligned)
-#let makereferences() = {
-  heading(level: 1, numbering: none, outlined: true)[参考文献]
-  gb7714-bibliography(title: none, full-control: entries => {
-    context {
-      // Label width: max(0.74cm, width of widest label "[N]")
-      let widest = entries.fold(0, (acc, e) => if e.order > acc { e.order } else { acc })
-      let label-w = measure("[" + str(widest) + "]").width + 4pt
-      if label-w < 0.74cm { label-w = 0.74cm }
-
-      for e in entries {
-        grid(
-          columns: (label-w, 1fr),
-          align(right + top, "[" + str(e.order) + "]"),
-          e.labeled-rendered,
-        )
-        parbreak()
-      }
-    }
-  })
-}
-
-// Appendix — matches LaTeX
-#let appendix(humanities: false, body) = {
-  heading(level: 1, numbering: none, outlined: true)[附录]
-  set heading(numbering: (..nums) => {
-    let pos = nums.pos()
-    let lv = pos.len()
-    let letter(n) = numbering("A", n)
-    if humanities {
-      if lv == 2 { "（" + letter(pos.at(1)) + "）" }
-      else if lv == 3 { str(pos.at(2)) + "." }
-    } else {
-      if lv == 2 { letter(pos.at(1)) + "." }
-      else if lv == 3 { letter(pos.at(1)) + "." + str(pos.at(2)) }
-    }
-  })
-  counter(heading).update(1)
-
-  // Reset appendix figure/table counters at each H2 section
-  show heading: it => {
-    if it.level == 2 {
-      counter(figure.where(kind: table)).update(0)
-      counter(figure.where(kind: image)).update(0)
-      counter(figure.where(kind: raw)).update(0)
-      counter(figure.where(kind: "algo")).update(0)
-    }
-    it
-  }
-
-  // Appendix figure/table numbering: letter-based per-kind (A.1, A.2; 表 A.1, 表 A.2 …)
-  show figure: it => {
-    if it.numbering != none { it } else {
-      let suppl = if it.kind == table { [表] } else if it.kind == image { [图] } else if it.kind == raw { [代码] } else { it.supplement }
-      context {
-        let hc = counter(heading).get()
-        let sec = hc.at(1, default: 1)
-        let letter = numbering("A", sec)
-        figure(
-          it.body,
-          kind: it.kind,
-          supplement: suppl,
-          caption: it.caption,
-          numbering: n => letter + "." + str(n),
-        )
-      }
-    }
-  }
-
-  body
-}
-
-// Cross-reference convenience commands
-#let chapref(label) = [第@label章]
-#let secref(label) = [第@label节]
-#let figref(label) = [图@label]
-#let tabref(label) = [表@label]
-#let eqref(label) = [式@label]
-#let algoref(label) = [算法@label]
-
-// Word count (auto-tracked, CJK characters)
-#let wordcount() = context state("total-words-cjk").final()
-
-// Theorem render — title + body inline (same paragraph), matching SJTUThesis & LaTeX
-#let thm-render(prefix: none, title: "", full-title: auto, body) = {
-  if full-title != "" {
-    strong[#full-title] + sym.space
-  }
-  body
-}
-
-// Proof render — inline QED, matching SJTUThesis
-#let pf-render(prefix: none, title: "", full-title: auto, body) = {
-  strong[证明] + sym.space + body + box(width: 0em) + h(1fr) + sym.wj + $square$
-}
-
-// Theorem environments — module-level so chapter files can access them.
-// Each type has an independent counter, matching LaTeX's \newtheorem{}.
-#let (thm-ctr, thm-box, thm, show-thm) = make-frame(
-  "theorem", theorion-i18n-map.at("theorem"), inherited-levels: 1, render: thm-render,
-)
-#let (cor-ctr, cor-box, cor, show-cor) = make-frame(
-  "corollary", theorion-i18n-map.at("corollary"), inherited-levels: 1, render: thm-render,
-)
-#let (lem-ctr, lem-box, lem, show-lem) = make-frame(
-  "lemma", theorion-i18n-map.at("lemma"), inherited-levels: 1, render: thm-render,
-)
-#let (prop-ctr, prop-box, prop, show-prop) = make-frame(
-  "proposition", theorion-i18n-map.at("proposition"), inherited-levels: 1, render: thm-render,
-)
-#let (conj-ctr, conj-box, conj, show-conj) = make-frame(
-  "conjecture", theorion-i18n-map.at("conjecture"), inherited-levels: 1, render: thm-render,
-)
-#let (assume-ctr, assume-box, assume, show-assume) = make-frame(
-  "assumption", theorion-i18n-map.at("assumption"), inherited-levels: 1, render: thm-render,
-)
-#let (dfn-ctr, dfn-box, dfn, show-dfn) = make-frame(
-  "definition", theorion-i18n-map.at("definition"), inherited-levels: 1, render: thm-render,
-)
-#let (exmp-ctr, exmp-box, exmp, show-exmp) = make-frame(
-  "example", theorion-i18n-map.at("example"), inherited-levels: 1, render: thm-render,
-)
-#let (rem-ctr, rem-box, rem, show-rem) = make-frame(
-  "remark", theorion-i18n-map.at("remark"), inherited-levels: 1, render: thm-render,
-)
-#let (pf-ctr, pf-box, pf, show-pf) = make-frame(
-  "proof", theorion-i18n-map.at("proof"), render: pf-render,
-)
+#import "utils/fonts.typ": *
+#import "utils/tables.typ": *
+#import "utils/theorion.typ": *
+#import "utils/helpers.typ": *
+#import "utils/word-count.typ": *
+#import "layouts/cover.typ": *
+#import "layouts/info-page.typ": *
+#import "layouts/abstract.typ": *
+#import "layouts/outline.typ": *
+#import "layouts/header-footer.typ": *
+#import "layouts/references.typ": *
+#import "layouts/appendix.typ": *
+#import "@preview/gb7714-bilingual:0.2.3": init-gb7714-impl, gb7714-bibliography, multicite
+#import "@preview/algo:0.3.6": algo, i, d, comment, code
+#import "@preview/wordometer:0.1.5": word-count-of
 
 #let thesis(
   school: "某学院", major: "某专业", id: "0000000", student: "某某某", advisor: "某某某", title: "某标题", subtitle: "某副标题", title-english: "Some Title", subtitle-english: "Some Subtitle", date: datetime.today(), abstract: "慧枫尚萍氢，驳展妙棚端梦称委竞励。绘象臂淬人壳闭营风混仓、问抬兽村蜡胡锹挤污艰烃伏惧派宝既抓章住蓟棒褶均谭穿谴属；羟贮银…钓郭曾牙记氢硝巍仰蒲邀趟。革旅剑撞压单施宵饼狼将售烷贸问术粮洞魔。却烟陕倍且隘框糟秩板商，宙刚疮顿表羽楞景哺驯邮戒歌溜著聪峻忙劈左绩卖卫萨讯完读百釉好仔帜纽龟玉炒脂衍蛴瓦副冯查索桐梁；轴派？蝗丸朝保岂搅搞燕挫品休礼倾玻黑李宽列邮苦仔汛鳙物己弱寸栓孝哄俭牙敬厄搬吨楞干捧原趋息…善！", keywords: ("关键词1", "关键词2", "关键词3"), abstract-english: lorem(300), keywords-english: ("Keyword1", "keyword2", "keyword3"), doc,
@@ -430,28 +271,9 @@
   })
   show figure.where(kind: table): set figure.caption(position: top)
 
-  let make-page-header() = context {
-    let is-odd = calc.rem(counter(page).get().first(), 2) != 0
-    let flip = twoside and not is-odd
-    set text(font: ff.song, size: TJFONT_BODY)
-    let a = image("figures/tongji-header.svg", height: 1.14cm)
-    let b = align(horizon, block(height: 1.14cm, align(center + horizon, text(font: ff.song, size: TJFONT_BODY, header-text))))
-    let (logo, label) = if flip { (b, a) } else { (a, b) }
-    let (cl, cr) = if flip { (0.5em, 1cm) } else { (1cm, 0.5em) }
-    grid(
-      columns: (cl, 1fr, auto, cr), [],
-      logo,
-      label,
-      [],
-    )
-    v(-0.5em)
-    block(width: 100%, height: 1.5pt, stroke: (top: 0.5pt, bottom: 0.5pt))
-    draw-binding(twoside: twoside)
-  }
-
   set page(
     margin: page-margin, binding: left,
-    numbering: "I", header: make-page-header(), header-ascent: 20%, footer: context {
+    numbering: "I", header: make-page-header(ff, twoside, header-text), header-ascent: 20%, footer: context {
       set align(center)
       set text(font: ff.song, size: TJFONT_BODY)
       numbering("I", counter(page).get().first())
@@ -480,7 +302,7 @@
   make-outline()
   newpage(twoside: twoside)
 
-  set page(margin: page-margin, binding: left, numbering: "1", header: make-page-header(), header-ascent: 20%, footer: context {
+  set page(margin: page-margin, binding: left, numbering: "1", header: make-page-header(ff, twoside, header-text), header-ascent: 20%, footer: context {
     line(stroke: 1.8pt, length: 100%)
     set text(font: ff.song, size: TJFONT_BODY)
     v(-0.6em)
@@ -534,20 +356,6 @@
   }
 
   let body = word-count-tracked(body-with-bib)
-
-  body
-  }
-
-  // Cross-reference convenience commands
-  let chapref(label) = [第@label章]
-  let secref(label) = [第@label节]
-  let figref(label) = [图@label]
-  let tabref(label) = [表@label]
-  let eqref(label) = [式@label]
-  let algoref(label) = [算法@label]
-
-  // Word count (auto-tracked, CJK characters)
-  let wordcount() = context state("total-words-cjk").final()
 
   body
 }

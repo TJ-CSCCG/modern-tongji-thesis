@@ -1,4 +1,4 @@
-#import "../paddling-tongji-thesis/tongjithesis.typ": *
+#import "../lib.typ": *
 #import "chapters/metadata.typ": *
 #import "chapters/00_abstract.typ": *
 
@@ -6,7 +6,7 @@
 
 #let field = "science"
 #let fontset = "fandol"
-#let bib-path = "bib/note.bib"
+#let bib-path = "ref.bib"
 #let twoside = false
 
 #show: thesis.with(
