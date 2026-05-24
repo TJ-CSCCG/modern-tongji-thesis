@@ -18,13 +18,9 @@
 }
 
 #let circled-number(n) = {
-  // Dedicated circled-number font fallback — matching LaTeX's HaranoAjiMinchi strategy.
-  // Noto Serif CJK SC has excellent circled glyphs 1-50 on Web App;
-  // Source Han Serif / Apple SD Gothic Neo / HaranoAjiMincho on local systems.
-  let cn-font = (
-    "Noto Serif CJK SC", "Source Han Serif SC", "Apple SD Gothic Neo", "HaranoAjiMincho",
-  )
-  set text(font: cn-font, fallback: true)
+  // Dedicated font for circled numbers 1-50 — matching LaTeX's HaranoAjiMincho strategy.
+  // Apple SD Gothic Neo (macOS system) and HaranoAjiMincho (TeX Live) have full coverage.
+  set text(font: ("Apple SD Gothic Neo", "HaranoAjiMincho"), fallback: true)
   if n >= 1 and n <= 20 {
     "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳".clusters().at(n - 1)
   } else if n >= 21 and n <= 35 {
@@ -33,13 +29,13 @@
     "㊱㊲㊳㊴㊵㊶㊷㊸㊹㊺㊻㊼㊽㊾㊿".clusters().at(n - 36)
   } else {
     let w = str(n).len()
-    let scale = if w <= 1 { 1.0 } else if w == 2 { 0.72 } else if w == 3 { 0.55 } else { 0.45 }
+    let s = if w <= 1 { 1.0 } else if w == 2 { 0.72 } else if w == 3 { 0.55 } else { 0.45 }
     box(
       stroke: 0.5pt,
       radius: 50%,
       inset: (x: 1.5pt, y: 0pt),
       baseline: 0pt,
-      scale(x: scale * 100%, y: scale * 100%, text(size: 1em, str(n))),
+      scale(x: s * 100%, y: s * 100%, text(size: 1em, str(n))),
     )
   }
 }
