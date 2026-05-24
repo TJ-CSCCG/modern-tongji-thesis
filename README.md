@@ -77,9 +77,11 @@ brew install typst
 #### 3. 编译
 
 ```bash
-git clone https://github.com/TJ-CSCCG/TongjiThesis-typst.git
-cd TongjiThesis-typst
-typst compile init-files/main.typ thesis.pdf --root .
+# 下载字体（首次使用）
+./fonts/download-fonts.sh
+
+# 编译
+typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
 ```
 
 ---

@@ -79,9 +79,11 @@ Set the `fontset` parameter in `init-files/metadata.typ`:
 #### 3. Compile
 
 ```bash
-git clone https://github.com/TJ-CSCCG/TongjiThesis-typst.git
-cd TongjiThesis-typst
-typst compile init-files/main.typ thesis.pdf --root .
+# Download fonts (first time only)
+./fonts/download-fonts.sh
+
+# Compile
+typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
 ```
 
 ---

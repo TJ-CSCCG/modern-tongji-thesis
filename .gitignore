@@ -48,3 +48,6 @@ Backup[ ]of[ ]*.numbers/
 
 # Typst
 *.pdf
+fonts/*
+!fonts/README.md
+!fonts/download-fonts.sh
