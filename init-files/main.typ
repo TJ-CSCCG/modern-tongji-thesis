@@ -1,7 +1,13 @@
 #import "../paddling-tongji-thesis/tongjithesis.typ": *
-#import "metadata.typ": *
+#import "chapters/metadata.typ": *
+#import "chapters/00_abstract.typ": *
 
 #set pagebreak(weak: true)
+
+#let field = "science"
+#let fontset = "fandol"
+#let bib-path = "bib/note.bib"
+#let twoside = false
 
 #show: thesis.with(
   school: school, major: major, id: id, student: student, advisor: advisor,
@@ -13,7 +19,7 @@
   infothesiswords: infothesiswords, infomaterials: infomaterials,
   abstract-title: abstract-title, abstract-subtitle: abstract-subtitle,
   abstract-title-english: abstract-title-english, abstract-subtitle-english: abstract-subtitle-english,
-  bib-content: read(bib-path), fontset: fontset,
+  field: field, fontset: fontset, bib-content: read(bib-path), twoside: twoside,
 )
 
 #include "chapters/01_intro.typ"

@@ -16,40 +16,48 @@
 #let bottomrule(stroke: heavyrulewidth) = { hlinex(stroke: stroke) }
 #let cmidrule(start: 0, end: -1, stroke: cmidrulewidth) = { hlinex(start: start, end: end, stroke: stroke) }
 
-#let draw-binding() = {
-  place("|", dx: -1.6cm, dy: 2.3cm)
-  place("|", dx: -1.6cm, dy: 2.9cm)
-  place("|", dx: -1.6cm, dy: 3.5cm)
-  place("|", dx: -1.6cm, dy: 4.1cm)
-  place("|", dx: -1.6cm, dy: 4.7cm)
-  place("|", dx: -1.6cm, dy: 5.3cm)
-  place("|", dx: -1.6cm, dy: 5.9cm)
-  place("|", dx: -1.6cm, dy: 6.5cm)
-  place("|", dx: -1.6cm, dy: 7.1cm)
-  place("|", dx: -1.6cm, dy: 7.7cm)
-  place("装", dx: -1.8cm, dy: 8.3cm)
-  place("|", dx: -1.6cm, dy: 8.9cm)
-  place("|", dx: -1.6cm, dy: 9.5cm)
-  place("|", dx: -1.6cm, dy: 10.1cm)
-  place("|", dx: -1.6cm, dy: 10.7cm)
-  place("|", dx: -1.6cm, dy: 11.3cm)
-  place("订", dx: -1.8cm, dy: 11.9cm)
-  place("|", dx: -1.6cm, dy: 12.5cm)
-  place("|", dx: -1.6cm, dy: 13.1cm)
-  place("|", dx: -1.6cm, dy: 13.7cm)
-  place("|", dx: -1.6cm, dy: 14.3cm)
-  place("|", dx: -1.6cm, dy: 14.9cm)
-  place("线", dx: -1.8cm, dy: 15.5cm)
-  place("|", dx: -1.6cm, dy: 16.1cm)
-  place("|", dx: -1.6cm, dy: 16.7cm)
-  place("|", dx: -1.6cm, dy: 17.3cm)
-  place("|", dx: -1.6cm, dy: 17.9cm)
-  place("|", dx: -1.6cm, dy: 18.5cm)
-  place("|", dx: -1.6cm, dy: 19.1cm)
-  place("|", dx: -1.6cm, dy: 19.7cm)
-  place("|", dx: -1.6cm, dy: 20.3cm)
-  place("|", dx: -1.6cm, dy: 20.9cm)
-  place("|", dx: -1.6cm, dy: 21.5cm)
+#let draw-binding(twoside: false) = {
+  context {
+    let pipe-dx = -1.6cm
+    let label-dx = -1.8cm
+    if twoside and calc.rem(counter(page).get().first(), 2) == 0 {
+      pipe-dx = 17.5cm
+      label-dx = 17.3cm
+    }
+    place("|", dx: pipe-dx, dy: 2.3cm)
+    place("|", dx: pipe-dx, dy: 2.9cm)
+    place("|", dx: pipe-dx, dy: 3.5cm)
+    place("|", dx: pipe-dx, dy: 4.1cm)
+    place("|", dx: pipe-dx, dy: 4.7cm)
+    place("|", dx: pipe-dx, dy: 5.3cm)
+    place("|", dx: pipe-dx, dy: 5.9cm)
+    place("|", dx: pipe-dx, dy: 6.5cm)
+    place("|", dx: pipe-dx, dy: 7.1cm)
+    place("|", dx: pipe-dx, dy: 7.7cm)
+    place("装", dx: label-dx, dy: 8.3cm)
+    place("|", dx: pipe-dx, dy: 8.9cm)
+    place("|", dx: pipe-dx, dy: 9.5cm)
+    place("|", dx: pipe-dx, dy: 10.1cm)
+    place("|", dx: pipe-dx, dy: 10.7cm)
+    place("|", dx: pipe-dx, dy: 11.3cm)
+    place("订", dx: label-dx, dy: 11.9cm)
+    place("|", dx: pipe-dx, dy: 12.5cm)
+    place("|", dx: pipe-dx, dy: 13.1cm)
+    place("|", dx: pipe-dx, dy: 13.7cm)
+    place("|", dx: pipe-dx, dy: 14.3cm)
+    place("|", dx: pipe-dx, dy: 14.9cm)
+    place("线", dx: label-dx, dy: 15.5cm)
+    place("|", dx: pipe-dx, dy: 16.1cm)
+    place("|", dx: pipe-dx, dy: 16.7cm)
+    place("|", dx: pipe-dx, dy: 17.3cm)
+    place("|", dx: pipe-dx, dy: 17.9cm)
+    place("|", dx: pipe-dx, dy: 18.5cm)
+    place("|", dx: pipe-dx, dy: 19.1cm)
+    place("|", dx: pipe-dx, dy: 19.7cm)
+    place("|", dx: pipe-dx, dy: 20.3cm)
+    place("|", dx: pipe-dx, dy: 20.9cm)
+    place("|", dx: pipe-dx, dy: 21.5cm)
+  }
 }
 
 #let empty-par() = {

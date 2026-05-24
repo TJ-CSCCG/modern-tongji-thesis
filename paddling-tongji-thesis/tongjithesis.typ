@@ -74,6 +74,8 @@
   abstract-title: none, abstract-subtitle: none, abstract-title-english: none, abstract-subtitle-english: none,
   // Bibliography
   bib-content: none,
+  // Twoside
+  twoside: false,
 ) = {
   let is-humanities = (field == "humanities")
   let cover-text = if is-humanities { "毕业论文（设计）" } else { "毕业设计（论文）" }
@@ -92,8 +94,13 @@
     math: ("New Computer Modern Math",),
   )
   set document(author: id + " " + student, title: title)
+  let page-margin = if twoside {
+    (top: 4.0cm, bottom: 2.7cm, inside: 3.3cm, outside: 1.8cm)
+  } else {
+    (top: 4.0cm, bottom: 2.7cm, left: 3.3cm, right: 1.8cm)
+  }
   set page(
-    paper: "a4", margin: (top: 4.0cm, bottom: 2.7cm, left: 3.3cm, right: 1.8cm), binding: left,
+    paper: "a4", margin: page-margin, binding: left,
   )
   set text(TJFONT_BODY, font: ff.song, lang: "zh", region: "cn")
 
@@ -104,7 +111,7 @@
     cover-text: cover-text,
     fonts: ff,
   )
-  pagebreak()
+  if twoside { pagebreak(to: "odd") } else { pagebreak() }
 
   make-info-page(
     title: title, subtitle: subtitle, school: school, major: major,
@@ -112,7 +119,7 @@
     infowordcount: infowordcount, infothesiswords: infothesiswords,
     infomaterials: infomaterials, header-text: header-text, fonts: ff,
   )
-  pagebreak()
+  if twoside { pagebreak(to: "odd") } else { pagebreak() }
 
   set par(justify: true, first-line-indent: (amount: 2em, all: true), leading: 1.2em, spacing: 1.2em)
   set par(justification-limits: (tracking: (min: -0.01em, max: 0.02em)), linebreaks: "optimized")
@@ -282,19 +289,28 @@
   show math.equation.where(block: true): i-figured.show-equation
   show figure.where(kind: table): set figure.caption(position: top)
 
+  let make-page-header() = context {
+    let is-odd = calc.rem(counter(page).get().first(), 2) != 0
+    let flip = twoside and not is-odd
+    set text(font: ff.song, size: TJFONT_BODY)
+    let a = image("figures/tongji-header.svg", height: 1.14cm)
+    let b = align(horizon, block(height: 1.14cm, align(center + horizon, text(font: ff.song, size: TJFONT_BODY, header-text))))
+    let (logo, label) = if flip { (b, a) } else { (a, b) }
+    let (cl, cr) = if flip { (0.5em, 1cm) } else { (1cm, 0.5em) }
+    grid(
+      columns: (cl, 1fr, auto, cr), [],
+      logo,
+      label,
+      [],
+    )
+    v(-0.5em)
+    block(width: 100%, height: 1.5pt, stroke: (top: 0.5pt, bottom: 0.5pt))
+    draw-binding(twoside: twoside)
+  }
+
   set page(
-    numbering: "I", header: {
-      set text(font: ff.song, size: TJFONT_BODY)
-      grid(
-        columns: (1cm, 1fr, auto, 0.5em), [],
-        image("figures/tongji-header.svg", height: 1.14cm),
-        align(horizon, block(height: 1.14cm, align(center + horizon, text(font: ff.song, size: TJFONT_BODY, header-text)))),
-        [],
-      )
-      v(-0.5em)
-      block(width: 100%, height: 1.5pt, stroke: (top: 0.5pt, bottom: 0.5pt))
-      draw-binding()
-    }, header-ascent: 20%, footer: context {
+    margin: page-margin, binding: left,
+    numbering: "I", header: make-page-header(), header-ascent: 20%, footer: context {
       set align(center)
       set text(font: ff.song, size: TJFONT_BODY)
       numbering("I", counter(page).get().first())
@@ -321,21 +337,35 @@
   pagebreak()
 
   make-outline()
-  pagebreak()
+  if twoside { pagebreak(to: "odd") } else { pagebreak() }
 
-  set page(numbering: "1", footer: context {
+  set page(margin: page-margin, binding: left, numbering: "1", header: make-page-header(), header-ascent: 20%, footer: context {
     line(stroke: 1.8pt, length: 100%)
-    set align(right)
     set text(font: ff.song, size: TJFONT_BODY)
     v(-0.6em)
-    [
-      共#h(1em)
-      #counter(page).final().at(0)#h(1em)
-      页#h(1em)
-      第#h(1em)
-      #counter(page).display()
-      #h(1em)页
-    ]
+    let is-odd = calc.rem(counter(page).get().first(), 2) != 0
+    let swap = twoside and not is-odd
+    if swap {
+      set align(left)
+      [
+        第#h(1em)
+        #counter(page).display()
+        #h(1em)页#h(1em)
+        共#h(1em)
+        #counter(page).final().at(0)#h(1em)
+        页
+      ]
+    } else {
+      set align(right)
+      [
+        共#h(1em)
+        #counter(page).final().at(0)#h(1em)
+        页#h(1em)
+        第#h(1em)
+        #counter(page).display()
+        #h(1em)页
+      ]
+    }
   })
   counter(page).update(1)
 
@@ -385,18 +415,49 @@
   let rem = make-thm-env("注", "rem")
   let pf(body) = context { [*证明* #body □] }
 
-  // Appendix
+  // Appendix — matches LaTeX: \chapter*{附录} (unnumbered H1), then
+  // \section (H2) = A/B/C (science) or （A）/（B）/（C） (humanities),
+  // \subsection (H3) = A.1/A.2 (science) or 1./2. (humanities).
+  // Floats are numbered within section (图 A.1, 表 A.2, (A.1), 算法 A.1, …).
   let appendix(body) = {
     heading(level: 1, numbering: none, outlined: true)[附录]
     set heading(numbering: (..nums) => {
-      if nums.pos().len() == 1 {
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(nums.pos().at(0) - 1)
+      let pos = nums.pos()
+      let lv = pos.len()
+      let letter(n) = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(n - 1)
+      if is-humanities {
+        if lv == 2 { "（" + letter(pos.at(1)) + "）" }
+        else if lv == 3 { str(pos.at(2)) + "." }
       } else {
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(nums.pos().at(0) - 1) + "." + str(nums.pos().at(1))
+        if lv == 2 { letter(pos.at(1)) + "." }
+        else if lv == 3 { letter(pos.at(1)) + "." + str(pos.at(2)) }
       }
     })
-    set heading(level: 1, outlined: true)
     counter(heading).update(0)
+
+    // i-figured overrides: reset at section level (H2) and number with letters
+    show heading: i-figured.reset-counters.with(level: 2, extra-kinds: ("algo",))
+    show figure: i-figured.show-figure.with(
+      level: 2, leading-zero: false, zero-fill: true,
+      numbering: nums => {
+        let sec = nums.first()
+        let fig = nums.last()
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(sec - 1) + "." + str(fig)
+      },
+      extra-prefixes: (algo: "algo:"),
+    )
+    show math.equation.where(block: true): i-figured.show-equation.with(
+      level: 2, leading-zero: false, zero-fill: true,
+      numbering: nums => {
+        let sec = nums.first()
+        let eq = nums.last()
+        "(" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(sec - 1) + "." + str(eq) + ")"
+      },
+    )
+
+    body
+  }
+
   // Cross-reference convenience commands
   let chapref(label) = [第@label章]
   let secref(label) = [第@label节]
@@ -407,9 +468,6 @@
 
   // Word count (auto-tracked, CJK characters)
   let wordcount() = context state("total-words-cjk").final()
-
-  body
-  }
 
   body
 }

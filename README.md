@@ -63,15 +63,15 @@ brew install typst
 
 #### 2. 选择字体集
 
-在 `init-files/metadata.typ` 中设置 `fontset` 参数：
+在 `init-files/chapters/metadata.typ` 中填写封面与信息说明页信息，在 `init-files/chapters/00_abstract.typ` 中填写中英文摘要与关键词。其他选项在 `init-files/main.typ` 中设置。
 
 > 所有字体集均使用 **TeX Gyre Termes**（Times New Roman 的开源替代，Typst Web App 内置，Linux: `apt install fonts-texgyre` 或下载 ZIP）作为中英文混排的 Latin 衬线字体。
 
-| 平台     | 推荐 fontset | 说明                                                                         |
-| -------- | ------------ | ---------------------------------------------------------------------------- |
-| macOS    | `"mac"`      | Songti SC / Heiti SC 系统字体                                                |
-| Windows  | `"windows"`  | SimSun / SimHei 系统字体                                                     |
-| Linux    | `"fandol"`   | Fandol + TeX Gyre Termes（[CTAN 下载](fonts/README.md)）                     |
+| 平台         | 推荐 fontset            | 说明                                                                         |
+| ------------ | ----------------------- | ---------------------------------------------------------------------------- |
+| macOS        | `"mac"`                 | Songti SC / Heiti SC 系统字体                                                |
+| Windows      | `"windows"`             | SimSun / SimHei 系统字体                                                     |
+| Linux        | `"fandol"`              | Fandol + TeX Gyre Termes（[CTAN 下载](fonts/README.md)）                     |
 | Adobe / 方正 | `"adobe"` / `"founder"` | 从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 |
 
 #### 3. 编译
@@ -88,23 +88,67 @@ typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
 
 ## 模板配置
 
+### 项目文件组织
+
+与 LaTeX 模板保持一致的目录结构：
+
+| 文件                                  | 用途                                                                     |
+| ------------------------------------- | ------------------------------------------------------------------------ |
+| `init-files/main.typ`                 | 编译入口，配置文档类选项（`field`、`fontset`、`twoside`、`bib-path` 等） |
+| `init-files/chapters/metadata.typ`    | 封面信息、信息说明页数据、摘要页标题覆盖（可选）                         |
+| `init-files/chapters/00_abstract.typ` | 中英文摘要内容与关键词                                                   |
+
 ### 文档类选项
 
-在 `init-files/main.typ` 的 `thesis.with()` 中配置：
+在 `init-files/main.typ` 中配置：
 
 ```typ
+#import "../paddling-tongji-thesis/tongjithesis.typ": *
+#import "chapters/metadata.typ": *
+#import "chapters/00_abstract.typ": *
+
+// -- 文档类选项 --
+#let field = "science"      // "science" 理工科（默认） / "humanities" 文科
+#let fontset = "fandol"     // fandol / windows / mac / adobe / founder
+#let bib-path = "bib/note.bib"
+#let twoside = false        // false 单面打印（默认） / true 双面打印
+
 #show: thesis.with(
-  field: "science",      // "science" 理工科 / "humanities" 文科
-  fontset: "fandol",   // fandol / windows / mac / adobe / founder
-  bib-content: read("bib/note.bib"),
+  // 封面信息（来自 metadata.typ）
+  school: school, major: major, id: id, student: student,
+  advisor: advisor, title: title, subtitle: subtitle,
+  title-english: title-english, subtitle-english: subtitle-english,
+  date: date,
+
+  // 摘要（来自 00_abstract.typ）
+  abstract: abstract, keywords: keywords,
+  abstract-english: abstract-english, keywords-english: keywords-english,
+
+  // 信息说明页（来自 metadata.typ）
+  infotype: infotype, infoabstract: infoabstract,
+  infodrawings: infodrawings, infowordcount: infowordcount,
+  infothesiswords: infothesiswords, infomaterials: infomaterials,
+
+  // 摘要页标题覆盖（来自 metadata.typ，可选）
+  abstract-title: abstract-title, abstract-subtitle: abstract-subtitle,
+  abstract-title-english: abstract-title-english,
+  abstract-subtitle-english: abstract-subtitle-english,
+
+  // 文档类选项
+  field: field, fontset: fontset,
+  bib-content: read(bib-path), twoside: twoside,
 )
 ```
 
-> `field: "humanities"` 启用文科格式：章节编号 一、/（一）/ 1. / （1） / ①②③
+#### 主要选项说明
 
-### 元数据
-
-所有个人信息在 `init-files/metadata.typ` 中填写（与 LaTeX 模板的 `chapters/metadata.tex` 对应）。详见该文件内注释。
+| 选项       | 类型     | 默认值      | 说明                                                                                        |
+| ---------- | -------- | ----------- | ------------------------------------------------------------------------------------------- |
+| `field`    | `string` | `"science"` | `"science"` 理工科，章节编号 1 / 1.1 / 1.1.1；`"humanities"` 文科，章节编号 一、/（一）/ 1. |
+| `fontset`  | `string` | `"fandol"`  | 字体集：`fandol` / `windows` / `mac` / `adobe` / `founder`                                  |
+| `twoside`  | `bool`   | `false`     | 双面打印模式：启用后装订线交替出现在左右侧，页眉/页脚内容也相应切换                         |
+| `bib-path` | `string` | —           | 参考文献数据库文件路径（.bib）                                                              |
+| `infotype` | `string` | `"thesis"`  | 成果类型：`"thesis"` 毕业论文 / `"design"` 毕业设计 / `"engineering"` 工程设计              |
 
 ---
 

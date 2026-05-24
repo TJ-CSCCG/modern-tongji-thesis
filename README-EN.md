@@ -49,7 +49,6 @@ Typst template for Tongji University undergraduate thesis (final project).
 
 Select `Start from a template` in the [Typst Web App](https://typst.app) and search for `paddling-tongji-thesis`.
 
-
 ### Local Usage
 
 #### 1. Install Typst
@@ -64,16 +63,15 @@ brew install typst
 
 #### 2. Choose Font Set
 
-Set the `fontset` parameter in `init-files/metadata.typ`:
-
+Fill cover and info page data in `init-files/chapters/metadata.typ`, and bilingual abstract content with keywords in `init-files/chapters/00_abstract.typ`. Other options are set in `init-files/main.typ`.
 
 > All font presets use **TeX Gyre Termes** (free, open-source TNR clone; built into Typst Web App; Linux: `apt install fonts-texgyre` or download ZIP) as the Latin serif font for Chinese-English mixed typesetting.
 
-| Platform | Recommended fontset | Notes                                                                      |
-| -------- | ------------------- | -------------------------------------------------------------------------- |
-| macOS    | `"mac"`             | Songti SC / Heiti SC system fonts                                          |
-| Windows  | `"windows"`         | SimSun / SimHei system fonts                                               |
-| Linux    | `"fandol"`          | Fandol + TeX Gyre Termes ([CTAN download](fonts/README.md))                |
+| Platform        | Recommended fontset     | Notes                                                                              |
+| --------------- | ----------------------- | ---------------------------------------------------------------------------------- |
+| macOS           | `"mac"`                 | Songti SC / Heiti SC system fonts                                                  |
+| Windows         | `"windows"`             | SimSun / SimHei system fonts                                                       |
+| Linux           | `"fandol"`              | Fandol + TeX Gyre Termes ([CTAN download](fonts/README.md))                        |
 | Adobe / Founder | `"adobe"` / `"founder"` | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
 
 #### 3. Compile
@@ -90,24 +88,67 @@ typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
 
 ## Template Configuration
 
+### Project File Layout
+
+Mirrors the LaTeX template directory structure:
+
+| File                                  | Purpose                                                                         |
+| ------------------------------------- | ------------------------------------------------------------------------------- |
+| `init-files/main.typ`                 | Entry point, document options (`field`, `fontset`, `twoside`, `bib-path`, etc.) |
+| `init-files/chapters/metadata.typ`    | Cover info, info page data, abstract title overrides (optional)                 |
+| `init-files/chapters/00_abstract.typ` | Bilingual abstract content and keywords                                         |
+
 ### Document Options
 
 Configure in `init-files/main.typ`:
 
 ```typ
+#import "../paddling-tongji-thesis/tongjithesis.typ": *
+#import "chapters/metadata.typ": *
+#import "chapters/00_abstract.typ": *
+
+// -- document options --
+#let field = "science"      // "science" (default) or "humanities"
+#let fontset = "fandol"     // fandol / windows / mac / adobe / founder
+#let bib-path = "bib/note.bib"
+#let twoside = false        // false single-sided (default) / true double-sided
+
 #show: thesis.with(
-  field: "science",      // "science" or "humanities"
-  fontset: "fandol",   // fandol / windows / mac / adobe / founder
-  bib-content: read("bib/note.bib"),
+  // Cover info (from metadata.typ)
+  school: school, major: major, id: id, student: student,
+  advisor: advisor, title: title, subtitle: subtitle,
+  title-english: title-english, subtitle-english: subtitle-english,
+  date: date,
+
+  // Abstracts (from 00_abstract.typ)
+  abstract: abstract, keywords: keywords,
+  abstract-english: abstract-english, keywords-english: keywords-english,
+
+  // Info page (from metadata.typ)
+  infotype: infotype, infoabstract: infoabstract,
+  infodrawings: infodrawings, infowordcount: infowordcount,
+  infothesiswords: infothesiswords, infomaterials: infomaterials,
+
+  // Abstract title overrides (from metadata.typ, optional)
+  abstract-title: abstract-title, abstract-subtitle: abstract-subtitle,
+  abstract-title-english: abstract-title-english,
+  abstract-subtitle-english: abstract-subtitle-english,
+
+  // Document options
+  field: field, fontset: fontset,
+  bib-content: read(bib-path), twoside: twoside,
 )
 ```
 
-> `field: "humanities"` enables humanities numbering: 一、/（一）/ 1. / （1） / ①②③
+#### Key Options
 
-### Metadata
-
-All user information goes in `init-files/metadata.typ` (matches LaTeX's `chapters/metadata.tex`). See comments in that file.
-
+| Option     | Type     | Default     | Description                                                                                                            |
+| ---------- | -------- | ----------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `field`    | `string` | `"science"` | `"science"` for science/engineering numbering 1 / 1.1 / 1.1.1; `"humanities"` for humanities numbering 一、/（一）/ 1. |
+| `fontset`  | `string` | `"fandol"`  | Font preset: `fandol` / `windows` / `mac` / `adobe` / `founder`                                                        |
+| `twoside`  | `bool`   | `false`     | Double-sided mode: when enabled, binding marks alternate sides, header/footer content mirrors between odd/even pages   |
+| `bib-path` | `string` | —           | Bibliography database file path (.bib)                                                                                 |
+| `infotype` | `string` | `"thesis"`  | Output type: `"thesis"` / `"design"` / `"engineering"`                                                                 |
 
 ---
 
