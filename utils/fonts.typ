@@ -1,3 +1,4 @@
+// Font size table — matching LaTeX Chinese font size system
 #let font-size = (
   "0": 42pt,
   "-0": 36pt,
@@ -87,6 +88,7 @@
 #let xiaobiaosong = font-family.xiaobiaosong
 #let xihei = font-family.xihei
 
+// Math symbols
 #let ii = math.class("normal", $mono(i)$)
 #let jj = math.class("normal", $mono(j)$)
 #let ee = math.class("normal", $mono(e)$)

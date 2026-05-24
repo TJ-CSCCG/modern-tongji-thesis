@@ -2,8 +2,8 @@
 
 ## 仓库结构 | Repository Structure
 
-- **源文件**：`paddling-tongji-thesis/` 目录下的 `.typ` 模板文件。
-- **文档文件**：`init-files/` 目录下的 `.typ` 文件（包括 `main.typ`），用于展示模板的使用方法。
+- **源文件**：`lib.typ` 以及 `utils/`、`layouts/` 目录下的 `.typ` 模板文件。
+- **文档文件**：`template/` 目录下的 `.typ` 文件（包括 `main.typ`），用于展示模板的使用方法。
 - **配置文件**：规范开发与使用的文件（如 `.gitignore`、`typst.toml`、`.editorconfig`）。
 
 ## 如何贡献 | How to Contribute

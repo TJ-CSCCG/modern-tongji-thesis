@@ -5,19 +5,20 @@
 #   ./scripts/bump-version.sh <new-version> [--tag]
 #
 # Examples:
-#   ./scripts/bump-version.sh 0.2.0
-#   ./scripts/bump-version.sh 0.2.0 --tag
+#   ./scripts/bump-version.sh 0.2.1
+#   ./scripts/bump-version.sh 0.2.1 --tag
 #
 # Updates:
 #   - package.json              "version" field
 #   - typst.toml                "version" field
 #   - .github/patches/package_release.diff   version in import paths
+#   - thumbnail.png             regenerated from compiled PDF first page
 
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
   echo "Usage: $0 <new-version> [--tag]"
-  echo "Example: $0 0.2.0 --tag"
+  echo "Example: $0 0.2.1 --tag"
   exit 1
 fi
 
@@ -49,18 +50,26 @@ sed -i.bak "s/version = \"${OLD_VERSION}\"/version = \"${NEW_VERSION}\"/" typst.
 rm typst.toml.bak
 
 # package_release.diff
-sed -i.bak "s/@preview\/paddling-tongji-thesis:${OLD_VERSION}/@preview\/paddling-tongji-thesis:${NEW_VERSION}/g" .github/patches/package_release.diff
+sed -i.bak "s/@preview\/modern-tongji-thesis:${OLD_VERSION}/@preview\/modern-tongji-thesis:${NEW_VERSION}/g" .github/patches/package_release.diff
 rm .github/patches/package_release.diff.bak
 
 echo ""
 echo "Updated files:"
 grep -n "version" package.json typst.toml | head -5
-grep "paddling-tongji-thesis:" .github/patches/package_release.diff | head -3
+grep "modern-tongji-thesis:" .github/patches/package_release.diff | head -3
+
+# Regenerate thumbnail from PDF first page
+echo ""
+echo "Regenerating thumbnail..."
+typst compile template/main.typ /tmp/thumbnail.pdf --root .
+magick -density 300 "/tmp/thumbnail.pdf[0]" -background white -alpha remove -alpha off -resize 512x512 thumbnail.png
+echo "  thumbnail.png updated ($(wc -c < thumbnail.png | tr -d ' ') bytes)"
+rm /tmp/thumbnail.pdf
 
 echo ""
 git diff --stat
 
-git add package.json typst.toml .github/patches/package_release.diff
+git add package.json typst.toml .github/patches/package_release.diff thumbnail.png
 git commit -m "chore: bump version to v${NEW_VERSION}"
 
 if [ "$CREATE_TAG" = true ]; then

@@ -1,4 +1,4 @@
-#import "../../paddling-tongji-thesis/tongjithesis.typ": *
+#import "../../lib.typ": *
 
 本附录提供正文中未详细列出的补充数据与推导过程，供读者参考。
 

@@ -1,4 +1,4 @@
-#import "../../paddling-tongji-thesis/tongjithesis.typ": *
+#import "../../lib.typ": *
 
 = 基本功能介绍 <introduction>
 
