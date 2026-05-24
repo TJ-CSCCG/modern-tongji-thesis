@@ -8,7 +8,7 @@ Typst是被广泛认为是#LaTeX 的 “进化版”，它保留了#LaTeX 的强
 “所见即所得（WYSIWYG，What You See Is What You Get）” 的实现。
 Typst的设计理念是让文档的制作过程更加高效和愉快，同时保持专业级的输出质量。然而，由于Typst仍处于开发阶段，它的功能远没有#LaTeX 和基于#LaTeX 的C#TeX 那么丰富，因此在使用Typst时，我们可能需要一些额外的工作来完成一些特殊的排版需求。
 
-在本节（@introduction）中，我们将介绍 Typst
+在本章（@introduction）中，我们将介绍 Typst
 的简单使用方法，尤其是中文排版的相关内容，并提供一些常用的排版示例。如果你对
 Typst 的使用方法还不太熟悉，可以参考#link("https://typst.app/docs")[#emph[Typst的官方文档]]。
 

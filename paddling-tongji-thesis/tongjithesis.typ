@@ -130,6 +130,21 @@
   set enum(numbering: n => "（" + str(n) + "）", indent: 2em, spacing: 1.2em)
   set list(indent: 2em, spacing: 1.2em)
 
+  // Cross-reference formatting — "第 X 章" / "第 X 节" pattern
+  show ref: it => {
+    if it.element != none and it.element.func() == heading {
+      let h = it.element
+      if h.numbering != none {
+        let n = numbering(h.numbering, ..counter(heading).at(h.location()))
+        let lv = h.level
+        let prefix = if lv == 1 { "第" + n + "章" } else if lv == 2 { "第" + n + "节" } else if lv == 3 { "第" + n + "小节" } else { none }
+        if prefix != none { link(h.location(), prefix) } else { it }
+      } else { it }
+    } else {
+      it
+    }
+  }
+
   set heading(numbering: (..nums) =>
     if is-humanities {
       let pos = nums.pos()
