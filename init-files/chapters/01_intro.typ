@@ -103,7 +103,7 @@ In Typst, *bold*, _italic_ and `monospace` are supported.
   ],
 )
 
-此外，Typst 还支持使用 #raw("#[#set text(font: <some_font>); <some_text>]", lang: "typ") 命令来自定义字体。在本模板中，我们预置了方正字库中的以下字体，并设置了相应的别名供使用。
+此外，Typst 还支持使用 #raw("#[#set text(font: <some_font>); <some_text>]", lang: "typ") 命令来自定义字体。本模板提供了五套字体配置（`fandol`、`windows`、`mac`、`adobe`、`founder`），与同济大学 LaTeX 模板完全一致，包含以下四种 CJK 字体：
 
 #table(
   columns: (auto, auto, 1fr), [
@@ -168,34 +168,8 @@ In Typst, *bold*, _italic_ and `monospace` are supported.
     #set text(font: font-family.fangsong)
     #h(2em)董事会由18人组成，主要成员有：三个德医公会元老：宝隆、福沙伯（第二任校长）、福尔克尔；三名德国商人：莱姆克、米歇劳和赖纳；两名中国绅商：朱葆三（沪军都督府财政部长及上海商务会会长，大买办）、虞洽卿（荷兰银行买办）；总领事馆的副领事弗赖海尔
     · 冯 · 吕特等。
-  ], [
-    #set align(center)
-    #set text(font: font-family.xiaobiaosong)
-    小标宋
-  ], [
-    #set align(center)
-    #raw("font-family.xiaobiaosong", lang: "typ")\
-    或\
-    #raw("xiaobiaosong", lang: "typ")
-  ], [
-    #set text(font: font-family.xiaobiaosong)
-    #h(2em)埃里希 ·
-    宝隆医生被正式推选为董事会总监督（董事长）兼学堂首任总理（校长），负责学堂的管理。医学堂的校址设在同济医院对面的白克路（今凤阳路415号上海长征医院内）。1907年10月1日德文医学堂举行了开学典礼。
-  ], [
-    #set align(center)
-    #set text(font: font-family.xihei)
-    细黑
-  ], [
-    #set align(center)
-    #raw("font-family.xihei", lang: "typ")\
-    或\
-    #raw("xihei", lang: "typ")
-  ], [
-    #set text(font: font-family.xihei)
-    #h(2em)1923年3月17日北洋政府教育部下达第108号训令，批准同济工科
-    “改为大学”。学校随即召开董事会议，将学校定名为 “同济大学”。1923年3月26日，学校以
-    “同济大学董事会” 名义呈文北洋政府教育部，称 “经校董会议定名称为同济大学”。
   ],
+
 )
 
 我们还可以使用 #raw("#underline[]", lang: "typ") 命令来表示下划线，例如：
