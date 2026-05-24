@@ -311,10 +311,21 @@
     }
   }
 
+  // Theorem environments — matching LaTeX \theoremstyle{definition}
+  show: show-theorion
+  set-inherited-levels(1)
+  set-theorion-numbering("1.1")
+  set-qed-symbol[#sym.wj]
+
   show list: it => it
   show enum: it => it
   // Figure auto-center + float spacing matching official spec
-  show figure: it => { set align(center); v(1.2em) + it + v(1.2em) }
+  // Skip theorem-kind figures (handled by theorion)
+  show figure: it => {
+    let thm-kinds = ("theorem", "lemma", "corollary", "proposition", "conjecture", "assumption", "definition", "example", "remark", "proof")
+    if it.kind in thm-kinds { it }
+    else { set align(center); v(1.2em) + it + v(1.2em) }
+  }
   show figure: set block(breakable: true)
   show table: it => it
   show math.equation.where(block: true): it => it
