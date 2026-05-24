@@ -12,11 +12,23 @@
 | macOS / Windows | 从 [CTAN](https://mirrors.ctan.org/fonts/tex-gyre.zip) 下载 OTF 文件（解压后的 `tex-gyre-termes` 目录） |
 | Typst Web App | 内置，无需上传 |
 
+## HaranoAjiMincho（带圈数字字体）
+
+模板使用 HaranoAjiMincho 字体渲染带圈数字 ①–㊿（与 LaTeX 模板一致）。从 CTAN 下载：
+
+```bash
+wget https://mirrors.ctan.org/fonts/haranoaji.zip
+unzip haranoaji.zip -d ~/.local/share/fonts/
+fc-cache -fv
+```
+
+> 该字体随 TeX Live 安装。macOS 系统自带 Apple SD Gothic Neo 亦可覆盖。若均未安装，Typst 会通过 `fallback: true` 搜索系统字体。
+
 ## 默认字体集 `fandol`
 
 ### CJK 字体下载
 
-Fandol CJK 字体无 apt 包，从 CTAN 下载：
+从 CTAN 下载：
 
 ```bash
 wget https://mirrors.ctan.org/fonts/fandol.zip
