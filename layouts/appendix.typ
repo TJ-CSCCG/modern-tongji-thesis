@@ -26,24 +26,13 @@
     it
   }
 
-  // Appendix figure/table numbering: letter-based per-kind (A.1, A.2; 表 A.1, 表 A.2 …)
-  show figure: it => {
-    if it.numbering != none { it } else {
-      let suppl = if it.kind == table { [表] } else if it.kind == image { [图] } else if it.kind == raw { [代码] } else { it.supplement }
-      context {
-        let hc = counter(heading).get()
-        let sec = hc.at(1, default: 1)
-        let letter = numbering("A", sec)
-        figure(
-          it.body,
-          kind: it.kind,
-          supplement: suppl,
-          caption: it.caption,
-          numbering: n => letter + "." + str(n),
-        )
-      }
-    }
-  }
+  // Appendix figure/table numbering: letter-based per-section (A.1, A.2; B.1, B.2 …)
+  // Uses set rather than show to avoid the recursion/condition problem with non-none numbering.
+  set figure(numbering: n => context {
+    let hc = counter(heading).get()
+    let sec = hc.at(1, default: 1)
+    numbering("A", sec) + "." + str(n)
+  })
 
   body
 }

@@ -9,6 +9,7 @@ repository = "https://github.com/TJ-CSCCG/modern-tongji-thesis"
 keywords = ["Tongji University", "thesis", "undergraduate"]
 categories = ["thesis"]
 exclude = ["scripts", "fonts/download-fonts.sh"]
+compiler = "0.14.0"
 
 [template]
 path = "template"

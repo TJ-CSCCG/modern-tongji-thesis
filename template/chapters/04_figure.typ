@@ -118,6 +118,75 @@
   ],
 )
 
+==== 子图
+
+当需要为共用一个编号的多个子图添加（a）（b）等子标题时，使用 `imagex()` 和 `subfig()`：
+
+#table(
+  columns: (1fr, 1fr), [
+    #set align(center)
+    #strong[代码]
+  ], [
+    #set align(center)
+    #strong[渲染结果]
+  ], ```typ
+  #imagex(
+    subfig(image(example-image, width: 80%), caption: [左侧视图], lbl-name: "left"),
+    subfig(image(example-image, width: 80%), caption: [右侧视图], lbl-name: "right"),
+    columns: (1fr, 1fr),
+    caption: [多子图示例],
+  ) <fig:subfig>
+  引用：见@fig:subfig:left 和@fig:subfig:right。
+  ```, [
+    #imagex(
+      subfig(image(example-image, width: 80%), caption: [左侧视图], lbl-name: "left"),
+      subfig(image(example-image, width: 80%), caption: [右侧视图], lbl-name: "right"),
+      columns: (1fr, 1fr),
+      caption: [多子图示例],
+    ) <fig:subfig>
+  ],
+)
+
+=== 跨页续表
+
+本模板提供 `continued-table()` 函数，支持自动\u201c续表 X\u201d标记和三线表样式：
+
+```typ
+#continued-table(
+  header: (
+    [*测试程序*], [*运行时间 (s)*], [*同步时间 (s)*], [*检查点时间 (s)*],
+  ),
+  columns: 4,
+  caption: [跨页续表示例],
+  [CG.C.2], [23.05], [0.002], [0.116#table-note("模拟数据")],
+  ... // 更多行
+)
+```
+
+下面是一个跨页续表实例：
+
+#continued-table(
+  header: (
+    [*测试程序*], [*运行时间 (s)*], [*同步时间 (s)*], [*检查点时间 (s)*],
+  ),
+  columns: 4,
+  caption: [跨页续表示例],
+  [CG.C.2], [23.05], [0.002], [0.116#table-note("模拟数据")],
+  [CG.A.4], [15.06], [0.003], [0.067],
+  [CG.A.8], [13.38], [0.004], [0.072],
+  [MG.A.2], [9.72], [0.002], [0.015],
+  [MG.B.4], [31.44], [0.003], [0.009],
+  [MG.C.8], [41.20], [0.001], [0.055],
+  [EP.C.2], [495.49], [0.001], [0.009],
+  [EP.C.4], [397.69], [0.002], [0.015],
+  [EP.C.8], [196.74], [0.003], [0.018],
+  [1], [3.14], [0.002], [],   [2], [6.28], [0.002], [],
+  [3], [9.42], [0.003], [],   [4], [12.56], [0.001], [],
+  [5], [15.70], [0.004], [],  [6], [18.84], [0.002], [],
+  [7], [21.98], [0.003], [],  [8], [25.12], [0.001], [],
+  [9], [28.26], [0.002], [],  [10], [31.40], [0.003], [],
+)
+
 === 表格
 
 表格是论文中常见的浮动体，它可以是简单的表格，也可以是复杂的表格。编排表格时应简单明了、表达一致，内容明晰易懂，表文呼应，内容一致。在Typst中，表格以 #raw("#table()", lang: "typ") 的形式实现。同样地，我们需要把 #raw("#table()", lang: "typ") 作为 #raw("#figure()", lang: "typ") 的
