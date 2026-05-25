@@ -134,9 +134,7 @@ jobs:
       - name: Create source archive
         if: steps.check.outputs.exists == 'false'
         run: |
-          EXCLUDES=".git .github patches bin fonts"
-          for e in $EXCLUDES; do EXC="$EXC --exclude=$e"; done
-          tar -czf "modern-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz" $EXC --warning=no-file-changed .
+          git archive --format=tar.gz --output="modern-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz" HEAD
           echo "Source archive created"
 
       - name: Read release template
