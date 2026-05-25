@@ -136,7 +136,7 @@ jobs:
         run: |
           EXCLUDES=".git .github patches bin fonts"
           for e in $EXCLUDES; do EXC="$EXC --exclude=$e"; done
-          tar -czf "modern-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz" $EXC .
+          tar -czf "modern-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz" $EXC --warning=no-file-changed .
           echo "Source archive created"
 
       - name: Read release template
