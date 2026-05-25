@@ -27,20 +27,6 @@ Typst template for Tongji University undergraduate thesis (final project).
 
 ---
 
-## Features
-
-- Cover, info page, bilingual abstracts, TOC, body, bibliography, acknowledgments
-- Dual discipline: `field: "science"` / `field: "humanities"`
-- Theorem environments (theorem, corollary, lemma, proposition, conjecture, assumption, definition, example, remark, proof)
-- Appendix (lettered sections A, B, C...)
-- GB/T 7714-2015 bilingual bibliography (`gb7714-bilingual` package)
-- Three-line tables (native Typst `table` + `table.hline`)
-- Algorithm typesetting (`algo` package)
-- Chapter-prefixed float numbering (native Typst `figure` counter, fig/table/equation/algo)
-- Circled number footnotes ①②③ (Unicode 1-50 + drawn circles 51+)
-- Five fontsets: `fandol` (default), `windows`, `mac`, `adobe`, `founder`
-- Character-level justification + optimized line breaks
-
 ---
 
 ## Quick Start

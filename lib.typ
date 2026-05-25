@@ -3,6 +3,9 @@
 #import "utils/theorion.typ": *
 #import "utils/helpers.typ": *
 #import "utils/word-count.typ": *
+#import "utils/lists.typ": *
+#import "utils/continued-table.typ": *
+#import "utils/figurex.typ": *
 #import "layouts/cover.typ": *
 #import "layouts/info-page.typ": *
 #import "layouts/abstract.typ": *
@@ -13,6 +16,10 @@
 #import "@preview/gb7714-bilingual:0.2.3": init-gb7714-impl, gb7714-bibliography, multicite
 #import "@preview/algo:0.3.6": algo, i, d, comment, code
 #import "@preview/wordometer:0.1.5": word-count-of
+#import "@preview/cuti:0.4.0": show-cn-fakebold
+#import "@preview/equate:0.3.2": equate
+#import "@preview/codly:1.3.0": *
+#import "@preview/codly-languages:0.1.10": codly-languages
 
 #let thesis(
   school: "某学院", major: "某专业", id: "0000000", student: "某某某", advisor: "某某某", title: "某标题", subtitle: "某副标题", title-english: "Some Title", subtitle-english: "Some Subtitle", date: datetime.today(), abstract: "慧枫尚萍氢，驳展妙棚端梦称委竞励。绘象臂淬人壳闭营风混仓、问抬兽村蜡胡锹挤污艰烃伏惧派宝既抓章住蓟棒褶均谭穿谴属；羟贮银…钓郭曾牙记氢硝巍仰蒲邀趟。革旅剑撞压单施宵饼狼将售烷贸问术粮洞魔。却烟陕倍且隘框糟秩板商，宙刚疮顿表羽楞景哺驯邮戒歌溜著聪峻忙劈左绩卖卫萨讯完读百釉好仔帜纽龟玉炒脂衍蛴瓦副冯查索桐梁；轴派？蝗丸朝保岂搅搞燕挫品休礼倾玻黑李宽列邮苦仔汛鳙物己弱寸栓孝哄俭牙敬厄搬吨楞干捧原趋息…善！", keywords: ("关键词1", "关键词2", "关键词3"), abstract-english: lorem(300), keywords-english: ("Keyword1", "keyword2", "keyword3"), doc,
@@ -26,6 +33,8 @@
   bib-content: none,
   // Twoside
   twoside: false,
+  // Punctuation — "circle" keeps U+3002, "dot" replaces with U+FF0E
+  fullwidthstop: "circle",
 ) = {
   let is-humanities = (field == "humanities")
   let cover-text = if is-humanities { "毕业论文（设计）" } else { "毕业设计（论文）" }
@@ -73,18 +82,37 @@
 
   set par(justify: true, first-line-indent: (amount: 2em, all: true), leading: 1.2em, spacing: 1.2em)
   set par(justification-limits: (tracking: (min: -0.01em, max: 0.02em)), linebreaks: "optimized")
+  show: show-cn-fakebold
   show strong: it => text(font: ff.hei, it.body)
   show emph: it => text(font: ff.kai, style: "italic", it.body)
   show raw: set text(font: ff.code)
   show math.equation: set text(font: ff.math)
   // Display math spacing: 0pt above/below (official spec)
   show math.equation.where(block: true): it => v(0pt) + it + v(0pt)
+  show: equate.with(breakable: true, sub-numbering: false)
   set underline(offset: 3pt, stroke: 0.6pt)
   // Circled number footnotes
   set footnote(numbering: n => circled-number(n))
-  // Lists: enumerate L1 uses （1）full-width parens, itemize indents match paragraph
-  set enum(numbering: n => "（" + str(n) + "）", indent: 2em, spacing: 1.2em)
+  // Lists: decoupled-marker layout avoids CJK-Latin baseline offset in items
+  set enum(
+    numbering: (..nums) => {
+      let pos = nums.pos()
+      if pos.len() == 1 {
+        "（" + str(pos.first()) + "）"
+      } else if pos.len() == 2 {
+        circled-number(pos.last())
+      } else {
+        // Deeper nesting — use circled numbers
+        circled-number(pos.last())
+      }
+    },
+    indent: 2em,
+    spacing: 1.2em,
+  )
   set list(indent: 2em, spacing: 1.2em)
+  if fullwidthstop == "dot" {
+    show "。": "．"
+  }
 
   // Cross-reference formatting — "第 X 章" / "第 X 节" pattern
   show ref: it => {
@@ -214,32 +242,21 @@
   show: show-rem
   show: show-pf
 
-  show list: it => it
-  show enum: it => it
   // Figure auto-center + float spacing matching official spec
   // Skip theorem-kind figures (handled by theorion)
   show figure: it => {
     let thm-kinds = ("theorem", "lemma", "corollary", "proposition", "conjecture", "assumption", "definition", "example", "remark", "proof")
     if it.kind in thm-kinds { it }
+    else if it.kind == "subfigure" { it }
     else { set align(center); v(1.2em) + it + v(1.2em) }
   }
   show figure: set block(breakable: true)
   show table: it => it
   show math.equation.where(block: true): it => it
-  show raw.where(block: true): it => it
 
-  // Code blocks: line numbers, frame, tab size, smaller font
-  show raw.where(block: true): it => {
-    set text(size: TJFONT_TABLE)
-    set par(leading: 0.8em)
-    block(
-      fill: luma(250),
-      inset: 10pt,
-      radius: 4pt,
-      stroke: 0.5pt + luma(200),
-      it
-    )
-  }
+  // Code blocks: syntax highlighting with line numbers
+  show: codly-init.with()
+  codly(languages: codly-languages)
 
   // Captions: 五号(10.5pt) 宋体, no indent
   show figure.caption: it => {
@@ -259,6 +276,7 @@
     counter(figure.where(kind: table)).update(0)
     counter(figure.where(kind: raw)).update(0)
     counter(figure.where(kind: "algo")).update(0)
+    counter(figure.where(kind: "subfigure")).update(0)
     it
   }
   set figure(numbering: n => context {
@@ -356,6 +374,7 @@
   }
 
   let body = word-count-tracked(body-with-bib)
+  let final = apply-list-rules(body)
 
-  body
+  final
 }
