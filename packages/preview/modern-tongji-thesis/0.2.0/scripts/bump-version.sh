@@ -62,7 +62,7 @@ grep "modern-tongji-thesis:" .github/patches/package_release.diff | head -3
 echo ""
 echo "Regenerating thumbnail..."
 typst compile template/main.typ /tmp/thumbnail.pdf --root .
-magick -density 300 "/tmp/thumbnail.pdf[0]" -background white -alpha remove -alpha off -resize 1080x1080 thumbnail.png
+magick -density 300 "/tmp/thumbnail.pdf[0]" -background white -alpha remove -alpha off -resize 512x512 thumbnail.png
 echo "  thumbnail.png updated ($(wc -c < thumbnail.png | tr -d ' ') bytes)"
 rm /tmp/thumbnail.pdf
 

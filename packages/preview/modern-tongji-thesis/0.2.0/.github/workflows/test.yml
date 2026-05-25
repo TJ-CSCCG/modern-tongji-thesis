@@ -1,0 +1,112 @@
+name: test
+
+on:
+  push:
+    branches: [main, dev]
+    paths-ignore:
+      - '*.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.github/release_template.md'
+      - '.github/workflows/release.yml'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.github/release_template.md'
+      - '.github/workflows/release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        field: [science, humanities]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v5
+        with:
+          typst-version: '^0.14.0'
+
+      - name: Download fonts
+        run: |
+          chmod +x fonts/download-fonts.sh
+          ./fonts/download-fonts.sh
+
+      - name: Configure humanities variant
+        if: matrix.field == 'humanities'
+        run: |
+          sed -i 's/field: "science"/field: "humanities"/' template/main.typ
+
+      - name: Compile thesis
+        run: |
+          typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
+
+      - name: Show log on failure
+        if: failure()
+        run: cat main.typ 2>/dev/null; echo "---"; ls -la thesis.pdf 2>/dev/null || true
+
+      - name: Rename PDF
+        if: success()
+        run: mv thesis.pdf modern-tongji-thesis-${{ matrix.field }}.pdf
+
+      - name: Upload PDF
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: document-${{ matrix.field }}
+          path: modern-tongji-thesis-${{ matrix.field }}.pdf
+          retention-days: 30
+
+  test-summary:
+    runs-on: ubuntu-latest
+    needs: build
+    if: always()
+    steps:
+      - name: Check builds succeeded
+        run: |
+          echo "Build status: ${{ needs.build.result }}"
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "Build failed"
+            exit 1
+          fi
+          echo "All builds completed successfully"
+
+  collect-pdfs:
+    runs-on: ubuntu-latest
+    needs: build
+    if: always() && !cancelled()
+    steps:
+      - name: Download all PDF artifacts
+        uses: actions/download-artifact@v7
+        with:
+          pattern: document-*
+          merge-multiple: true
+
+      - name: List downloaded files
+        run: ls -la *.pdf
+
+      - name: Upload consolidated PDFs
+        uses: actions/upload-artifact@v7
+        with:
+          name: all-compiled-documents
+          path: '*.pdf'
+          retention-days: 90

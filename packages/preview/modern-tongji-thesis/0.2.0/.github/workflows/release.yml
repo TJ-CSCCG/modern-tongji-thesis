@@ -1,0 +1,171 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build-release:
+    strategy:
+      fail-fast: false
+      matrix:
+        field: [science, humanities]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v5
+        with:
+          typst-version: '^0.14.0'
+
+      - name: Download fonts
+        run: |
+          chmod +x fonts/download-fonts.sh
+          ./fonts/download-fonts.sh
+
+      - name: Configure humanities variant
+        if: matrix.field == 'humanities'
+        run: |
+          sed -i 's/field: "science"/field: "humanities"/' template/main.typ
+
+      - name: Compile thesis
+        run: |
+          typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
+
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=$(grep '^version' typst.toml | head -1 | sed 's/.*= "//;s/"//')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Package version: $VERSION"
+
+      - name: Rename PDF
+        if: success()
+        run: |
+          mv thesis.pdf modern-tongji-thesis-v${{ steps.version.outputs.version }}-${{ matrix.field }}.pdf
+
+      - name: Upload PDF
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-pdf-${{ matrix.field }}
+          path: modern-tongji-thesis-v*.pdf
+          retention-days: 90
+
+  prepare-package:
+    # On tag push: create a patched 'package' branch for Typst Universe submission.
+    # Replaces local imports (../lib.typ) with @preview imports,
+    # then force-pushes to the 'package' branch.
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Apply patch and push to package branch
+        run: |
+          chmod +x .github/bin/package_release.sh
+          .github/bin/package_release.sh
+
+  release:
+    needs: build-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=$(grep '^version' typst.toml | head -1 | sed 's/.*= "//;s/"//')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check if release already exists
+        id: check
+        run: |
+          if gh release view "v${{ steps.version.outputs.version }}" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release v${{ steps.version.outputs.version }} already exists"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download release PDFs
+        if: steps.check.outputs.exists == 'false'
+        uses: actions/download-artifact@v7
+        with:
+          pattern: release-pdf-*
+          merge-multiple: true
+
+      - name: Get previous version
+        if: steps.check.outputs.exists == 'false'
+        id: prev
+        run: |
+          PREV=$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || true)
+          echo "tag=$PREV" >> "$GITHUB_OUTPUT"
+          echo "version=${PREV#v}" >> "$GITHUB_OUTPUT"
+          echo "Previous release: ${PREV:-none}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create source archive
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          git archive --format=tar.gz --output="modern-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz" HEAD
+          echo "Source archive created"
+
+      - name: Read release template
+        if: steps.check.outputs.exists == 'false'
+        id: template
+        run: |
+          BODY=$(sed \
+            -e "s/PREV_VERSION_TOKEN/${{ steps.prev.outputs.version }}/g" \
+            -e "s/VERSION_TOKEN/${{ steps.version.outputs.version }}/g" \
+            .github/release_template.md)
+          if [ -z "${{ steps.prev.outputs.version }}" ]; then
+            BODY=$(echo "$BODY" | sed '/PREV_VERSION_TOKEN\|完整对比\|Full changelog/d')
+          fi
+          {
+            echo "body<<EOF"
+            echo "$BODY"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        if: steps.check.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: "modern-tongji-thesis v${{ steps.version.outputs.version }}"
+          body: ${{ steps.template.outputs.body }}
+          files: |
+            modern-tongji-thesis-v${{ steps.version.outputs.version }}-science.pdf
+            modern-tongji-thesis-v${{ steps.version.outputs.version }}-humanities.pdf
+            modern-tongji-thesis-v${{ steps.version.outputs.version }}.tar.gz
+          draft: true
+          prerelease: false
+          fail_on_unmatched_files: false
+          make_latest: true
