@@ -1,4 +1,4 @@
-#import "../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.2.0": *
 #import "chapters/metadata.typ": *
 #import "chapters/00_abstract.typ": *
 

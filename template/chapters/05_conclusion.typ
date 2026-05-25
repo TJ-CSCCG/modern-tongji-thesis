@@ -1,4 +1,4 @@
-#import "../../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.2.0": *
 
 = 总结与未来工作展望
 

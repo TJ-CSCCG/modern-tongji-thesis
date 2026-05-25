@@ -1,4 +1,4 @@
-#import "../../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.2.0": *
 
 #heading("谢辞", numbering: none)
 #empty-par()

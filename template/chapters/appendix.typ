@@ -1,4 +1,4 @@
-#import "../../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.2.0": *
 
 本附录提供正文中未详细列出的补充数据与推导过程，供读者参考。
 
