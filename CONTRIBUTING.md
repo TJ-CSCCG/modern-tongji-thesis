@@ -10,13 +10,13 @@
 
 ### 寻求帮助 | Asking for Help
 
-我们通过 [Discussions](https://github.com/TJ-CSCCG/TongjiThesis-typst/discussions) 提供技术支持。
+我们通过 [Discussions](https://github.com/TJ-CSCCG/modern-tongji-thesis/discussions) 提供技术支持。
 
 **请勿通过即时通讯工具直接联系贡献者。**
 
 ### 反馈 Bug | Reporting a Bug
 
-如确认存在 Bug，请通过 [Issue](https://github.com/TJ-CSCCG/TongjiThesis-typst/issues) 模板提交反馈。
+如确认存在 Bug，请通过 [Issue](https://github.com/TJ-CSCCG/modern-tongji-thesis/issues) 模板提交反馈。
 
 ### 提交 Pull Request
 

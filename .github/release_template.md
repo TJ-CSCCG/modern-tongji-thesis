@@ -48,7 +48,7 @@ typst compile main.typ
 
 - [GitHub](https://github.com/TJ-CSCCG/modern-tongji-thesis)
 - [Typst Universe](https://typst.app/universe/package/modern-tongji-thesis)
-- [LaTeX 模板](https://github.com/TJ-CSCCG/tongji-undergrad-thesis)
+- [LaTeX 模板](https://github.com/TJ-CSCCG/TongjiThesis)
 
 ---
 
