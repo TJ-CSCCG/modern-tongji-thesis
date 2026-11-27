@@ -16,20 +16,24 @@ mkdir -p "$FONTS_DIR"
 
 echo "Downloading fonts to $FONTS_DIR ..."
 
+# mirrors.ctan.org sends each request to a random mirror, and some mirrors lag
+# or fail TLS, so a failed download is retried (on another mirror) and an HTTP
+# error fails the script instead of saving an error page as the zip.
 download_ctan() {
   local name="$1"
   local url="$2"
   local pattern="$3"
   echo "  → $name"
-  curl -sL "$url" -o /tmp/typst-fonts.zip
+  curl -fsSL --retry 3 --retry-all-errors "$url" -o /tmp/typst-fonts.zip
   unzip -qo /tmp/typst-fonts.zip -d /tmp/typst-fonts-tmp
   find /tmp/typst-fonts-tmp -name "$pattern" -exec cp {} "$FONTS_DIR/" \;
   rm -rf /tmp/typst-fonts.zip /tmp/typst-fonts-tmp
 }
 
-# Fandol CJK
+# Fandol CJK. CTAN moved Fandol to its obsolete area when the authors withdrew
+# it; TJ-CSCCG/cjk-fonts-for-ctex releases the same files.
 download_ctan "Fandol" \
-  "https://mirrors.ctan.org/fonts/fandol.zip" \
+  "https://github.com/TJ-CSCCG/cjk-fonts-for-ctex/releases/latest/download/fandol.zip" \
   "*.otf"
 
 # TeX Gyre Termes
