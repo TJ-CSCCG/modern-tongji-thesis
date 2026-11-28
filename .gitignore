@@ -48,6 +48,8 @@ Backup[ ]of[ ]*.numbers/
 
 # Typst
 *.pdf
+# Rendered by .github/bin/package_release.sh; committed only on the package branch
+/thumbnail.png
 fonts/*
 !fonts/README.md
 !fonts/download-fonts.sh
