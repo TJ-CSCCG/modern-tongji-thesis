@@ -1,0 +1,39 @@
+name: Release PR
+
+# Maintains a release PR from Conventional Commits on main: it bumps the version
+# in package.json and typst.toml and updates CHANGELOG.md. Merging it creates
+# the v* tag and a DRAFT GitHub release with the changelog as its notes. A
+# maintainer publishes the draft, which starts publish.yml to attach the PDFs
+# and the source tarball and to rebuild the `package` branch for Typst Universe.
+#
+# Auth: the org's GitHub App token (secrets APP_ID and APP_PRIVATE_KEY), so CI
+# runs on the release PR it opens: the default GITHUB_TOKEN cannot trigger
+# workflow runs.
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Run release-please
+        uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
