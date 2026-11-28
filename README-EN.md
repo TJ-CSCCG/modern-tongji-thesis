@@ -47,23 +47,27 @@ brew install typst
 # https://github.com/typst/typst#installation
 ```
 
-#### 2. Choose Font Set
+#### 2. Fill In and Choose Fonts
 
 Fill cover and info page data in `template/chapters/metadata.typ`, and bilingual abstract content with keywords in `template/chapters/00_abstract.typ`. Other options are set in `template/main.typ`.
 
-> All font presets use **TeX Gyre Termes** (free, open-source TNR clone; built into Typst Web App; Linux: `apt install fonts-texgyre` or download ZIP) as the Latin serif font for Chinese-English mixed typesetting.
+`fontset` picks the CJK fonts, matching the LaTeX template's option. The default `"auto"` uses the Zhongyi fonts of the official Word template (SimSun, SimHei, KaiTi, FangSong, shipped with Windows) when they are installed, and otherwise the free fonts of the LaTeX template's `fontset=texlive` (LXGW Neo ZhiSong, LXGW Neo XiHei, AR PL KaitiM GB, LXGW Zhuque Fangsong). Latin text uses TeX Gyre Termes, a free Times New Roman clone. CJK fonts without a bold face get bold text stroked at 1/35 of the font size, as Word does.
 
-| Platform        | Recommended fontset     | Notes                                                                              |
-| --------------- | ----------------------- | ---------------------------------------------------------------------------------- |
-| macOS           | `"mac"`                 | Songti SC / Heiti SC system fonts                                                  |
-| Windows         | `"windows"`             | SimSun / SimHei system fonts                                                       |
-| Linux           | `"fandol"`              | Fandol + TeX Gyre Termes ([CTAN download](fonts/README.md))                        |
-| Adobe / Founder | `"adobe"` / `"founder"` | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
+| `fontset`               | Fonts                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------- |
+| `"auto"` (default)      | `"windows"` when SimSun is installed, otherwise `"texlive"`                     |
+| `"windows"`             | Zhongyi fonts (Windows; elsewhere run `./fonts/download-fonts.sh windows`)      |
+| `"texlive"`             | Free fonts (downloaded by `./fonts/download-fonts.sh`)                          |
+| `"founder"` / `"adobe"` | Founder / Adobe fonts (`./fonts/download-fonts.sh founder` or `adobe`)          |
+| `"mac"`                 | Songti SC / Heiti SC / Kaiti SC / STFangsong, shipped with macOS                |
+| `"fandol"`              | Fandol (withdrawn by its authors; kept for theses already using it)             |
+
+See [fonts/README.md](fonts/README.md).
 
 #### 3. Compile
 
 ```bash
-# Download fonts (first time only)
+# Download fonts (first time only; add `windows` for the Word template's Zhongyi fonts)
 ./fonts/download-fonts.sh
 
 # Compile
@@ -89,15 +93,16 @@ Mirrors the LaTeX template directory structure:
 Configure in `template/main.typ`:
 
 ```typ
-#import "../modern-tongji-thesis/tongjithesis.typ": *
+#import "../lib.typ": *  // "@preview/modern-tongji-thesis:<version>" in a project created from Typst Universe
 #import "chapters/metadata.typ": *
 #import "chapters/00_abstract.typ": *
 
 // -- document options --
 #let field = "science"      // "science" (default) or "humanities"
-#let fontset = "fandol"     // fandol / windows / mac / adobe / founder
-#let bib-path = "bib/note.bib"
+#let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
+#let bib-path = ("ref.bib", "ref.yml")  // .bib / .yml
 #let twoside = false        // false single-sided (default) / true double-sided
+#let blind = false          // true for the blind-review version
 
 #show: thesis.with(
   // Cover info (from metadata.typ)
@@ -121,8 +126,8 @@ Configure in `template/main.typ`:
   abstract-subtitle-english: abstract-subtitle-english,
 
   // Document options
-  field: field, fontset: fontset,
-  bib-content: read(bib-path), twoside: twoside,
+  field: field, fontset: fontset, twoside: twoside, blind: blind,
+  bib-content: bib-path.map(read),
 )
 ```
 
@@ -131,16 +136,53 @@ Configure in `template/main.typ`:
 | Option     | Type     | Default     | Description                                                                                                            |
 | ---------- | -------- | ----------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `field`    | `string` | `"science"` | `"science"` for science/engineering numbering 1 / 1.1 / 1.1.1; `"humanities"` for humanities numbering 一、/（一）/ 1. |
-| `fontset`  | `string` | `"fandol"`  | Font preset: `fandol` / `windows` / `mac` / `adobe` / `founder`                                                        |
+| `fontset`  | `string` | `"auto"`    | Font set: `auto` / `windows` / `texlive` / `founder` / `adobe` / `mac` / `fandol`, see above                           |
 | `twoside`  | `bool`   | `false`     | Double-sided mode: when enabled, binding marks alternate sides, header/footer content mirrors between odd/even pages   |
-| `bib-path` | `string` | —           | Bibliography database file path (.bib)                                                                                 |
+| `blind`    | `bool`   | `false`     | Blind-review version: the cover leaves the student's name, student ID and advisor blank, the acknowledgements are left out, and the PDF names no author (see below) |
+| `bib-path` | `string` / `array` | — | Bibliography file path (BibLaTeX `.bib` or Hayagriva `.yml`), or an array of them |
 | `infotype` | `string` | `"thesis"`  | Output type: `"thesis"` / `"design"` / `"engineering"`                                                                 |
+
+### Blind Review
+
+To submit an anonymous thesis (for a blind review a school organizes), set `blind` to `true` in `template/main.typ` and compile again; nothing has to be deleted by hand:
+
+- the cover keeps its fields but leaves the student's name, student ID and advisor blank;
+- the acknowledgements are left out (`#if not blind { include "chapters/acknowledgments.typ" }` in `main.typ`);
+- the PDF names no author in its properties.
+
+Mark other identifying text in the body with `#tjblind[official text][blind text]`, for example `#tjblind[国家自然科学基金（12345678）][某项目]`. The plagiarism check upload and the undergraduate thesis spot checks require the official version (同济本〔2021〕33号), so do not submit the blind version there.
+
+### Bibliography
+
+References follow the GB/T 7714—2025 numeric system with the style in [`csl/gb-t-7714-2025-numeric.csl`](csl/gb-t-7714-2025-numeric.csl): `china-national-standard-gb-t-7714-2025-numeric.csl` from the [official CSL style repository](https://github.com/citation-style-language/styles) (CC BY-SA 3.0), changed to the half-width punctuation the writing spec requires. Cite with `@key`; adjacent citations merge into `[1,2]` or `[1-3]`, and `@key[12]` prints the page in superscript after the number. Unlike the LaTeX template, the data needs care in three places:
+
+- English titles are printed as written, so write them in sentence case; English editions are written `edition = {3rd ed.}`.
+- The institution of a thesis or report also goes in `publisher`.
+- Newspapers ([N]) and preprints ([PP]) go in a Hayagriva `.yml` file; see `template/ref.yml`.
+
+### Differences from the LaTeX Template
+
+This template follows 《同济大学本科生毕业设计（论文）撰写规范》 (revised October 2026) as the [LaTeX template](https://github.com/TJ-CSCCG/TongjiThesis) implements it; the cover, information page, abstracts, contents, body, references, appendix and acknowledgements were compared with it page by page. These differences remain:
+
+- References: English titles are not converted to sentence case, pinyin given names are abbreviated, and CSTR is not printed; newspapers and preprints go in a `.yml` file (see above).
+- Three-line tables have none of the 3–4 pt of extra space `booktabs` puts around the rules.
+- Math uses New Computer Modern Math; the LaTeX template uses the Times-like `newtx`.
+- Code blocks use `codly`'s style, not that of LaTeX `listings`.
+- The task book, proposal and midterm report forms are not provided yet.
+
+### Upgrading from 0.2
+
+- `songti`, `heiti`, `kaiti` and `fangsong` are functions that follow the chosen font set: write `#heiti[text]` instead of `#text(font: heiti)[text]`. `font-family` is removed.
+- The default `fontset` is `"auto"` instead of `"fandol"`, so the fonts change; to keep Fandol, set `fontset: "fandol"` and download Fandol with `./fonts/download-fonts.sh fandol`.
+- The bibliography no longer uses `gb7714-bilingual`: `#multicite()` still works, the `mark` field of a `.bib` entry is no longer read, and English titles, editions, newspapers and preprints need the changes the Bibliography section describes. `bib-content` takes the contents of several files.
+- Table text is 五号 instead of 小五 (the writing spec), so a table sized to fill the text width at 小五 may need narrower columns.
+- The new `blind` option: add `#let blind = false` to `main.typ`, pass it with `thesis.with(blind: blind)`, and include the acknowledgements with `#if not blind { include "chapters/acknowledgments.typ" }`.
 
 ---
 
 ## License
 
-MIT License.
+MIT License. `csl/gb-t-7714-2025-numeric.csl` is adapted from the official CSL style repository and shared under CC BY-SA 3.0.
 
 Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 

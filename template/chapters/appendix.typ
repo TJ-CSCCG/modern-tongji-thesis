@@ -8,10 +8,9 @@
 
 #figure(
   table(
-    columns: 4,
+    columns: (1fr,) * 4,
     align: center,
     stroke: none,
-    inset: 8pt,
     toprule(),
     midrule(),
     [*课程成绩*], [*成绩等级*], [*课程绩点*], [*百分制折算值*],
@@ -29,12 +28,12 @@
 
 平均绩点（GPA）计算公式为：
 $
-  "GPA" = frac(sum(("课程学分") times ("课程绩点")), sum("课程学分"))
+  "GPA" = frac(sum ("课程学分" times "课程绩点"), sum "课程学分")
 $
 
 全部课程的百分制平均成绩按以下公式折算：
 $
-  "百分制平均成绩" = frac(sum(("百分制成绩折算值") times ("课程学分")), sum("课程学分"))
+  "百分制平均成绩" = frac(sum ("百分制成绩折算值" times "课程学分"), sum "课程学分")
 $
 
 == 补充数据表
@@ -43,10 +42,9 @@ $
 
 #figure(
   table(
-    columns: 4,
+    columns: (1fr,) * 4,
     align: center,
     stroke: none,
-    inset: 8pt,
     toprule(),
     midrule(),
     [*样本编号*], [*输入值*], [*输出值*], [*误差*],

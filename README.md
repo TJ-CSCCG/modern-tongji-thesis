@@ -47,23 +47,27 @@ brew install typst
 # https://github.com/typst/typst#installation
 ```
 
-#### 2. 选择字体集
+#### 2. 填写信息与选择字体
 
 在 `template/chapters/metadata.typ` 中填写封面与信息说明页信息，在 `template/chapters/00_abstract.typ` 中填写中英文摘要与关键词。其他选项在 `template/main.typ` 中设置。
 
-> 所有字体集均使用 **TeX Gyre Termes**（Times New Roman 的开源替代，Typst Web App 内置，Linux: `apt install fonts-texgyre` 或下载 ZIP）作为中英文混排的 Latin 衬线字体。
+字体集由 `fontset` 选择，与 LaTeX 模板的同名选项对应。默认值 `"auto"` 在装有 Word 模板所用的中易字体（SimSun、SimHei、KaiTi、FangSong，Windows 自带）时使用它们，否则使用 LaTeX 模板 `fontset=texlive` 的免费字体（霞鹜新致宋、霞鹜新晰黑、文鼎 PL 中楷、朱雀仿宋）。西文统一使用 TeX Gyre Termes（Times New Roman 的开源替代）。没有粗体字形的中文字体，粗体按 Word 的方式以字号 1/35 的描边模拟。
 
-| 平台         | 推荐 fontset            | 说明                                                                         |
-| ------------ | ----------------------- | ---------------------------------------------------------------------------- |
-| macOS        | `"mac"`                 | Songti SC / Heiti SC 系统字体                                                |
-| Windows      | `"windows"`             | SimSun / SimHei 系统字体                                                     |
-| Linux        | `"fandol"`              | Fandol + TeX Gyre Termes（[CTAN 下载](fonts/README.md)）                     |
-| Adobe / 方正 | `"adobe"` / `"founder"` | 从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 |
+| `fontset`              | 字体                                                                         |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| `"auto"`（默认）       | 有 SimSun 时同 `"windows"`，否则同 `"texlive"`                               |
+| `"windows"`            | 中易字体（Windows 自带；其他系统运行 `./fonts/download-fonts.sh windows`）   |
+| `"texlive"`            | 免费字体（`./fonts/download-fonts.sh` 下载）                                 |
+| `"founder"` / `"adobe"` | 方正 / Adobe 字体（`./fonts/download-fonts.sh founder` 或 `adobe`）         |
+| `"mac"`                | macOS 自带的 Songti SC / Heiti SC / Kaiti SC / STFangsong                    |
+| `"fandol"`             | Fandol（作者已撤回，仅为旧稿保留）                                           |
+
+详见 [fonts/README.md](fonts/README.md)。
 
 #### 3. 编译
 
 ```bash
-# 下载字体（首次使用）
+# 下载字体（首次使用；加上 windows 另下载 Word 模板所用的中易字体）
 ./fonts/download-fonts.sh
 
 # 编译
@@ -89,15 +93,16 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 在 `template/main.typ` 中配置：
 
 ```typ
-#import "../modern-tongji-thesis/tongjithesis.typ": *
+#import "../lib.typ": *  // 从 Typst Universe 创建的项目中为 "@preview/modern-tongji-thesis:<版本>"
 #import "chapters/metadata.typ": *
 #import "chapters/00_abstract.typ": *
 
 // -- 文档类选项 --
 #let field = "science"      // "science" 理工科（默认） / "humanities" 文科
-#let fontset = "fandol"     // fandol / windows / mac / adobe / founder
-#let bib-path = "bib/note.bib"
+#let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
+#let bib-path = ("ref.bib", "ref.yml")  // .bib / .yml
 #let twoside = false        // false 单面打印（默认） / true 双面打印
+#let blind = false          // true 盲审版本
 
 #show: thesis.with(
   // 封面信息（来自 metadata.typ）
@@ -121,8 +126,8 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
   abstract-subtitle-english: abstract-subtitle-english,
 
   // 文档类选项
-  field: field, fontset: fontset,
-  bib-content: read(bib-path), twoside: twoside,
+  field: field, fontset: fontset, twoside: twoside, blind: blind,
+  bib-content: bib-path.map(read),
 )
 ```
 
@@ -131,16 +136,53 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 | 选项       | 类型     | 默认值      | 说明                                                                                        |
 | ---------- | -------- | ----------- | ------------------------------------------------------------------------------------------- |
 | `field`    | `string` | `"science"` | `"science"` 理工科，章节编号 1 / 1.1 / 1.1.1；`"humanities"` 文科，章节编号 一、/（一）/ 1. |
-| `fontset`  | `string` | `"fandol"`  | 字体集：`fandol` / `windows` / `mac` / `adobe` / `founder`                                  |
+| `fontset`  | `string` | `"auto"`    | 字体集：`auto` / `windows` / `texlive` / `founder` / `adobe` / `mac` / `fandol`，见上文                         |
 | `twoside`  | `bool`   | `false`     | 双面打印模式：启用后装订线交替出现在左右侧，页眉/页脚内容也相应切换                         |
-| `bib-path` | `string` | —           | 参考文献数据库文件路径（.bib）                                                              |
+| `blind`    | `bool`   | `false`     | 盲审版本：封面上的学生姓名、学号、指导教师留空，不输出谢辞，PDF 文档属性中不写作者，见下文                    |
+| `bib-path` | `string` / `array` | — | 参考文献数据文件路径（BibLaTeX `.bib` 或 Hayagriva `.yml`），可以是多个文件组成的数组 |
 | `infotype` | `string` | `"thesis"`  | 成果类型：`"thesis"` 毕业论文 / `"design"` 毕业设计 / `"engineering"` 工程设计              |
+
+### 盲审版本
+
+需要提交匿名论文（如学院组织的盲审）时，把 `template/main.typ` 中的 `blind` 改为 `true` 重新编译，不必手工删改内容：
+
+- 封面保留各栏目，但学生姓名、学号、指导教师留空；
+- 不输出谢辞（`main.typ` 中的 `#if not blind { include "chapters/acknowledgments.typ" }`）；
+- PDF 文档属性中不写作者。
+
+正文中其他能识别身份的内容用 `#tjblind[正式版内容][盲审版内容]` 标记，例如 `#tjblind[国家自然科学基金（12345678）][某项目]`，本人已发表成果可写作“第一作者”等。查重上传与本科毕业论文抽检要求提交正式版（同济本〔2021〕33号），不要使用盲审版本。
+
+### 参考文献
+
+参考文献按 GB/T 7714—2025 顺序编码制排版，样式文件为 [`csl/gb-t-7714-2025-numeric.csl`](csl/gb-t-7714-2025-numeric.csl)：取自 [CSL 官方样式库](https://github.com/citation-style-language/styles)的 `china-national-standard-gb-t-7714-2025-numeric.csl`（CC BY-SA 3.0），按撰写规范改为半角标点。在正文中用 `@key` 引用，连续的引用自动合并为 `[1,2]`、`[1-3]`；引用页码写作 `@key[12]`，以上标排在序号之后。与 LaTeX 模板相比，需在文献数据中注意：
+
+- 英文题名按原样输出，请写作句首大写；英文文献的版本项写作 `edition = {3rd ed.}`。
+- 学位论文与报告的保存单位、出版者另写在 `publisher` 中。
+- 报纸（[N]）与预印本（[PP]）写在 Hayagriva 格式的 `.yml` 文件中，示例见 `template/ref.yml`。
+
+### 与 LaTeX 模板的差异
+
+本模板按 [LaTeX 模板](https://github.com/TJ-CSCCG/TongjiThesis)实现的《同济大学本科生毕业设计（论文）撰写规范》（2026 年 10 月修订版）排版，封面、信息说明页、摘要、目录、正文、参考文献、附录与谢辞的版式与之逐页对照。目前仍有以下不同：
+
+- 参考文献：英文题名不自动改为句首大写，汉语拼音姓名缩写为首字母，不著录 CSTR；报纸与预印本需写在 `.yml` 文件中（见上文）。
+- 三线表：顶线、栏目线、底线两侧没有 LaTeX `booktabs` 额外的 3～4 pt 留白。
+- 公式使用 New Computer Modern Math，LaTeX 模板使用 Times 风格的 `newtx`。
+- 代码块使用 `codly` 的样式，与 LaTeX 的 `listings` 不同。
+- 任务书、开题报告与中期报告尚未提供。
+
+### 从 0.2 升级
+
+- `songti`、`heiti`、`kaiti`、`fangsong` 改为函数，按所选字体集排版：`#text(font: heiti)[文字]` 改写为 `#heiti[文字]`；`font-family` 已删除。
+- `fontset` 默认值由 `"fandol"` 改为 `"auto"`，输出字体随之改变；要保留 Fandol，写 `fontset: "fandol"`，并用 `./fonts/download-fonts.sh fandol` 下载 Fandol 字体。
+- 参考文献不再使用 `gb7714-bilingual`：`#multicite()` 仍可使用，`.bib` 中的 `mark` 字段不再读取；按上文“参考文献”一节调整英文题名、版本项与报纸、预印本条目。`bib-content` 可传入多个文件的内容。
+- 表内文字由小五号改为五号（撰写规范），按小五号排满版心的表格可能需要调整列宽。
+- 新增 `blind` 选项：在 `main.typ` 中加入 `#let blind = false`，传给 `thesis.with(blind: blind)`，并把谢辞改为 `#if not blind { include "chapters/acknowledgments.typ" }`。
 
 ---
 
 ## 开源协议
 
-MIT License。
+MIT License。`csl/gb-t-7714-2025-numeric.csl` 改编自 CSL 官方样式库，按 CC BY-SA 3.0 发布。
 
 欢迎提交 Issue 或 PR。详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 

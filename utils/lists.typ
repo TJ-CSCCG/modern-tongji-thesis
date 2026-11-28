@@ -1,7 +1,9 @@
-#import "fonts.typ": TJFONT_BODY
+#import "fonts.typ": TJFONT_BODY, TJ_LINE_PITCH
 #import "helpers.typ": circled-number
 
-#let item-spacing = 1.2em
+// Items follow each other at the body's line pitch, with no extra space
+// (the LaTeX template's nosep).
+#let item-spacing = TJ_LINE_PITCH - TJFONT_BODY
 
 #let _tj-enum-depth = state("_tj-enum-depth", 0)
 #let _tj-list-depth = state("_tj-list-depth", 0)
@@ -15,7 +17,8 @@
 //
 // Enum L1: （1）（2）paragraph-style block labels (matching LaTeX setlist[enumerate,1])
 // Enum L2: ①②③ circled numbers (matching LaTeX TJCircled + tj@cval{enumii})
-// List L1: filled circle  L2: stroked circle
+// List L1: • at 2 em, L2: – at 4 em, each 0.5 em before the text; lines after
+// the first start at the margin (the LaTeX template's wide lists)
 #let apply-list-rules(body) = {
   show enum: it => {
     _tj-enum-depth.update(d => d + 1)
@@ -64,14 +67,14 @@
       let result = none
       for child in it.children {
         if child.func() == list.item {
-          let marker = if depth == 1 { $circle.filled$ } else { $circle.stroked$ }
-          let lbl = text(size: TJFONT_BODY, marker)
+          let marker = if depth == 1 { [•] } else { [–] }
+          let lbl = text(size: TJFONT_BODY, marker) + h(0.5em)
           let item-block = block(
             above: item-spacing,
             below: item-spacing,
             {
               set par(first-line-indent: 0pt)
-              h(2em) + lbl + child.body
+              h(2em * calc.min(depth, 2)) + lbl + child.body
             },
           )
           result = if result == none { item-block } else { result + item-block }

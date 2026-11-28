@@ -8,8 +8,9 @@
 #let advisor = "李共济" + h(1em) + "教授"
 #let title = "同济大学本科毕业设计（论文）模板与Typst排版技术应用"
 #let subtitle = "模板排版功能示例、学术写作规范与格式设置指南"
-#let title-english = "Template and Typst Typesetting for Tongji University Undergraduate Thesis"
-#let subtitle-english = "A Guide to Typesetting Features, Academic Writing Standards, and Formatting"
+// 英文题名：仅首词与专有名词首字母大写（撰写规范）
+#let title-english = "Template and Typst typesetting for Tongji University undergraduate thesis"
+#let subtitle-english = "A guide to typesetting features, academic writing standards, and formatting"
 #let date = datetime(year: datetime.today().year(), month: datetime.today().month(), day: datetime.today().day())
 
 // ============================================================
@@ -39,8 +40,8 @@
 
 // 随附资料（每条一个字符串；留空数组 [] 则显示空白行）
 #let infomaterials = (
-  "随附材料名称一（如：全套图纸、程序源代码、计算书等）；",
-  "随附材料名称二",
+  "随附资料名称一（如：全套图纸、程序源代码、计算书等）；",
+  "随附资料名称二",
 )
 
 // ============================================================

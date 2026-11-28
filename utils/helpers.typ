@@ -17,9 +17,10 @@
   }
 }
 
-// Circled number — matching LaTeX's HaranoAjiMincho strategy
+// Circled number — matching LaTeX's HaranoAjiMincho strategy: one font that
+// covers ①–㊿, since SimSun has only ①–⑩.
 #let circled-number(n) = {
-  set text(font: ("Apple SD Gothic Neo", "HaranoAjiMincho"), fallback: true)
+  set text(font: "Harano Aji Mincho", fallback: true)
   if n >= 1 and n <= 20 {
     "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳".clusters().at(n - 1)
   } else if n >= 21 and n <= 35 {
@@ -38,6 +39,16 @@
       align(center + horizon, scale(x: s * 100%, y: s * 100%, text(size: 1em, str(n)))),
     )
   }
+}
+
+// Blind review: whether thesis() typesets the anonymous version.
+#let blind-state = state("tongji-thesis-blind", false)
+
+// #tjblind[正式版内容][盲审版内容]: the first argument in the official version,
+// the second in the blind-review version (blind: true). Mark identifying text
+// with it, such as a project number or the writer's own publications.
+#let tjblind(official, anonymized) = context {
+  if blind-state.get() { anonymized } else { official }
 }
 
 // Cross-reference convenience commands

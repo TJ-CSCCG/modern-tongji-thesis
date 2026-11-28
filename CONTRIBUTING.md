@@ -10,13 +10,13 @@
 
 ### 寻求帮助 | Asking for Help
 
-我们通过 [Discussions](https://github.com/TJ-CSCCG/TongjiThesis-typst/discussions) 提供技术支持。
+我们通过 [Discussions](https://github.com/TJ-CSCCG/modern-tongji-thesis/discussions) 提供技术支持。
 
 **请勿通过即时通讯工具直接联系贡献者。**
 
 ### 反馈 Bug | Reporting a Bug
 
-如确认存在 Bug，请通过 [Issue](https://github.com/TJ-CSCCG/TongjiThesis-typst/issues) 模板提交反馈。
+如确认存在 Bug，请通过 [Issue](https://github.com/TJ-CSCCG/modern-tongji-thesis/issues) 模板提交反馈。
 
 ### 提交 Pull Request
 
@@ -59,5 +59,6 @@ release-please maintains the version: do not edit it in `typst.toml` or `package
 | 2024.06 | [FeO3](https://github.com/seashell11234455) | 项目起源，创建初始 Typst 模板                                                                                    |
 | 2024.07 | [RizhongLin](https://github.com/RizhongLin) | 开始贡献，完善模板格式、增加 Typst 教程，持续维护更新                                                            |
 | 2025.05 | —                                           | 全面对齐 LaTeX 模板：字体集系统、信息说明页、定理环境、附录、gb7714-bilingual 参考文献、双学科模式、CI/CD 工作流 |
+| 2026.11 | [RizhongLin](https://github.com/RizhongLin) | 对齐 2026 年 10 月修订的撰写规范与 LaTeX 模板：逐页版式、`fontset: "auto"` 与 Word 式描边加粗、GB/T 7714—2025 参考文献（CSL）、盲审版本 |
 
 我们非常感谢以上贡献者的付出。如果您觉得本项目对您的毕业设计或论文有所帮助，希望您可以在致谢部分提及。

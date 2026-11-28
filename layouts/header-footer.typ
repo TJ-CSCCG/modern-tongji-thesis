@@ -1,71 +1,80 @@
-// Page headers, footers, and binding line
-#import "../utils/fonts.typ": TJFONT_BODY
+// Page header, footer and binding line, placed where the LaTeX template's
+// fancyhdr page styles and eso-pic binding line put them. Positions are
+// measured from the page edges of an A4 page.
+#import "../utils/fonts.typ": TJFONT_BODY, TJFONT_CAPTION
 
-#let draw-binding(twoside: false) = {
-  context {
-    let pipe-dx = -1.6cm
-    let label-dx = -1.8cm
-    if twoside and calc.rem(counter(page).get().first(), 2) == 0 {
-      pipe-dx = 17.5cm
-      label-dx = 17.3cm
+// Text whose baseline sits at the top of its box, so `place(dy: y)` puts the
+// baseline at y.
+#let _on-baseline(body) = box(text(top-edge: "baseline", bottom-edge: "baseline", body))
+
+// Even pages of a two-sided thesis mirror the header, footer and binding line.
+#let _is-even-twoside(twoside) = twoside and calc.even(counter(page).get().first())
+
+// Binding line (装订线): 3 mm rules down the binding edge with 装, 订 and 线 in
+// 五号, centered 1.6 cm (19.4 cm on even two-sided pages) plus half a box from
+// the page edge. Each value is the bottom of a rule or the baseline of a
+// character, in cm above the bottom of the page, as in the LaTeX template.
+#let _binding-marks = (
+  23.60, 23.12, 22.65, 22.16, 21.68, 21.20, 20.72, 20.24, 19.76, 19.29, 18.80, 18.32, 17.84,
+  "装", 16.88, 16.40, 15.92, 15.44, 14.96, "订", 14.00, 13.52, 13.04, 12.56, 12.07,
+  "线", 11.12, 10.63, 10.15, 9.68, 9.20, 8.71, 8.24, 7.76, 7.27, 6.79, 6.32, 5.84, 5.35,
+)
+#let _binding-labels = ("装": 17.37, "订": 14.50, "线": 11.60)
+
+#let binding-line(twoside: false) = context {
+  let center = (if _is-even-twoside(twoside) { 19.4cm } else { 1.6cm }) + 5.88pt
+  let from-top(y) = 29.7cm - y * 1cm
+  set text(size: TJFONT_CAPTION)
+  for mark in _binding-marks {
+    if type(mark) == str {
+      place(top + left, dx: center - 0.5em, dy: from-top(_binding-labels.at(mark)), _on-baseline(mark))
+    } else {
+      place(top + left, dx: center, dy: from-top(mark) - 3mm, line(angle: 90deg, length: 3mm, stroke: 0.4pt))
     }
-    place("|", dx: pipe-dx, dy: 2.3cm)
-    place("|", dx: pipe-dx, dy: 2.9cm)
-    place("|", dx: pipe-dx, dy: 3.5cm)
-    place("|", dx: pipe-dx, dy: 4.1cm)
-    place("|", dx: pipe-dx, dy: 4.7cm)
-    place("|", dx: pipe-dx, dy: 5.3cm)
-    place("|", dx: pipe-dx, dy: 5.9cm)
-    place("|", dx: pipe-dx, dy: 6.5cm)
-    place("|", dx: pipe-dx, dy: 7.1cm)
-    place("|", dx: pipe-dx, dy: 7.7cm)
-    place("装", dx: label-dx, dy: 8.3cm)
-    place("|", dx: pipe-dx, dy: 8.9cm)
-    place("|", dx: pipe-dx, dy: 9.5cm)
-    place("|", dx: pipe-dx, dy: 10.1cm)
-    place("|", dx: pipe-dx, dy: 10.7cm)
-    place("|", dx: pipe-dx, dy: 11.3cm)
-    place("订", dx: label-dx, dy: 11.9cm)
-    place("|", dx: pipe-dx, dy: 12.5cm)
-    place("|", dx: pipe-dx, dy: 13.1cm)
-    place("|", dx: pipe-dx, dy: 13.7cm)
-    place("|", dx: pipe-dx, dy: 14.3cm)
-    place("|", dx: pipe-dx, dy: 14.9cm)
-    place("线", dx: label-dx, dy: 15.5cm)
-    place("|", dx: pipe-dx, dy: 16.1cm)
-    place("|", dx: pipe-dx, dy: 16.7cm)
-    place("|", dx: pipe-dx, dy: 17.3cm)
-    place("|", dx: pipe-dx, dy: 17.9cm)
-    place("|", dx: pipe-dx, dy: 18.5cm)
-    place("|", dx: pipe-dx, dy: 19.1cm)
-    place("|", dx: pipe-dx, dy: 19.7cm)
-    place("|", dx: pipe-dx, dy: 20.3cm)
-    place("|", dx: pipe-dx, dy: 20.9cm)
-    place("|", dx: pipe-dx, dy: 21.5cm)
   }
 }
 
-#let empty-par() = {
-  v(-1.2em)
-  box()
+// Page header: the Tongji logo 1 cm in from the binding side, the header text
+// on the other side, and a double rule of two 0.5 pt lines. Use with
+// `header-ascent: 0pt`; the box spans the 4 cm top margin.
+#let make-page-header(twoside, header-text) = context {
+  let even = _is-even-twoside(twoside)
+  let logo = image("../figures/tongji-header.svg", height: 1.14cm)
+  block(width: 100%, height: 4cm, {
+    set text(size: TJFONT_BODY)
+    place(if even { top + right } else { top + left }, dx: if even { -1cm } else { 1cm }, dy: 54.56pt, logo)
+    place(if even { top + left } else { top + right }, dy: 72.87pt, _on-baseline(header-text))
+    place(top + left, dy: 91.84pt, line(length: 100%, stroke: 0.5pt))
+    place(top + left, dy: 93.34pt, line(length: 100%, stroke: 0.5pt))
+  })
 }
 
-// Make page header (shared between preface and mainmatter)
-#let make-page-header(ff, twoside, header-text) = context {
-  let is-odd = calc.rem(counter(page).get().first(), 2) != 0
-  let flip = twoside and not is-odd
-  set text(font: ff.song, size: TJFONT_BODY)
-  let a = image("../figures/tongji-header.svg", height: 1.14cm)
-  let b = align(horizon, block(height: 1.14cm, align(center + horizon, text(font: ff.song, size: TJFONT_BODY, header-text))))
-  let (logo, label) = if flip { (b, a) } else { (a, b) }
-  let (cl, cr) = if flip { (0.5em, 1cm) } else { (1cm, 0.5em) }
-  grid(
-    columns: (cl, 1fr, auto, cr), [],
-    logo,
-    label,
-    [],
-  )
-  v(-0.5em)
-  block(width: 100%, height: 1.5pt, stroke: (top: 0.5pt, bottom: 0.5pt))
-  draw-binding(twoside: twoside)
+// Footer of the front matter: the page number in Roman numerals, centered.
+// Use with `footer-descent: 0pt`; the box spans the 2.7 cm bottom margin.
+#let make-front-footer() = context {
+  block(width: 100%, height: 2.7cm, {
+    set text(size: TJFONT_BODY)
+    place(top + center, dy: 29.89pt, _on-baseline(numbering("I", counter(page).get().first())))
+  })
 }
+
+// Footer of the main matter: a 1.8 pt rule and “共 N 页 第 n 页”, its parts one
+// em apart, on the outer side.
+#let make-main-footer(twoside) = context {
+  let even = _is-even-twoside(twoside)
+  let total = [共#h(1em)#counter(page).final().first()#h(1em)页]
+  let current = [第#h(1em)#counter(page).get().first()#h(1em)页]
+  block(width: 100%, height: 2.7cm, {
+    set text(size: TJFONT_BODY)
+    place(top + left, dy: 14.6pt, line(length: 100%, stroke: 1.8pt))
+    if even {
+      place(top + left, dy: 29.89pt, _on-baseline[#current#h(1em)#total])
+    } else {
+      place(top + right, dy: 29.89pt, _on-baseline[#total#h(1em)#current])
+    }
+  })
+}
+
+// Kept for theses written for 0.2: a paragraph after a heading is indented
+// without it now.
+#let empty-par() = none

@@ -1,5 +1,6 @@
 #import "fonts.typ": TJFONT_TABLE, TJFONT_CAPTION
 #import "tables.typ": toprule, midrule, bottomrule
+#import "numbering.typ": float-number
 
 #let table-notes-state = state("table-notes", ())
 #let table-note(text) = {
@@ -32,13 +33,12 @@
   show table: set text(size: TJFONT_TABLE)
 
   figure(
-    kind: "table",
+    kind: table,
     supplement: [表],
     caption: caption,
     [
       #table(
         columns: columns,
-        inset: 5pt,
         stroke: none,
         table.header(
           table.cell(
@@ -47,16 +47,8 @@
               set align(right)
               set text(size: TJFONT_CAPTION)
               v(0pt)
-              let h1 = query(heading.where(level: 1).before(here())).last()
-              if h1 != none and h1.body == [附录] {
-                let sec = counter(heading).get().at(1, default: 1)
-                let fg = counter(figure.where(kind: "table")).get().first()
-                [续表 #numbering("A", sec).#fg#h(2em)]
-              } else {
-                let ch = counter(heading).get().first()
-                let fg = counter(figure.where(kind: "table")).get().first()
-                [续表 #ch.#fg#h(2em)]
-              }
+              let fg = counter(figure.where(kind: table)).get().first()
+              [续表~#float-number(fg)#h(2em)]
               v(-0.3em)
             } else {
               nxt.update(true)
