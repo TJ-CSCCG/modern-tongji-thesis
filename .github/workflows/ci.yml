@@ -110,9 +110,14 @@ jobs:
           fi
           command -v pdffonts > /dev/null || sudo apt-get install -y -qq poppler-utils
           pdffonts thesis.pdf
-          for font in SimSun SimHei; do
+          for font in SimSun SimHei KaiTi FangSong; do
             pdffonts thesis.pdf | grep -q "$font" || { echo "::error::fontset auto did not choose the windows set: no $font in the PDF."; exit 1; }
           done
+          # Nothing may fall back to the free set the script also downloads.
+          if pdffonts thesis.pdf | grep -E 'LXGW|Zhuque|GBZenKai'; then
+            echo "::error::Text fell back to a font of the free set."
+            exit 1
+          fi
 
   # blind: true must leave the sample student's name, student ID, advisor and
   # acknowledgements out of the PDF text and name no author in its metadata.

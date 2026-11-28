@@ -3,7 +3,8 @@
 // 复选框：与汉字等宽等高的方框，勾选时内含对勾。
 #let tj-checkbox(checked) = box(
   width: 0.95em, height: 0.95em, baseline: 0.1em, stroke: 0.5pt,
-  if checked { align(center + horizon, text(size: 0.62em, sym.checkmark)) },
+  // The check mark comes from the math font, which every font set has.
+  if checked { align(center + horizon, text(size: 0.62em, $checkmark$)) },
 )
 
 // 定宽下划线，内容居中；内容为空时为纯下划线。
