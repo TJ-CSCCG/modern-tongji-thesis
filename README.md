@@ -59,7 +59,7 @@ brew install typst
 | `"windows"`            | 中易字体（Windows 自带；其他系统运行 `./fonts/download-fonts.sh windows`）   |
 | `"texlive"`            | 免费字体（`./fonts/download-fonts.sh` 下载）                                 |
 | `"founder"` / `"adobe"` | 方正 / Adobe 字体（`./fonts/download-fonts.sh founder` 或 `adobe`）         |
-| `"mac"`                | macOS 自带的华文字体                                                         |
+| `"mac"`                | macOS 自带的 Songti SC / Heiti SC / Kaiti SC / STFangsong                    |
 | `"fandol"`             | Fandol（作者已撤回，仅为旧稿保留）                                           |
 
 详见 [fonts/README.md](fonts/README.md)。
@@ -154,7 +154,7 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 
 ### 参考文献
 
-参考文献按 GB/T 7714—2025 顺序编码制排版，样式文件为 [`csl/gb-t-7714-2025-numeric.csl`](csl/gb-t-7714-2025-numeric.csl)：取自 [CSL 官方样式库](https://github.com/citation-style-language/styles)的 `china-national-standard-gb-t-7714-2025-numeric.csl`（CC BY-SA 3.0），按撰写规范改为半角标点。在正文中用 `@key` 引用，连续的引用自动合并为 `[1,2]`、`[1-3]`。与 LaTeX 模板相比，需在文献数据中注意：
+参考文献按 GB/T 7714—2025 顺序编码制排版，样式文件为 [`csl/gb-t-7714-2025-numeric.csl`](csl/gb-t-7714-2025-numeric.csl)：取自 [CSL 官方样式库](https://github.com/citation-style-language/styles)的 `china-national-standard-gb-t-7714-2025-numeric.csl`（CC BY-SA 3.0），按撰写规范改为半角标点。在正文中用 `@key` 引用，连续的引用自动合并为 `[1,2]`、`[1-3]`；引用页码写作 `@key[12]`，以上标排在序号之后。与 LaTeX 模板相比，需在文献数据中注意：
 
 - 英文题名按原样输出，请写作句首大写；英文文献的版本项写作 `edition = {3rd ed.}`。
 - 学位论文与报告的保存单位、出版者另写在 `publisher` 中。
@@ -170,11 +170,19 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 - 代码块使用 `codly` 的样式，与 LaTeX 的 `listings` 不同。
 - 任务书、开题报告与中期报告尚未提供。
 
+### 从 0.2 升级
+
+- `songti`、`heiti`、`kaiti`、`fangsong` 改为函数，按所选字体集排版：`#text(font: heiti)[文字]` 改写为 `#heiti[文字]`；`font-family` 已删除。
+- `fontset` 默认值由 `"fandol"` 改为 `"auto"`，输出字体随之改变；要保留 Fandol，写 `fontset: "fandol"`，并用 `./fonts/download-fonts.sh fandol` 下载 Fandol 字体。
+- 参考文献不再使用 `gb7714-bilingual`：`#multicite()` 仍可使用，`.bib` 中的 `mark` 字段不再读取；按上文“参考文献”一节调整英文题名、版本项与报纸、预印本条目。`bib-content` 可传入多个文件的内容。
+- 表内文字由小五号改为五号（撰写规范），按小五号排满版心的表格可能需要调整列宽。
+- 新增 `blind` 选项：在 `main.typ` 中加入 `#let blind = false`，传给 `thesis.with(blind: blind)`，并把谢辞改为 `#if not blind { include "chapters/acknowledgments.typ" }`。
+
 ---
 
 ## 开源协议
 
-MIT License。
+MIT License。`csl/gb-t-7714-2025-numeric.csl` 改编自 CSL 官方样式库，按 CC BY-SA 3.0 发布。
 
 欢迎提交 Issue 或 PR。详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 

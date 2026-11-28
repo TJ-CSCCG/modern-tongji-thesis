@@ -59,7 +59,7 @@ Fill cover and info page data in `template/chapters/metadata.typ`, and bilingual
 | `"windows"`             | Zhongyi fonts (Windows; elsewhere run `./fonts/download-fonts.sh windows`)      |
 | `"texlive"`             | Free fonts (downloaded by `./fonts/download-fonts.sh`)                          |
 | `"founder"` / `"adobe"` | Founder / Adobe fonts (`./fonts/download-fonts.sh founder` or `adobe`)          |
-| `"mac"`                 | The STHeiti family shipped with macOS                                           |
+| `"mac"`                 | Songti SC / Heiti SC / Kaiti SC / STFangsong, shipped with macOS                |
 | `"fandol"`              | Fandol (withdrawn by its authors; kept for theses already using it)             |
 
 See [fonts/README.md](fonts/README.md).
@@ -154,7 +154,7 @@ Mark other identifying text in the body with `#tjblind[official text][blind text
 
 ### Bibliography
 
-References follow the GB/T 7714—2025 numeric system with the style in [`csl/gb-t-7714-2025-numeric.csl`](csl/gb-t-7714-2025-numeric.csl): `china-national-standard-gb-t-7714-2025-numeric.csl` from the [official CSL style repository](https://github.com/citation-style-language/styles) (CC BY-SA 3.0), changed to the half-width punctuation the writing spec requires. Cite with `@key`; adjacent citations merge into `[1,2]` or `[1-3]`. Unlike the LaTeX template, the data needs care in three places:
+References follow the GB/T 7714—2025 numeric system with the style in [`csl/gb-t-7714-2025-numeric.csl`](csl/gb-t-7714-2025-numeric.csl): `china-national-standard-gb-t-7714-2025-numeric.csl` from the [official CSL style repository](https://github.com/citation-style-language/styles) (CC BY-SA 3.0), changed to the half-width punctuation the writing spec requires. Cite with `@key`; adjacent citations merge into `[1,2]` or `[1-3]`, and `@key[12]` prints the page in superscript after the number. Unlike the LaTeX template, the data needs care in three places:
 
 - English titles are printed as written, so write them in sentence case; English editions are written `edition = {3rd ed.}`.
 - The institution of a thesis or report also goes in `publisher`.
@@ -170,11 +170,19 @@ This template follows 《同济大学本科生毕业设计（论文）撰写规�
 - Code blocks use `codly`'s style, not that of LaTeX `listings`.
 - The task book, proposal and midterm report forms are not provided yet.
 
+### Upgrading from 0.2
+
+- `songti`, `heiti`, `kaiti` and `fangsong` are functions that follow the chosen font set: write `#heiti[text]` instead of `#text(font: heiti)[text]`. `font-family` is removed.
+- The default `fontset` is `"auto"` instead of `"fandol"`, so the fonts change; to keep Fandol, set `fontset: "fandol"` and download Fandol with `./fonts/download-fonts.sh fandol`.
+- The bibliography no longer uses `gb7714-bilingual`: `#multicite()` still works, the `mark` field of a `.bib` entry is no longer read, and English titles, editions, newspapers and preprints need the changes the Bibliography section describes. `bib-content` takes the contents of several files.
+- Table text is 五号 instead of 小五 (the writing spec), so a table sized to fill the text width at 小五 may need narrower columns.
+- The new `blind` option: add `#let blind = false` to `main.typ`, pass it with `thesis.with(blind: blind)`, and include the acknowledgements with `#if not blind { include "chapters/acknowledgments.typ" }`.
+
 ---
 
 ## License
 
-MIT License.
+MIT License. `csl/gb-t-7714-2025-numeric.csl` is adapted from the official CSL style repository and shared under CC BY-SA 3.0.
 
 Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 

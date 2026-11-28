@@ -1,4 +1,4 @@
-#import "../utils/fonts.typ": TJFONT_ABSTRACT, TJFONT_ABSTRACT_SUB, TJFONT_HEADING, TJFONT_BODY
+#import "../utils/fonts.typ": TJFONT_ABSTRACT, TJFONT_ABSTRACT_SUB, TJFONT_HEADING
 
 // Abstract pages — matches the LaTeX \MakeAbstract and \MakeAbstractEng: the
 // thesis title in bold 小二 and the subtitle in bold 三号 (黑体 in Chinese),

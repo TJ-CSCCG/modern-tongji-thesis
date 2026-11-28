@@ -39,7 +39,6 @@
     [
       #table(
         columns: columns,
-
         stroke: none,
         table.header(
           table.cell(
