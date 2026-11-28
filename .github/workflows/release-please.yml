@@ -13,6 +13,9 @@ name: Release PR
 on:
   push:
     branches: [main]
+  # Run by hand to rebuild the release PR, for example after adding a
+  # BEGIN_COMMIT_OVERRIDE block to a merged PR's body to correct its changelog entry.
+  workflow_dispatch:
 
 permissions: {}
 
