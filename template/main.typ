@@ -6,7 +6,7 @@
 
 #let field = "science"
 #let fontset = "auto"
-#let bib-path = "ref.bib"
+#let bib-path = ("ref.bib", "ref.yml")  // BibLaTeX 与 Hayagriva YAML 文件，可只写一个
 #let twoside = false
 
 #show: thesis.with(
@@ -19,7 +19,7 @@
   infothesiswords: infothesiswords, infomaterials: infomaterials,
   abstract-title: abstract-title, abstract-subtitle: abstract-subtitle,
   abstract-title-english: abstract-title-english, abstract-subtitle-english: abstract-subtitle-english,
-  field: field, fontset: fontset, bib-content: read(bib-path), twoside: twoside,
+  field: field, fontset: fontset, bib-content: if type(bib-path) == array { bib-path.map(read) } else { read(bib-path) }, twoside: twoside,
 )
 
 #include "chapters/01_intro.typ"

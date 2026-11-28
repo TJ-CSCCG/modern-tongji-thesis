@@ -13,7 +13,6 @@
 #import "layouts/header-footer.typ": *
 #import "layouts/references.typ": *
 #import "layouts/appendix.typ": *
-#import "@preview/gb7714-bilingual:0.2.3": init-gb7714-impl, gb7714-bibliography, multicite
 #import "@preview/algo:0.3.6": algo, i, d, comment, code
 #import "@preview/wordometer:0.1.5": word-count-of
 #import "@preview/cuti:0.4.0": show-cn-fakebold
@@ -31,7 +30,8 @@
   infotype: "thesis", infoabstract: "", infodrawings: "", infowordcount: "", infothesiswords: "", infomaterials: (),
   // Abstract titles (defaults to thesis title)
   abstract-title: none, abstract-subtitle: none, abstract-title-english: none, abstract-subtitle-english: none,
-  // Bibliography
+  // Bibliography: the contents of a .bib (BibLaTeX) or .yml (Hayagriva) file,
+  // or an array of them, set as GB/T 7714—2025 where makereferences() is called
   bib-content: none,
   // Twoside
   twoside: false,
@@ -345,12 +345,14 @@
   })
   counter(page).update(1)
 
-  // Initialize bibliography if bib-content provided
-  let body-with-bib = if bib-content != none {
-    init-gb7714-impl(bib-content, style: "numeric", version: "2015", doc)
-  } else {
-    doc
+  // Citation ranges use a hyphen, [5-6], as the writing spec's half-width
+  // punctuation and the LaTeX template print them.
+  show cite: it => { show "–": "-"; it }
+  // The reference list goes where makereferences() was called
+  show metadata.where(value: "tongji-thesis-references"): it => {
+    if bib-content != none { render-references(bib-content) }
   }
+  let body-with-bib = doc
 
   // Word count tracking (CJK characters + words, excluding headings/tables/code)
   let word-count-tracked(content) = {

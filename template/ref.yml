@@ -1,0 +1,55 @@
+# 参考文献数据库（Hayagriva YAML）
+# BibLaTeX 没有报纸与预印本类型，Typst 读取 .bib 时无法给出 [N] 与 [PP]，
+# 这两类文献写在本文件中：报纸的 parent 为 newspaper，预印本为不带期刊的 article。
+# 格式说明：https://github.com/typst/hayagriva/blob/main/docs/file-format.md
+
+# ===== 报纸文章 =====
+newspaper1:
+  type: article
+  author: 沈慎
+  title: “九章”量子计算机的里程碑意义
+  date: 2020-12-18
+  page-range: "05"
+  parent:
+    type: newspaper
+    title: 人民日报
+
+newspaper2:
+  type: article
+  author: ["吴月辉", "谷业凯"]
+  title: 人工智能发展迎来新趋势(AI前沿观察)
+  date: 2024-01-12
+  page-range: "08"
+  parent:
+    type: newspaper
+    title: 人民日报海外版
+
+# ===== 预印本 =====
+preprint1:
+  type: article
+  # 超过三位作者时只著录前三位，其后加“等”或“et al.”，此处从略
+  author:
+    - "DeepSeek-AI"
+    - "Xu, Anyi"
+    - "Lin, Bangcai"
+    - "Xue, Bing"
+    - "Wang, Bingxuan"
+    - "Xu, Bingzheng"
+  title: "DeepSeek-V4: towards highly efficient million-token context intelligence"
+  date: 2026-04
+  publisher: arXiv
+  serial-number:
+    arxiv: "2606.19348"
+  url:
+    value: https://arxiv.org/abs/2606.19348
+    date: 2026-07-03
+
+preprint2:
+  type: article
+  author: ["肖玲", "张雪", "王永"]
+  title: 数据要素的统计测算方法探究
+  date: 2024-08-14
+  publisher: PSSXiv
+  url:
+    value: https://zsyyb.cn/abs/202408.01096
+    date: 2024-09-30

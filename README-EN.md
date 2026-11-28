@@ -100,7 +100,7 @@ Configure in `template/main.typ`:
 // -- document options --
 #let field = "science"      // "science" (default) or "humanities"
 #let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
-#let bib-path = "bib/note.bib"
+#let bib-path = ("ref.bib", "ref.yml")
 #let twoside = false        // false single-sided (default) / true double-sided
 
 #show: thesis.with(
@@ -126,7 +126,7 @@ Configure in `template/main.typ`:
 
   // Document options
   field: field, fontset: fontset,
-  bib-content: read(bib-path), twoside: twoside,
+  bib-content: bib-path.map(read), twoside: twoside,
 )
 ```
 
@@ -137,8 +137,16 @@ Configure in `template/main.typ`:
 | `field`    | `string` | `"science"` | `"science"` for science/engineering numbering 1 / 1.1 / 1.1.1; `"humanities"` for humanities numbering 一、/（一）/ 1. |
 | `fontset`  | `string` | `"auto"`    | Font set: `auto` / `windows` / `texlive` / `founder` / `adobe` / `mac` / `fandol`, see above                           |
 | `twoside`  | `bool`   | `false`     | Double-sided mode: when enabled, binding marks alternate sides, header/footer content mirrors between odd/even pages   |
-| `bib-path` | `string` | —           | Bibliography database file path (.bib)                                                                                 |
+| `bib-path` | `string` / `array` | — | Bibliography file path (BibLaTeX `.bib` or Hayagriva `.yml`), or an array of them |
 | `infotype` | `string` | `"thesis"`  | Output type: `"thesis"` / `"design"` / `"engineering"`                                                                 |
+
+### Bibliography
+
+References follow the GB/T 7714—2025 numeric system with the style in [`csl/gb-t-7714-2025-numeric.csl`](csl/gb-t-7714-2025-numeric.csl): `china-national-standard-gb-t-7714-2025-numeric.csl` from the [official CSL style repository](https://github.com/citation-style-language/styles) (CC BY-SA 3.0), changed to the half-width punctuation the writing spec requires. Cite with `@key`; adjacent citations merge into `[1,2]` or `[1-3]`. Unlike the LaTeX template, the data needs care in three places:
+
+- English titles are printed as written, so write them in sentence case; English editions are written `edition = {3rd ed.}`.
+- The institution of a thesis or report also goes in `publisher`.
+- Newspapers ([N]) and preprints ([PP]) go in a Hayagriva `.yml` file; see `template/ref.yml`.
 
 ---
 

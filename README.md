@@ -100,7 +100,7 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 // -- 文档类选项 --
 #let field = "science"      // "science" 理工科（默认） / "humanities" 文科
 #let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
-#let bib-path = "bib/note.bib"
+#let bib-path = ("ref.bib", "ref.yml")
 #let twoside = false        // false 单面打印（默认） / true 双面打印
 
 #show: thesis.with(
@@ -126,7 +126,7 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 
   // 文档类选项
   field: field, fontset: fontset,
-  bib-content: read(bib-path), twoside: twoside,
+  bib-content: bib-path.map(read), twoside: twoside,
 )
 ```
 
@@ -137,8 +137,16 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 | `field`    | `string` | `"science"` | `"science"` 理工科，章节编号 1 / 1.1 / 1.1.1；`"humanities"` 文科，章节编号 一、/（一）/ 1. |
 | `fontset`  | `string` | `"auto"`    | 字体集：`auto` / `windows` / `texlive` / `founder` / `adobe` / `mac` / `fandol`，见上文                         |
 | `twoside`  | `bool`   | `false`     | 双面打印模式：启用后装订线交替出现在左右侧，页眉/页脚内容也相应切换                         |
-| `bib-path` | `string` | —           | 参考文献数据库文件路径（.bib）                                                              |
+| `bib-path` | `string` / `array` | — | 参考文献数据文件路径（BibLaTeX `.bib` 或 Hayagriva `.yml`），可以是多个文件组成的数组 |
 | `infotype` | `string` | `"thesis"`  | 成果类型：`"thesis"` 毕业论文 / `"design"` 毕业设计 / `"engineering"` 工程设计              |
+
+### 参考文献
+
+参考文献按 GB/T 7714—2025 顺序编码制排版，样式文件为 [`csl/gb-t-7714-2025-numeric.csl`](csl/gb-t-7714-2025-numeric.csl)：取自 [CSL 官方样式库](https://github.com/citation-style-language/styles)的 `china-national-standard-gb-t-7714-2025-numeric.csl`（CC BY-SA 3.0），按撰写规范改为半角标点。在正文中用 `@key` 引用，连续的引用自动合并为 `[1,2]`、`[1-3]`。与 LaTeX 模板相比，需在文献数据中注意：
+
+- 英文题名按原样输出，请写作句首大写；英文文献的版本项写作 `edition = {3rd ed.}`。
+- 学位论文与报告的保存单位、出版者另写在 `publisher` 中。
+- 报纸（[N]）与预印本（[PP]）写在 Hayagriva 格式的 `.yml` 文件中，示例见 `template/ref.yml`。
 
 ---
 

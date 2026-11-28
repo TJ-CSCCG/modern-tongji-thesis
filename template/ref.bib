@@ -1,13 +1,16 @@
 % ================================================================
 % 参考文献数据库
 % 排列方式：按文献类型分组，组内按年份升序排列
+% 题名按原样输出：英文题名写作句首大写（GB/T 7714—2025 示例的写法），专有名词与缩写照常大写
+% 英文文献的版本项写作 3rd ed.；学位论文与报告的保存单位、出版者另写在 publisher 中
+% 报纸与预印本写在 ref.yml 中
 % ================================================================
 
 % ===== 期刊文章 =====
 
 @article{article1,
   author  = {LeCun, Yann and Bengio, Yoshua and Hinton, Geoffrey},
-  title   = {Deep Learning},
+  title   = {Deep learning},
   journal = {Nature},
   year    = {2015},
   volume  = {521},
@@ -77,8 +80,7 @@
              Gu, Zihui and Zhu, Zijia and Liu, Zijun and Li, Zilin and
              Xie, Ziwei and Song, Ziyang and Pan, Zizheng and Huang, Zhen and
              Xu, Zhipeng and Zhang, Zhongyu and Zhang, Zhen},
-  title   = {{DeepSeek}-{R1}: Incentivizing Reasoning Capabilities in {LLMs}
-             via Reinforcement Learning},
+  title   = {DeepSeek-R1: incentivizing reasoning capabilities in LLMs via reinforcement learning},
   journal = {Nature},
   year    = {2025},
   month   = sep,
@@ -93,7 +95,7 @@
 @book{book1,
   author    = {严蔚敏 and 吴伟民},
   title     = {数据结构},
-  note = {C语言版},
+  subtitle  = {C语言版},
   publisher = {清华大学出版社},
   address   = {北京},
   year      = {1997}
@@ -101,8 +103,8 @@
 
 @book{book2,
   author    = {Knuth, Donald E.},
-  title     = {The Art of Computer Programming, Volume 1: Fundamental Algorithms},
-  edition = {3},
+  title     = {The art of computer programming, volume 1: fundamental algorithms},
+  edition   = {3rd ed.},
   publisher = {Addison-Wesley},
   address   = {Upper Saddle River, NJ},
   year      = {1997}
@@ -122,9 +124,9 @@
 
 @inbook{inbook1,
   author    = {Russell, Stuart J. and Norvig, Peter},
-  title     = {Learning from Examples},
-  booktitle = {Artificial Intelligence: A Modern Approach},
-  edition = {4},
+  title     = {Learning from examples},
+  booktitle = {Artificial intelligence: a modern approach},
+  edition   = {4th ed.},
   publisher = {Pearson},
   address   = {Hoboken, NJ},
   year      = {2020},
@@ -135,8 +137,8 @@
 
 @inproceedings{conf1,
   author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
-  title     = {Deep Residual Learning for Image Recognition},
-  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  title     = {Deep residual learning for image recognition},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
   year      = {2016},
   pages     = {770--778},
   doi       = {10.1109/CVPR.2016.90}
@@ -145,9 +147,9 @@
 @inproceedings{conf2,
   author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and
                Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and
-               Kaiser, {\L}ukasz and Polosukhin, Illia},
-  title     = {Attention Is All You Need},
-  booktitle = {Advances in Neural Information Processing Systems},
+               Kaiser, Łukasz and Polosukhin, Illia},
+  title     = {Attention is all you need},
+  booktitle = {Advances in neural information processing systems},
   year      = {2017},
   volume    = {30},
   pages     = {5998--6008}
@@ -157,24 +159,27 @@
 
 @phdthesis{thesis3,
   author  = {Zhang, Weinan},
-  title   = {Optimal Real-Time Bidding for Display Advertising},
+  title   = {Optimal real-time bidding for display advertising},
   school  = {University College London},
+  publisher = {University College London},
   address = {London},
   year    = {2016}
 }
 
 @phdthesis{thesis1,
   author  = {Li, Mu},
-  title   = {Scaling Distributed Machine Learning with System and Algorithm Co-design},
+  title   = {Scaling distributed machine learning with system and algorithm co-design},
   school  = {Carnegie Mellon University},
+  publisher = {Carnegie Mellon University},
   address = {Pittsburgh, PA},
   date    = {2017-01-04}
 }
 
 @phdthesis{thesis2,
   author  = {Chen, Lijie},
-  title   = {Better Hardness via Algorithms, and New Forms of Hardness versus Randomness},
+  title   = {Better hardness via algorithms, and new forms of hardness versus randomness},
   school  = {Massachusetts Institute of Technology},
+  publisher = {Massachusetts Institute of Technology},
   address = {Cambridge, MA},
   date    = {2022-08-01}
 }
@@ -183,10 +188,10 @@
 
 @techreport{techreport2,
   author      = {Fielding, Roy T. and Reschke, Julian F.},
-  title       = {Hypertext Transfer Protocol ({HTTP}/1.1): Semantics and Content},
-  type        = {RFC},
-  number      = {7231},
+  title       = {Hypertext transfer protocol (HTTP/1.1): semantics and content},
+  number      = {RFC 7231},
   institution = {Internet Engineering Task Force},
+  publisher   = {Internet Engineering Task Force},
   date        = {2014-06-01},
   doi         = {10.17487/RFC7231}
 }
@@ -195,6 +200,7 @@
   author      = {中国互联网络信息中心},
   title       = {第47次中国互联网络发展状况统计报告},
   institution = {中国互联网络信息中心},
+  publisher   = {中国互联网络信息中心},
   address     = {北京},
   date        = {2021-02-03},
   url         = {https://www.cnnic.cn/n4/2022/0401/c88-1125.html},
@@ -205,52 +211,32 @@
 
 @patent{patent1,
   author = {Li, Yanhong},
-  title  = {Hypertext Document Retrieval System and Method},
+  title  = {Hypertext document retrieval system and method},
   number = {US 5920859},
   date   = {1999-07-06}
 }
 
 @patent{patent2,
   author = {Page, Lawrence},
-  title  = {Method for Node Ranking in a Linked Database},
+  title  = {Method for node ranking in a linked database},
   number = {US 6285999},
   date   = {2001-09-04}
-}
-
-% ===== 报纸文章 =====
-
-@newspaper{newspaper1,
-  author  = {沈慎},
-  title   = {“九章”量子计算机的里程碑意义},
-  journal = {人民日报},
-  date    = {2020-12-18},
-  number  = {05},
-  mark    = {N},
-}
-
-@newspaper{newspaper2,
-  author  = {吴月辉 and 谷业凯},
-  title   = {人工智能发展迎来新趋势（{AI}前沿观察）},
-  journal = {人民日报海外版},
-  date    = {2024-01-12},
-  number  = {08},
-  mark    = {N},
 }
 
 % ===== 网络资源 =====
 
 @online{online1,
-  author  = {中国国家标准化管理委员会},
-  title   = {信息与文献 参考文献著录规则},
-  date    = {2015-05-15},
-  url     = {https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=7FA63E9BBA56E60471AEDAEBDE44B14C},
-  urldate = {2026-03-26},
-  note    = {GB/T 7714-2015}
+  author  = {全国信息与文献标准化技术委员会},
+  title   = {信息与文献　参考文献著录规则},
+  date    = {2025-12-02},
+  url     = {https://std.samr.gov.cn/gb/search/gbDetailed?id=4507EFE13D37CB6AE06397BE0A0A601F},
+  urldate = {2026-07-03},
+  note    = {GB/T 7714-2025}
 }
 
 @online{online3,
   author  = {{World Health Organization}},
-  title   = {Ethics and Governance of Artificial Intelligence for Health},
+  title   = {Ethics and governance of artificial intelligence for health},
   date    = {2021-06-28},
   url     = {https://www.who.int/publications/i/item/9789240029200},
   urldate = {2026-03-26}
@@ -258,8 +244,9 @@
 
 @online{online2,
   author  = {{PyTorch Contributors}},
-  title   = {PyTorch Documentation},
+  title   = {PyTorch documentation},
   year    = {2026},
   url     = {https://pytorch.org/docs/stable/index.html},
   urldate = {2026-03-26}
 }
+
