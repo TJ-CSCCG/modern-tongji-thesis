@@ -87,6 +87,7 @@ Mirrors the LaTeX template directory structure:
 | `template/main.typ`                 | Entry point, document options (`field`, `fontset`, `twoside`, `bib-path`, etc.) |
 | `template/chapters/metadata.typ`    | Cover info, info page data, abstract title overrides (optional)                 |
 | `template/chapters/00_abstract.typ` | Bilingual abstract content and keywords                                         |
+| `template/taskbook.typ`, `proposal.typ`, `midterm.typ` | Entry points of the task book, proposal and midterm report; their content is in `chapters/*_body.typ` |
 
 ### Document Options
 
@@ -142,6 +143,30 @@ Configure in `template/main.typ`:
 | `bib-path` | `string` / `array` | — | Bibliography file path (BibLaTeX `.bib` or Hayagriva `.yml`), or an array of them |
 | `infotype` | `string` | `"thesis"`  | Output type: `"thesis"` / `"design"` / `"engineering"`                                                                 |
 
+### Task Book, Proposal and Midterm Report
+
+Besides the thesis, the template provides the three official forms, matching the LaTeX template's `doctype=taskbook|proposal|midterm`. Each compiles on its own:
+
+```bash
+typst compile template/taskbook.typ --root . --font-path ./fonts   # 毕业设计（论文）任务书
+typst compile template/proposal.typ --root . --font-path ./fonts   # 开题报告
+typst compile template/midterm.typ --root . --font-path ./fonts    # 中期报告
+```
+
+They share the title, subtitle, school, major, student name and student ID in `template/chapters/metadata.typ` with the thesis; the advisor signs every form by hand, so the advisor is not printed. The task book's dates are `taskbook-start` and `taskbook-end`, from which the weeks are counted (rounded up). The midterm report's agree/disagree boxes stay blank unless `midterm-decision` is `"agree"` or `"disagree"`. For a humanities major, set `field` to `"humanities"` in each entry file.
+
+The content goes in `template/chapters/taskbook_body.typ`, `proposal_body.typ` and `midterm_body.typ`, set with these commands, which choose the fonts and sizes:
+
+| Command | Use |
+| ------- | --- |
+| `#form-section[一、……]` | Section heading: 四号 黑体, indented two characters |
+| `#form-subsection[1．……]` | Subsection heading: 小四 黑体, indented two characters |
+| `#form-note[……]` / `#form-hint[……]` | Gray notes: the first is deleted from the final version; the second is a prompt, whose “请在此处填写……” placeholders are replaced with your text |
+| `#form-notice[填写说明]`, `#form-notice-body(...)` | The midterm report's instructions title (bold 小二 黑体) and numbered items (四号) |
+| `#review-box[...]`, `#form-label[……]` | A review box and a field label in it (小四 黑体) |
+| `#form-signature([指导教师签名])` | A right-aligned signature line (an underline and the date blanks, in 黑体); `width:` and `size:` adjust it |
+| `#form-date-blank()`, `#midterm-decision()` | The date blanks; the midterm report's agree/disagree boxes |
+
 ### Blind Review
 
 To submit an anonymous thesis (for a blind review a school organizes), set `blind` to `true` in `template/main.typ` and compile again; nothing has to be deleted by hand:
@@ -168,7 +193,6 @@ This template follows 《同济大学本科生毕业设计（论文）撰写规�
 - Three-line tables have none of the 3–4 pt of extra space `booktabs` puts around the rules.
 - Math uses New Computer Modern Math; the LaTeX template uses the Times-like `newtx`.
 - Code blocks use `codly`'s style, not that of LaTeX `listings`.
-- The task book, proposal and midterm report forms are not provided yet.
 
 ### Upgrading from 0.2
 

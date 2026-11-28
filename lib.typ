@@ -14,6 +14,7 @@
 #import "layouts/header-footer.typ": *
 #import "layouts/references.typ": *
 #import "layouts/appendix.typ": *
+#import "layouts/forms.typ": *
 #import "@preview/algo:0.3.6": algo, i, d, comment, code
 #import "@preview/wordometer:0.1.5": word-count-of
 #import "@preview/cuti:0.4.0": show-cn-fakebold
