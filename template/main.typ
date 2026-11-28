@@ -4,11 +4,12 @@
 
 #set pagebreak(weak: true)
 
-#let field = "science"
-#let fontset = "auto"
-#let bib-path = ("ref.bib", "ref.yml")  // BibLaTeX 与 Hayagriva YAML 文件，可只写一个
-#let twoside = false
-#let blind = false  // true：盲审版本，封面不写学生姓名、学号、指导教师，不输出谢辞
+// -- 文档类选项 --
+#let field = "science"      // "science" 理工科（默认） / "humanities" 文科
+#let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
+#let bib-path = ("ref.bib", "ref.yml")  // BibLaTeX（.bib）与 Hayagriva（.yml）文件
+#let twoside = false        // false 单面打印（默认） / true 双面打印
+#let blind = false          // true 盲审版本：封面不写学生姓名、学号、指导教师，不输出谢辞
 
 #show: thesis.with(
   school: school, major: major, id: id, student: student, advisor: advisor,
@@ -20,7 +21,8 @@
   infothesiswords: infothesiswords, infomaterials: infomaterials,
   abstract-title: abstract-title, abstract-subtitle: abstract-subtitle,
   abstract-title-english: abstract-title-english, abstract-subtitle-english: abstract-subtitle-english,
-  field: field, fontset: fontset, blind: blind, bib-content: if type(bib-path) == array { bib-path.map(read) } else { read(bib-path) }, twoside: twoside,
+  field: field, fontset: fontset, twoside: twoside, blind: blind,
+  bib-content: bib-path.map(read),
 )
 
 #include "chapters/01_intro.typ"

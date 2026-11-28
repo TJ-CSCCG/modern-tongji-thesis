@@ -93,14 +93,14 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 在 `template/main.typ` 中配置：
 
 ```typ
-#import "../modern-tongji-thesis/tongjithesis.typ": *
+#import "../lib.typ": *  // 从 Typst Universe 创建的项目中为 "@preview/modern-tongji-thesis:<版本>"
 #import "chapters/metadata.typ": *
 #import "chapters/00_abstract.typ": *
 
 // -- 文档类选项 --
 #let field = "science"      // "science" 理工科（默认） / "humanities" 文科
 #let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
-#let bib-path = ("ref.bib", "ref.yml")
+#let bib-path = ("ref.bib", "ref.yml")  // .bib / .yml
 #let twoside = false        // false 单面打印（默认） / true 双面打印
 #let blind = false          // true 盲审版本
 
@@ -126,8 +126,8 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
   abstract-subtitle-english: abstract-subtitle-english,
 
   // 文档类选项
-  field: field, fontset: fontset, blind: blind,
-  bib-content: bib-path.map(read), twoside: twoside,
+  field: field, fontset: fontset, twoside: twoside, blind: blind,
+  bib-content: bib-path.map(read),
 )
 ```
 
@@ -159,6 +159,16 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 - 英文题名按原样输出，请写作句首大写；英文文献的版本项写作 `edition = {3rd ed.}`。
 - 学位论文与报告的保存单位、出版者另写在 `publisher` 中。
 - 报纸（[N]）与预印本（[PP]）写在 Hayagriva 格式的 `.yml` 文件中，示例见 `template/ref.yml`。
+
+### 与 LaTeX 模板的差异
+
+本模板按 [LaTeX 模板](https://github.com/TJ-CSCCG/TongjiThesis)实现的《同济大学本科生毕业设计（论文）撰写规范》（2026 年 10 月修订版）排版，封面、信息说明页、摘要、目录、正文、参考文献、附录与谢辞的版式与之逐页对照。目前仍有以下不同：
+
+- 参考文献：英文题名不自动改为句首大写，汉语拼音姓名缩写为首字母，不著录 CSTR；报纸与预印本需写在 `.yml` 文件中（见上文）。
+- 三线表：顶线、栏目线、底线两侧没有 LaTeX `booktabs` 额外的 3～4 pt 留白。
+- 公式使用 New Computer Modern Math，LaTeX 模板使用 Times 风格的 `newtx`。
+- 代码块使用 `codly` 的样式，与 LaTeX 的 `listings` 不同。
+- 任务书、开题报告与中期报告尚未提供。
 
 ---
 

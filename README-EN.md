@@ -93,14 +93,14 @@ Mirrors the LaTeX template directory structure:
 Configure in `template/main.typ`:
 
 ```typ
-#import "../modern-tongji-thesis/tongjithesis.typ": *
+#import "../lib.typ": *  // "@preview/modern-tongji-thesis:<version>" in a project created from Typst Universe
 #import "chapters/metadata.typ": *
 #import "chapters/00_abstract.typ": *
 
 // -- document options --
 #let field = "science"      // "science" (default) or "humanities"
 #let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
-#let bib-path = ("ref.bib", "ref.yml")
+#let bib-path = ("ref.bib", "ref.yml")  // .bib / .yml
 #let twoside = false        // false single-sided (default) / true double-sided
 #let blind = false          // true for the blind-review version
 
@@ -126,8 +126,8 @@ Configure in `template/main.typ`:
   abstract-subtitle-english: abstract-subtitle-english,
 
   // Document options
-  field: field, fontset: fontset, blind: blind,
-  bib-content: bib-path.map(read), twoside: twoside,
+  field: field, fontset: fontset, twoside: twoside, blind: blind,
+  bib-content: bib-path.map(read),
 )
 ```
 
@@ -159,6 +159,16 @@ References follow the GB/T 7714—2025 numeric system with the style in [`csl/gb
 - English titles are printed as written, so write them in sentence case; English editions are written `edition = {3rd ed.}`.
 - The institution of a thesis or report also goes in `publisher`.
 - Newspapers ([N]) and preprints ([PP]) go in a Hayagriva `.yml` file; see `template/ref.yml`.
+
+### Differences from the LaTeX Template
+
+This template follows 《同济大学本科生毕业设计（论文）撰写规范》 (revised October 2026) as the [LaTeX template](https://github.com/TJ-CSCCG/TongjiThesis) implements it; the cover, information page, abstracts, contents, body, references, appendix and acknowledgements were compared with it page by page. These differences remain:
+
+- References: English titles are not converted to sentence case, pinyin given names are abbreviated, and CSTR is not printed; newspapers and preprints go in a `.yml` file (see above).
+- Three-line tables have none of the 3–4 pt of extra space `booktabs` puts around the rules.
+- Math uses New Computer Modern Math; the LaTeX template uses the Times-like `newtx`.
+- Code blocks use `codly`'s style, not that of LaTeX `listings`.
+- The task book, proposal and midterm report forms are not provided yet.
 
 ---
 
