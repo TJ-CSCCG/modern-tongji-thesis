@@ -41,6 +41,16 @@
   }
 }
 
+// Blind review: whether thesis() typesets the anonymous version.
+#let blind-state = state("tongji-thesis-blind", false)
+
+// #tjblind[正式版内容][盲审版内容]: the first argument in the official version,
+// the second in the blind-review version (blind: true). Mark identifying text
+// with it, such as a project number or the writer's own publications.
+#let tjblind(official, anonymized) = context {
+  if blind-state.get() { anonymized } else { official }
+}
+
 // Cross-reference convenience commands
 #let chapref(label) = [第@label章]
 #let secref(label) = [第@label节]

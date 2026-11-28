@@ -102,6 +102,7 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 #let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
 #let bib-path = ("ref.bib", "ref.yml")
 #let twoside = false        // false 单面打印（默认） / true 双面打印
+#let blind = false          // true 盲审版本
 
 #show: thesis.with(
   // 封面信息（来自 metadata.typ）
@@ -125,7 +126,7 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
   abstract-subtitle-english: abstract-subtitle-english,
 
   // 文档类选项
-  field: field, fontset: fontset,
+  field: field, fontset: fontset, blind: blind,
   bib-content: bib-path.map(read), twoside: twoside,
 )
 ```
@@ -137,8 +138,19 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 | `field`    | `string` | `"science"` | `"science"` 理工科，章节编号 1 / 1.1 / 1.1.1；`"humanities"` 文科，章节编号 一、/（一）/ 1. |
 | `fontset`  | `string` | `"auto"`    | 字体集：`auto` / `windows` / `texlive` / `founder` / `adobe` / `mac` / `fandol`，见上文                         |
 | `twoside`  | `bool`   | `false`     | 双面打印模式：启用后装订线交替出现在左右侧，页眉/页脚内容也相应切换                         |
+| `blind`    | `bool`   | `false`     | 盲审版本：封面上的学生姓名、学号、指导教师留空，不输出谢辞，PDF 文档属性中不写作者，见下文                    |
 | `bib-path` | `string` / `array` | — | 参考文献数据文件路径（BibLaTeX `.bib` 或 Hayagriva `.yml`），可以是多个文件组成的数组 |
 | `infotype` | `string` | `"thesis"`  | 成果类型：`"thesis"` 毕业论文 / `"design"` 毕业设计 / `"engineering"` 工程设计              |
+
+### 盲审版本
+
+需要提交匿名论文（如学院组织的盲审）时，把 `template/main.typ` 中的 `blind` 改为 `true` 重新编译，不必手工删改内容：
+
+- 封面保留各栏目，但学生姓名、学号、指导教师留空；
+- 不输出谢辞（`main.typ` 中的 `#if not blind { include "chapters/acknowledgments.typ" }`）；
+- PDF 文档属性中不写作者。
+
+正文中其他能识别身份的内容用 `#tjblind[正式版内容][盲审版内容]` 标记，例如 `#tjblind[国家自然科学基金（12345678）][某项目]`，本人已发表成果可写作“第一作者”等。查重上传与本科毕业论文抽检要求提交正式版（同济本〔2021〕33号），不要使用盲审版本。
 
 ### 参考文献
 

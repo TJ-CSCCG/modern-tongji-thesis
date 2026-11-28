@@ -38,6 +38,11 @@
   twoside: false,
   // Punctuation — "circle" keeps U+3002, "dot" replaces with U+FF0E
   fullwidthstop: "circle",
+  // Blind review: true leaves the student's name, student ID and advisor
+  // blank on the cover (the fields stay) and names no author in the PDF;
+  // main.typ leaves out the acknowledgements, and #tjblind[...][...] marks
+  // other identifying text
+  blind: false,
 ) = context {
   let is-humanities = (field == "humanities")
   let cover-text = if is-humanities { "毕业论文（设计）" } else { "毕业设计（论文）" }
@@ -47,7 +52,9 @@
   // songti/heiti/kaiti/fangsong.
   let ff = resolve-fonts(fontset)
   thesis-fonts.update(ff)
-  set document(author: id + " " + student, title: title)
+  blind-state.update(blind)
+  set document(author: if blind { () } else { id + " " + student }, title: title)
+  let anon(value) = if blind { "" } else { value }
   let page-margin = if twoside {
     (top: 4.0cm, bottom: 2.7cm, inside: 3.3cm, outside: 1.8cm)
   } else {
@@ -71,7 +78,7 @@
 
   make-cover(
     (
-      "课题名称", title, "副标题", subtitle, "学院", school, "专业", major, "学生姓名", student, "学号", id, "指导教师", advisor, "日期", date.display("[year]年[month]月[day]日"),
+      "课题名称", title, "副标题", subtitle, "学院", school, "专业", major, "学生姓名", anon(student), "学号", anon(id), "指导教师", anon(advisor), "日期", date.display("[year]年[month]月[day]日"),
     ),
     cover-text: cover-text,
     fonts: ff,

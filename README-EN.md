@@ -102,6 +102,7 @@ Configure in `template/main.typ`:
 #let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
 #let bib-path = ("ref.bib", "ref.yml")
 #let twoside = false        // false single-sided (default) / true double-sided
+#let blind = false          // true for the blind-review version
 
 #show: thesis.with(
   // Cover info (from metadata.typ)
@@ -125,7 +126,7 @@ Configure in `template/main.typ`:
   abstract-subtitle-english: abstract-subtitle-english,
 
   // Document options
-  field: field, fontset: fontset,
+  field: field, fontset: fontset, blind: blind,
   bib-content: bib-path.map(read), twoside: twoside,
 )
 ```
@@ -137,8 +138,19 @@ Configure in `template/main.typ`:
 | `field`    | `string` | `"science"` | `"science"` for science/engineering numbering 1 / 1.1 / 1.1.1; `"humanities"` for humanities numbering 一、/（一）/ 1. |
 | `fontset`  | `string` | `"auto"`    | Font set: `auto` / `windows` / `texlive` / `founder` / `adobe` / `mac` / `fandol`, see above                           |
 | `twoside`  | `bool`   | `false`     | Double-sided mode: when enabled, binding marks alternate sides, header/footer content mirrors between odd/even pages   |
+| `blind`    | `bool`   | `false`     | Blind-review version: the cover leaves the student's name, student ID and advisor blank, the acknowledgements are left out, and the PDF names no author (see below) |
 | `bib-path` | `string` / `array` | — | Bibliography file path (BibLaTeX `.bib` or Hayagriva `.yml`), or an array of them |
 | `infotype` | `string` | `"thesis"`  | Output type: `"thesis"` / `"design"` / `"engineering"`                                                                 |
+
+### Blind Review
+
+To submit an anonymous thesis (for a blind review a school organizes), set `blind` to `true` in `template/main.typ` and compile again; nothing has to be deleted by hand:
+
+- the cover keeps its fields but leaves the student's name, student ID and advisor blank;
+- the acknowledgements are left out (`#if not blind { include "chapters/acknowledgments.typ" }` in `main.typ`);
+- the PDF names no author in its properties.
+
+Mark other identifying text in the body with `#tjblind[official text][blind text]`, for example `#tjblind[国家自然科学基金（12345678）][某项目]`. The plagiarism check upload and the undergraduate thesis spot checks require the official version (同济本〔2021〕33号), so do not submit the blind version there.
 
 ### Bibliography
 
