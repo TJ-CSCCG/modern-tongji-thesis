@@ -47,23 +47,27 @@ brew install typst
 # https://github.com/typst/typst#installation
 ```
 
-#### 2. Choose Font Set
+#### 2. Fill In and Choose Fonts
 
 Fill cover and info page data in `template/chapters/metadata.typ`, and bilingual abstract content with keywords in `template/chapters/00_abstract.typ`. Other options are set in `template/main.typ`.
 
-> All font presets use **TeX Gyre Termes** (free, open-source TNR clone; built into Typst Web App; Linux: `apt install fonts-texgyre` or download ZIP) as the Latin serif font for Chinese-English mixed typesetting.
+`fontset` picks the CJK fonts, matching the LaTeX template's option. The default `"auto"` uses the Zhongyi fonts of the official Word template (SimSun, SimHei, KaiTi, FangSong, shipped with Windows) when they are installed, and otherwise the free fonts of the LaTeX template's `fontset=texlive` (LXGW Neo ZhiSong, LXGW Neo XiHei, AR PL KaitiM GB, LXGW Zhuque Fangsong). Latin text uses TeX Gyre Termes, a free Times New Roman clone. CJK fonts without a bold face get bold text stroked at 1/35 of the font size, as Word does.
 
-| Platform        | Recommended fontset     | Notes                                                                              |
-| --------------- | ----------------------- | ---------------------------------------------------------------------------------- |
-| macOS           | `"mac"`                 | Songti SC / Heiti SC system fonts                                                  |
-| Windows         | `"windows"`             | SimSun / SimHei system fonts                                                       |
-| Linux           | `"fandol"`              | Fandol + TeX Gyre Termes ([CTAN download](fonts/README.md))                        |
-| Adobe / Founder | `"adobe"` / `"founder"` | Download from [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) |
+| `fontset`               | Fonts                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------- |
+| `"auto"` (default)      | `"windows"` when SimSun is installed, otherwise `"texlive"`                     |
+| `"windows"`             | Zhongyi fonts (Windows; elsewhere run `./fonts/download-fonts.sh windows`)      |
+| `"texlive"`             | Free fonts (downloaded by `./fonts/download-fonts.sh`)                          |
+| `"founder"` / `"adobe"` | Founder / Adobe fonts (`./fonts/download-fonts.sh founder` or `adobe`)          |
+| `"mac"`                 | The STHeiti family shipped with macOS                                           |
+| `"fandol"`              | Fandol (withdrawn by its authors; kept for theses already using it)             |
+
+See [fonts/README.md](fonts/README.md).
 
 #### 3. Compile
 
 ```bash
-# Download fonts (first time only)
+# Download fonts (first time only; add `windows` for the Word template's Zhongyi fonts)
 ./fonts/download-fonts.sh
 
 # Compile
@@ -95,7 +99,7 @@ Configure in `template/main.typ`:
 
 // -- document options --
 #let field = "science"      // "science" (default) or "humanities"
-#let fontset = "fandol"     // fandol / windows / mac / adobe / founder
+#let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
 #let bib-path = "bib/note.bib"
 #let twoside = false        // false single-sided (default) / true double-sided
 
@@ -131,7 +135,7 @@ Configure in `template/main.typ`:
 | Option     | Type     | Default     | Description                                                                                                            |
 | ---------- | -------- | ----------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `field`    | `string` | `"science"` | `"science"` for science/engineering numbering 1 / 1.1 / 1.1.1; `"humanities"` for humanities numbering 一、/（一）/ 1. |
-| `fontset`  | `string` | `"fandol"`  | Font preset: `fandol` / `windows` / `mac` / `adobe` / `founder`                                                        |
+| `fontset`  | `string` | `"auto"`    | Font set: `auto` / `windows` / `texlive` / `founder` / `adobe` / `mac` / `fandol`, see above                           |
 | `twoside`  | `bool`   | `false`     | Double-sided mode: when enabled, binding marks alternate sides, header/footer content mirrors between odd/even pages   |
 | `bib-path` | `string` | —           | Bibliography database file path (.bib)                                                                                 |
 | `infotype` | `string` | `"thesis"`  | Output type: `"thesis"` / `"design"` / `"engineering"`                                                                 |

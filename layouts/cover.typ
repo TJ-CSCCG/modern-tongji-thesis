@@ -2,7 +2,7 @@
 
 // Cover page — matches LaTeX \maketitle
 #let make-cover(cover, cover-text: "毕业设计（论文）", fonts: none) = {
-  let f = if fonts != none { fonts } else { font-family }
+  let f = fonts
   align(center)[
   #image("../figures/tongji.svg", height: 2.5cm)
   #text(

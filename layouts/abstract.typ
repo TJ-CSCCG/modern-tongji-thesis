@@ -5,7 +5,7 @@
   title: "", subtitle: none, abstract: "", keywords: (), prompt: (), is-english: false,
   heading-override: none, fonts: none,
 ) = {
-  let f = if fonts != none { fonts } else { font-family }
+  let f = fonts
   align(center)[
     #v(1em)
     #text(font: f.hei, size: TJFONT_COVER_FIELD, weight: "bold", title)

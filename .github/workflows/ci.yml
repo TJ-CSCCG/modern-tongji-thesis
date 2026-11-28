@@ -79,6 +79,41 @@ jobs:
           path: modern-tongji-thesis-${{ matrix.field }}.pdf
           retention-days: 30
 
+  # fontset "auto" chooses the Word template's fonts when SimSun is installed.
+  # Downloads that set the way a writer does, compiles, and checks that the PDF
+  # embeds SimSun and that the build reports no unknown font family.
+  fonts-windows:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v5
+        with:
+          typst-version: '^0.14.0'
+
+      - name: Download fonts
+        run: ./fonts/download-fonts.sh windows
+
+      - name: Compile thesis
+        run: |
+          typst compile template/main.typ thesis.pdf --root . --font-path ./fonts 2> typst.log || { cat typst.log; exit 1; }
+          cat typst.log
+
+      - name: Check the fonts
+        run: |
+          if grep -q 'unknown font family' typst.log; then
+            echo "::error::The build names a font family Typst did not find."
+            exit 1
+          fi
+          command -v pdffonts > /dev/null || sudo apt-get install -y -qq poppler-utils
+          pdffonts thesis.pdf
+          for font in SimSun SimHei; do
+            pdffonts thesis.pdf | grep -q "$font" || { echo "::error::fontset auto did not choose the windows set: no $font in the PDF."; exit 1; }
+          done
+
   # Builds the package that publish.yml pushes to the `package` branch, creates
   # a project from it with `typst init` and compiles that project, the way a
   # Typst Universe user starts a thesis.
@@ -122,16 +157,17 @@ jobs:
 
   test-summary:
     runs-on: ubuntu-latest
-    needs: [build, package]
+    needs: [build, fonts-windows, package]
     if: always()
     steps:
       - name: Check builds succeeded
         env:
           BUILD: ${{ needs.build.result }}
+          FONTS: ${{ needs.fonts-windows.result }}
           PACKAGE: ${{ needs.package.result }}
         run: |
-          echo "Build: $BUILD, package: $PACKAGE"
-          if [[ "$BUILD" != "success" || "$PACKAGE" != "success" ]]; then
+          echo "Build: $BUILD, fonts-windows: $FONTS, package: $PACKAGE"
+          if [[ "$BUILD" != "success" || "$FONTS" != "success" || "$PACKAGE" != "success" ]]; then
             echo "Build failed"
             exit 1
           fi

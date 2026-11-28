@@ -6,7 +6,7 @@
   infoabstract: "", infodrawings: "", infowordcount: "", infothesiswords: "",
   infomaterials: (), header-text: "毕业设计（论文）", fonts: none,
 ) = {
-  let f = if fonts != none { fonts } else { font-family }
+  let f = fonts
   set align(center)
   text(font: f.hei, size: TJFONT_INFO)[同济大学本科#header-text 信息说明页]
   v(1em)

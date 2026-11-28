@@ -84,8 +84,7 @@ In Typst, *bold*, _italic_ and `monospace` are supported.
 In Typst, *bold*, _italic_ and `monospace` are supported.
 ])
 
-在本模板中，我们将中文的粗体、斜体和等宽字体分别预设为 “#strong[黑体]”、“#emph[楷体]”
-和 “#raw("仿宋")”。
+在本模板中，中文的粗体为加粗的宋体（字体没有粗体字形时，按 Word 的方式以字号 1/35 的描边模拟加粗，与 LaTeX 模板相同），斜体为 “#emph[楷体]”，等宽字体中的汉字为 “#raw("仿宋")”。
 
 请注意，因为语法解析的限制， `*...*`、`_..._` 和 #raw("`...`") 的前后有时需要空格分隔；而由于中文字体的特殊性，这样会导致额外的空格出现。因此，为了避免这种情况，我们可以使用 #raw("#emph[...]", lang: "typ") 函数来表示斜体，#raw("#strong[...]", lang: "typ") 函数来表示加粗，#raw("#raw(\"...\")", lang: "typ") 函数来表示等宽字体。例如：
 
@@ -103,7 +102,7 @@ In Typst, *bold*, _italic_ and `monospace` are supported.
   ],
 )
 
-此外，Typst 还支持使用 #raw("#[#set text(font: <some_font>); <some_text>]", lang: "typ") 命令来自定义字体。本模板提供了五套字体配置（`fandol`、`windows`、`mac`、`adobe`、`founder`），与同济大学 LaTeX 模板完全一致，包含以下四种 CJK 字体：
+字体由 `main.typ` 中的 `fontset` 选项选择，与 LaTeX 模板的同名选项对应。默认值 `"auto"` 在系统装有 Word 模板所用的中易字体（SimSun 等）时选用 `windows`，否则选用 `texlive`，即 LaTeX 模板 `fontset=texlive` 使用的免费字体（霞鹜新致宋、霞鹜新晰黑、文鼎 PL 中楷、朱雀仿宋）。也可直接指定 `windows`、`texlive`、`founder`、`adobe`、`mac` 或 `fandol`。四种字体可分别用以下命令调用：
 
 #table(
   columns: (auto, auto, 1fr), [
@@ -111,65 +110,48 @@ In Typst, *bold*, _italic_ and `monospace` are supported.
     #strong[字体]
   ], [
     #set align(center)
-    #strong[别名]
+    #strong[命令]
   ], [
     #set align(center)
     #strong[渲染结果]
   ], [
     #set align(center)
-    #set text(font: font-family.song)
-    宋体
+    #songti[宋体]
   ], [
     #set align(center)
-    #raw("font-family.song", lang: "typ")\
-    或\
-    #raw("songti", lang: "typ")
+    #raw("#songti[...]", lang: "typ")
   ], [
-    #set text(font: font-family.song)
-    #h(2em)1900年前后，由埃里希 · 宝隆创办的 “同济医院” 正式挂牌。埃里希 ·
-    宝隆医生看到医院里的医疗力量不足，计划在院内设立德文医学堂，招收中国学生，培养施诊医生。
+    #songti[#h(2em)1900年前后，由埃里希 · 宝隆创办的 “同济医院” 正式挂牌。埃里希 ·
+    宝隆医生看到医院里的医疗力量不足，计划在院内设立德文医学堂，招收中国学生，培养施诊医生。]
   ], [
     #set align(center)
-    #set text(font: font-family.hei)
-    黑体
+    #heiti[黑体]
   ], [
     #set align(center)
-    #raw("font-family.hei", lang: "typ")\
-    或\
-    #raw("heiti", lang: "typ")
+    #raw("#heiti[...]", lang: "typ")
   ], [
-    #set text(font: font-family.hei)
-    #h(2em)这个计划得到德国驻沪总领事以及德国政府高等教育司的支持。1906年，他们设立了一个支持医学堂开办的基金会，得到了德国
+    #heiti[#h(2em)这个计划得到德国驻沪总领事以及德国政府高等教育司的支持。1906年，他们设立了一个支持医学堂开办的基金会，得到了德国
     “促进德国与外国思想交流的科佩尔基金会”
-    的协助，筹集到一批医科书刊及新式的外科手术电动器械等物品。
+    的协助，筹集到一批医科书刊及新式的外科手术电动器械等物品。]
   ], [
     #set align(center)
-    #set text(font: font-family.kai)
-    楷体
+    #kaiti[楷体]
   ], [
     #set align(center)
-    #raw("font-family.kai", lang: "typ")\
-    或\
-    #raw("kaiti", lang: "typ")
+    #raw("#kaiti[...]", lang: "typ")
   ], [
-    #set text(font: font-family.kai)
-    #h(2em)1907年6月医学堂开学前，德国驻沪总领事克纳佩在上海不仅号召德国商人捐款，而且要求德国洋行向中国商人募捐。同时，费舍尔还要求中国官方的资助和支持，克纳佩利用在中德两国募来的捐款，成立了
-    “为中国人办的德国医学堂基金会”。
+    #kaiti[#h(2em)1907年6月医学堂开学前，德国驻沪总领事克纳佩在上海不仅号召德国商人捐款，而且要求德国洋行向中国商人募捐。同时，费舍尔还要求中国官方的资助和支持，克纳佩利用在中德两国募来的捐款，成立了
+    “为中国人办的德国医学堂基金会”。]
   ], [
     #set align(center)
-    #set text(font: font-family.fangsong)
-    仿宋
+    #fangsong[仿宋]
   ], [
     #set align(center)
-    #raw("font-family.fangsong", lang: "typ")\
-    或\
-    #raw("fangsong", lang: "typ")
+    #raw("#fangsong[...]", lang: "typ")
   ], [
-    #set text(font: font-family.fangsong)
-    #h(2em)董事会由18人组成，主要成员有：三个德医公会元老：宝隆、福沙伯（第二任校长）、福尔克尔；三名德国商人：莱姆克、米歇劳和赖纳；两名中国绅商：朱葆三（沪军都督府财政部长及上海商务会会长，大买办）、虞洽卿（荷兰银行买办）；总领事馆的副领事弗赖海尔
-    · 冯 · 吕特等。
+    #fangsong[#h(2em)董事会由18人组成，主要成员有：三个德医公会元老：宝隆、福沙伯（第二任校长）、福尔克尔；三名德国商人：莱姆克、米歇劳和赖纳；两名中国绅商：朱葆三（沪军都督府财政部长及上海商务会会长，大买办）、虞洽卿（荷兰银行买办）；总领事馆的副领事弗赖海尔
+    · 冯 · 吕特等。]
   ],
-
 )
 
 我们还可以使用 #raw("#underline[]", lang: "typ") 命令来表示下划线，例如：

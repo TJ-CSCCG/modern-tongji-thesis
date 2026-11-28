@@ -5,7 +5,7 @@
 #set pagebreak(weak: true)
 
 #let field = "science"
-#let fontset = "fandol"
+#let fontset = "auto"
 #let bib-path = "ref.bib"
 #let twoside = false
 

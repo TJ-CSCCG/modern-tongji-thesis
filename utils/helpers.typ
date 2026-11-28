@@ -17,9 +17,10 @@
   }
 }
 
-// Circled number — matching LaTeX's HaranoAjiMincho strategy
+// Circled number — matching LaTeX's HaranoAjiMincho strategy: one font that
+// covers ①–㊿, since SimSun has only ①–⑩.
 #let circled-number(n) = {
-  set text(font: ("Apple SD Gothic Neo", "HaranoAjiMincho"), fallback: true)
+  set text(font: "Harano Aji Mincho", fallback: true)
   if n >= 1 and n <= 20 {
     "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳".clusters().at(n - 1)
   } else if n >= 21 and n <= 35 {

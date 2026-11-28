@@ -47,23 +47,27 @@ brew install typst
 # https://github.com/typst/typst#installation
 ```
 
-#### 2. 选择字体集
+#### 2. 填写信息与选择字体
 
 在 `template/chapters/metadata.typ` 中填写封面与信息说明页信息，在 `template/chapters/00_abstract.typ` 中填写中英文摘要与关键词。其他选项在 `template/main.typ` 中设置。
 
-> 所有字体集均使用 **TeX Gyre Termes**（Times New Roman 的开源替代，Typst Web App 内置，Linux: `apt install fonts-texgyre` 或下载 ZIP）作为中英文混排的 Latin 衬线字体。
+字体集由 `fontset` 选择，与 LaTeX 模板的同名选项对应。默认值 `"auto"` 在装有 Word 模板所用的中易字体（SimSun、SimHei、KaiTi、FangSong，Windows 自带）时使用它们，否则使用 LaTeX 模板 `fontset=texlive` 的免费字体（霞鹜新致宋、霞鹜新晰黑、文鼎 PL 中楷、朱雀仿宋）。西文统一使用 TeX Gyre Termes（Times New Roman 的开源替代）。没有粗体字形的中文字体，粗体按 Word 的方式以字号 1/35 的描边模拟。
 
-| 平台         | 推荐 fontset            | 说明                                                                         |
-| ------------ | ----------------------- | ---------------------------------------------------------------------------- |
-| macOS        | `"mac"`                 | Songti SC / Heiti SC 系统字体                                                |
-| Windows      | `"windows"`             | SimSun / SimHei 系统字体                                                     |
-| Linux        | `"fandol"`              | Fandol + TeX Gyre Termes（[CTAN 下载](fonts/README.md)）                     |
-| Adobe / 方正 | `"adobe"` / `"founder"` | 从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载 |
+| `fontset`              | 字体                                                                         |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| `"auto"`（默认）       | 有 SimSun 时同 `"windows"`，否则同 `"texlive"`                               |
+| `"windows"`            | 中易字体（Windows 自带；其他系统运行 `./fonts/download-fonts.sh windows`）   |
+| `"texlive"`            | 免费字体（`./fonts/download-fonts.sh` 下载）                                 |
+| `"founder"` / `"adobe"` | 方正 / Adobe 字体（`./fonts/download-fonts.sh founder` 或 `adobe`）         |
+| `"mac"`                | macOS 自带的华文字体                                                         |
+| `"fandol"`             | Fandol（作者已撤回，仅为旧稿保留）                                           |
+
+详见 [fonts/README.md](fonts/README.md)。
 
 #### 3. 编译
 
 ```bash
-# 下载字体（首次使用）
+# 下载字体（首次使用；加上 windows 另下载 Word 模板所用的中易字体）
 ./fonts/download-fonts.sh
 
 # 编译
@@ -95,7 +99,7 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 
 // -- 文档类选项 --
 #let field = "science"      // "science" 理工科（默认） / "humanities" 文科
-#let fontset = "fandol"     // fandol / windows / mac / adobe / founder
+#let fontset = "auto"       // auto / windows / texlive / founder / adobe / mac / fandol
 #let bib-path = "bib/note.bib"
 #let twoside = false        // false 单面打印（默认） / true 双面打印
 
@@ -131,7 +135,7 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 | 选项       | 类型     | 默认值      | 说明                                                                                        |
 | ---------- | -------- | ----------- | ------------------------------------------------------------------------------------------- |
 | `field`    | `string` | `"science"` | `"science"` 理工科，章节编号 1 / 1.1 / 1.1.1；`"humanities"` 文科，章节编号 一、/（一）/ 1. |
-| `fontset`  | `string` | `"fandol"`  | 字体集：`fandol` / `windows` / `mac` / `adobe` / `founder`                                  |
+| `fontset`  | `string` | `"auto"`    | 字体集：`auto` / `windows` / `texlive` / `founder` / `adobe` / `mac` / `fandol`，见上文                         |
 | `twoside`  | `bool`   | `false`     | 双面打印模式：启用后装订线交替出现在左右侧，页眉/页脚内容也相应切换                         |
 | `bib-path` | `string` | —           | 参考文献数据库文件路径（.bib）                                                              |
 | `infotype` | `string` | `"thesis"`  | 成果类型：`"thesis"` 毕业论文 / `"design"` 毕业设计 / `"engineering"` 工程设计              |

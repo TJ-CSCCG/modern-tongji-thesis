@@ -1,67 +1,52 @@
-# 字体文件
+# 字体文件 | Fonts
 
-本模板**不再**通过此目录分发字体文件。请根据你的平台选择字体安装方式。
+本目录不随仓库分发字体文件。用下面的脚本下载，或把字体装进系统。
 
-## 一键下载
+This directory ships no font files. Download them with the script below, or install them on the system.
 
-```bash
-./fonts/download-fonts.sh
-```
-
-以上脚本自动下载 Fandol、TeX Gyre Termes 和 HaranoAjiMincho 到当前目录。然后使用以下命令编译：
+## 一键下载 | Download
 
 ```bash
-typst compile init-files/main.typ thesis.pdf --root . --font-path ./fonts
+./fonts/download-fonts.sh            # 免费字体 | the free fonts
+./fonts/download-fonts.sh windows    # 另下载中易字体 | also the Zhongyi fonts of the Word template
 ```
 
-## 手动安装
+脚本总是下载：
 
-如果无法使用脚本，请参照以下各字体下载说明。
+- `texlive` 字体集，即 LaTeX 模板 `fontset=texlive` 使用的免费字体：霞鹜新致宋（LXGW Neo ZhiSong）、霞鹜新晰黑（LXGW Neo XiHei）、朱雀仿宋（LXGW Zhuque Fangsong，CTAN `lxgw-fonts`）与文鼎 PL 中楷（AR PL KaitiM GB，CTAN `arphic-ttf`）；
+- TeX Gyre Termes：中英文混排中的西文字体；
+- Harano Aji Mincho：带圈数字 ①–㊿。
 
-### TeX Gyre Termes（Latin 衬线字体）
+给出字体集名称（`windows`、`founder`、`adobe`、`fandol`）时，另从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 的最新发行版下载该字体集，与 LaTeX 模板的 `make fonts` 相同。
 
-所有字体集均使用 TeX Gyre Termes 作为中英文混排时的 Latin 衬线字体。
+The script always downloads the `texlive` set (the free fonts of the LaTeX template's `fontset=texlive`), TeX Gyre Termes for Latin text, and Harano Aji Mincho for circled numbers. With a set name (`windows`, `founder`, `adobe`, `fandol`) it also downloads that set from the latest [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) release, as the LaTeX template's `make fonts` does.
 
-| 平台            | 安装方式                                                                                                |
-| --------------- | ------------------------------------------------------------------------------------------------------- |
-| Linux           | `sudo apt install fonts-texgyre` 或从 [CTAN](https://mirrors.ctan.org/fonts/tex-gyre.zip) 下载          |
-| macOS / Windows | 从 [CTAN](https://mirrors.ctan.org/fonts/tex-gyre.zip) 下载 OTF 文件（解压后的 `tex-gyre-termes` 目录） |
-| Typst Web App   | 内置，无需上传                                                                                          |
-
-### HaranoAjiMincho（带圈数字字体）
-
-模板使用 HaranoAjiMincho 字体渲染带圈数字 ①–㊿（与 LaTeX 模板一致）。从 CTAN 下载：
+然后编译 | Then compile:
 
 ```bash
-wget https://mirrors.ctan.org/fonts/haranoaji.zip
-unzip haranoaji.zip -d ~/.local/share/fonts/
-fc-cache -fv
+typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 ```
 
-> 该字体随 TeX Live 安装。macOS 系统自带 Apple SD Gothic Neo 亦可覆盖。若均未安装，Typst 会通过 `fallback: true` 搜索系统字体。
+## 字体集 | Font sets
 
-### 默认字体集 `fandol`
+`template/main.typ` 中的 `fontset` 选择字体集，与 LaTeX 模板的同名选项对应。
 
-#### CJK 字体下载
+| `fontset`         | 宋体 / 黑体 / 楷体 / 仿宋                                                   | 粗体     |
+| ----------------- | --------------------------------------------------------------------------- | -------- |
+| `"auto"`（默认）  | 装有 SimSun 时同 `windows`，否则同 `texlive`                                | 描边模拟 |
+| `"windows"`       | SimSun / SimHei / KaiTi / FangSong（Word 模板所用的中易字体）               | 描边模拟 |
+| `"texlive"`       | LXGW Neo ZhiSong / LXGW Neo XiHei / AR PL KaitiM GB / LXGW Zhuque Fangsong | 描边模拟 |
+| `"founder"`       | 方正书宋 / 方正黑体 / 方正楷体 / 方正仿宋                                   | 描边模拟 |
+| `"adobe"`         | Adobe Song Std / Adobe Heiti Std / Adobe Kaiti Std / Adobe Fangsong Std     | 描边模拟 |
+| `"mac"`           | Songti SC / Heiti SC / Kaiti SC / STFangsong（macOS 自带）                  | 真粗体   |
+| `"fandol"`        | FandolSong / FandolHei / FandolKai / FandolFang（作者已撤回，仅为旧稿保留） | 真粗体   |
 
-从 CTAN 下载：
+没有粗体字形的字体，粗体按 Word 加粗宋体的方式以字号 1/35 的描边模拟，与 LaTeX 模板的 `AutoFakeBold=2.86` 相同。`"auto"` 只检测 SimSun：未安装时，每次编译会给出一条 `unknown font family: simsun` 警告，对应 LaTeX 模板“fontset=auto chose texlive”的提示；运行 `./fonts/download-fonts.sh windows` 或指定 `fontset: "texlive"` 即可消除。
 
-```bash
-wget https://mirrors.ctan.org/fonts/fandol.zip
-unzip fandol.zip -d ~/.local/share/fonts/
-fc-cache -fv
-```
+`fontset` picks the font set, matching the LaTeX template's option. Fonts without a bold face get bold text stroked at 1/35 of the font size, as Word bolds SimSun and as the LaTeX template's `AutoFakeBold=2.86` does. `"auto"` probes only for SimSun: without it, each build reports one `unknown font family: simsun` warning, the counterpart of the LaTeX template's "fontset=auto chose texlive" message. Download the Windows set or set `fontset: "texlive"` to silence it.
 
-### 平台字体集（macOS / Windows）
+## Typst Web App
 
-无需额外下载，使用系统自带的 CJK 字体：
+把所需字体文件上传到项目中任意文件夹即可，Web App 会自动加载项目中的字体。
 
-- **macOS**：在 `metadata.typ` 中设置 `fontset: "mac"`（Songti SC / Heiti SC / Kaiti SC）
-- **Windows**：在 `metadata.typ` 中设置 `fontset: "windows"`（SimSun / SimHei / KaiTi / FangSong）
-
-系统字体集也使用 TeX Gyre Termes 作为 Latin 衬线字体（Typst Web App 内置，本地需安装或下载）。
-
-### 其他字体集
-
-- `adobe` / `founder`：从 [cjk-fonts-for-ctex](https://github.com/TJ-CSCCG/cjk-fonts-for-ctex) 下载
-- 详见 [README.md](../README.md#字体选择)
+Upload the font files to any folder of the project; the web app loads fonts from the project.

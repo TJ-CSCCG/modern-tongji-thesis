@@ -24,7 +24,9 @@
 #let thesis(
   school: "某学院", major: "某专业", id: "0000000", student: "某某某", advisor: "某某某", title: "某标题", subtitle: "某副标题", title-english: "Some Title", subtitle-english: "Some Subtitle", date: datetime.today(), abstract: "慧枫尚萍氢，驳展妙棚端梦称委竞励。绘象臂淬人壳闭营风混仓、问抬兽村蜡胡锹挤污艰烃伏惧派宝既抓章住蓟棒褶均谭穿谴属；羟贮银…钓郭曾牙记氢硝巍仰蒲邀趟。革旅剑撞压单施宵饼狼将售烷贸问术粮洞魔。却烟陕倍且隘框糟秩板商，宙刚疮顿表羽楞景哺驯邮戒歌溜著聪峻忙劈左绩卖卫萨讯完读百釉好仔帜纽龟玉炒脂衍蛴瓦副冯查索桐梁；轴派？蝗丸朝保岂搅搞燕挫品休礼倾玻黑李宽列邮苦仔汛鳙物己弱寸栓孝哄俭牙敬厄搬吨楞干捧原趋息…善！", keywords: ("关键词1", "关键词2", "关键词3"), abstract-english: lorem(300), keywords-english: ("Keyword1", "keyword2", "keyword3"), doc,
   field: "science",
-  fontset: "fandol",
+  // "auto": the Word template's fonts (SimSun…) when installed, else the free
+  // LXGW/AR PL set; or name a set: windows, texlive, founder, adobe, mac, fandol
+  fontset: "auto",
   // Info page
   infotype: "thesis", infoabstract: "", infodrawings: "", infowordcount: "", infothesiswords: "", infomaterials: (),
   // Abstract titles (defaults to thesis title)
@@ -35,23 +37,15 @@
   twoside: false,
   // Punctuation — "circle" keeps U+3002, "dot" replaces with U+FF0E
   fullwidthstop: "circle",
-) = {
+) = context {
   let is-humanities = (field == "humanities")
   let cover-text = if is-humanities { "毕业论文（设计）" } else { "毕业设计（论文）" }
   let header-text = cover-text
 
-  // Apply fontset
-  let p = font-presets.at(fontset)
-  let ff = (
-    song: p.song,
-    hei: p.hei,
-    kai: p.kai,
-    fang: p.fang,
-    xiaobiaosong: p.song,
-    xihei: p.hei,
-    code: ("DejaVu Sans Mono", "Fira Code"),
-    math: ("New Computer Modern Math",),
-  )
+  // Resolve the font set (fontset "auto" probes for SimSun) and share it with
+  // songti/heiti/kaiti/fangsong.
+  let ff = resolve-fonts(fontset)
+  thesis-fonts.update(ff)
   set document(author: id + " " + student, title: title)
   let page-margin = if twoside {
     (top: 4.0cm, bottom: 2.7cm, inside: 3.3cm, outside: 1.8cm)
@@ -82,8 +76,9 @@
 
   set par(justify: true, first-line-indent: (amount: 2em, all: true), leading: 1.2em, spacing: 1.2em)
   set par(justification-limits: (tracking: (min: -0.01em, max: 0.02em)), linebreaks: "optimized")
-  show: show-cn-fakebold
-  show strong: it => text(font: ff.hei, it.body)
+  // Bold CJK text in a set without bold faces is stroked like Word's bold
+  // SimSun; Latin text keeps its real bold face.
+  show: it => if ff.bold { it } else { show-cn-fakebold(it, stroke: TJ_FAKEBOLD_STROKE) }
   show emph: it => text(font: ff.kai, style: "italic", it.body)
   show raw: set text(font: ff.code)
   show math.equation: set text(font: ff.math)
