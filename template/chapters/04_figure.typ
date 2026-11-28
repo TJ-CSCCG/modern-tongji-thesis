@@ -149,14 +149,14 @@
 
 === 跨页续表
 
-本模板提供 `continued-table()` 函数，支持自动\u201c续表 X\u201d标记和三线表样式：
+本模板提供 `continued-table()` 函数，支持自动“续表 X”标记和三线表样式：
 
 ```typ
 #continued-table(
   header: (
     [*测试程序*], [*运行时间 (s)*], [*同步时间 (s)*], [*检查点时间 (s)*],
   ),
-  columns: 4,
+  columns: (1fr,) * 4,
   caption: [跨页续表示例],
   [CG.C.2], [23.05], [0.002], [0.116#table-note("模拟数据")],
   ... // 更多行
@@ -169,7 +169,7 @@
   header: (
     [*测试程序*], [*运行时间 (s)*], [*同步时间 (s)*], [*检查点时间 (s)*],
   ),
-  columns: 4,
+  columns: (1fr,) * 4,
   caption: [跨页续表示例],
   [CG.C.2], [23.05], [0.002], [0.116#table-note("模拟数据")],
   [CG.A.4], [15.06], [0.003], [0.067],
@@ -202,7 +202,7 @@
   ], ```typ
     #figure(
         table(
-          columns: 4,
+          columns: (1fr,) * 4,
           stroke: none,
           toprule(), midrule(),
           [*_t_*], [1], [2], [3],
@@ -215,7 +215,7 @@
       ```, [
     #figure(
       table(
-        columns: 4,
+        columns: (1fr,) * 4,
         stroke: none,
         toprule(), midrule(),
         [*_t_*], [1], [2], [3],
@@ -239,7 +239,7 @@ Typst 内置 `table` 已支持三线表所需的所有功能（`table.hline`、`
   ], ```typ
   #figure(
     table(
-      columns: 3,
+      columns: (1fr,) * 3,
       stroke: none,
       align: center + horizon,
 
@@ -261,7 +261,7 @@ Typst 内置 `table` 已支持三线表所需的所有功能（`table.hline`、`
   ```, [
     #figure(
       table(
-        columns: 3,
+        columns: (1fr,) * 3,
         stroke: none,
         align: center + horizon,
 
@@ -286,10 +286,9 @@ Typst 内置 `table` 已支持三线表所需的所有功能（`table.hline`、`
 ```typ
 #figure(
   table(
-    columns: 4,
+    columns: (1fr,) * 4,
     align: center,
     stroke: none,
-    inset: 8pt,
     table.header(
       toprule(),
       [*项目*], [*值*], [*单位*], [*备注*],
@@ -310,10 +309,9 @@ Typst 内置 `table` 已支持三线表所需的所有功能（`table.hline`、`
 
 #figure(
   table(
-    columns: 4,
+    columns: (1fr,) * 4,
     align: center,
     stroke: none,
-    inset: 8pt,
     table.header(
       toprule(),
       [*测试程序*], [*运行时间 (s)*], [*同步时间 (s)*], [*检查点时间 (s)*],

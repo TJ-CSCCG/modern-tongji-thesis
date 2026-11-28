@@ -1,3 +1,5 @@
+#import "../utils/fonts.typ": TJ_LINE_PITCH, TJFONT_BODY
+
 // Bibliography — GB/T 7714—2025 numeric, from the CSL style in
 // csl/gb-t-7714-2025-numeric.csl (the official CSL repository's style with the
 // half-width punctuation the writing spec requires).
@@ -60,6 +62,7 @@
     }
     pad(left: shift, it)
   }
-  show bibliography: set par(first-line-indent: 0pt, justify: true)
+  // Entries 5 pt apart beyond the line pitch, the LaTeX template's \bibitemsep
+  show bibliography: set par(first-line-indent: 0pt, justify: true, spacing: TJ_LINE_PITCH - TJFONT_BODY + 5pt)
   bibliography(sources.map(bytes), style: gbt7714-2025-style, title: none, full: false)
 }

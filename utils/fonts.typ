@@ -18,18 +18,27 @@
   "-7": 5pt,
 )
 
-// Named font size constants — matching LaTeX template's \tjfont* macros.
+// Named font size constants — matching the LaTeX template's \tjfont* macros,
+// which follow《同济大学本科生毕业设计（论文）撰写规范》(revised October 2026).
 #let TJFONT_COVER         = font-size.at("-0")  // 封面大标题：小初号 36pt
 #let TJFONT_TITLE         = font-size.at("-2")  // 课题名称：小二号 18pt
 #let TJFONT_CHAPTER       = font-size.at("-3")  // 章标题：小三号 15pt
-#let TJFONT_HEADING       = font-size.at("4")   // 摘要/目录/参考/谢辞标题：四号 14pt
+#let TJFONT_HEADING       = font-size.at("4")   // 摘要/目录/参考文献/附录/谢辞标题：四号 14pt
 #let TJFONT_INFO          = font-size.at("3")   // 信息说明页标题：三号 16pt
 #let TJFONT_BODY          = font-size.at("-4")  // 正文：小四号 12pt
 #let TJFONT_CAPTION       = font-size.at("5")   // 表题/图题：五号 10.5pt
-#let TJFONT_TABLE         = font-size.at("-5")  // 表内文字：小五号 9pt
+#let TJFONT_TABLE         = font-size.at("5")   // 表内文字：五号 10.5pt（撰写规范“表中文字原则上采用宋体五号”）
+#let TJFONT_FOOTNOTE      = font-size.at("-5")  // 脚注：小五号 9pt
 #let TJFONT_COVER_FIELD   = font-size.at("-2")  // 封面表格字段：小二号 18pt
 #let TJFONT_ABSTRACT      = font-size.at("-2")  // 摘要标题：小二号 18pt
 #let TJFONT_ABSTRACT_SUB  = font-size.at("3")   // 摘要副标题：三号 16pt
+
+// Distance between the baselines of body lines: Word's 1.5 line spacing of
+// 小四 SimSun, the LaTeX template's \linespread{1.625} (12 × 1.2 × 1.625).
+#let TJ_LINE_PITCH = 23.4pt
+
+// Space between a figure or table and the text around it: one blank line.
+#let TJ_FLOAT_SKIP = 23.4pt
 
 // Synthesized bold for CJK fonts without a bold face: a stroke of 1/35 of the
 // font size, the width Word uses for bold SimSun and the LaTeX template's
@@ -99,7 +108,9 @@
     kai: (latin-font, s.kai),
     fang: (latin-font, s.fang),
     code: ("DejaVu Sans Mono", s.fang),
-    math: ("New Computer Modern Math",),
+    // Math in New Computer Modern Math; text in math (quoted strings) falls
+    // back to Song for CJK, as the LaTeX template's \text does.
+    math: ("New Computer Modern Math", s.song),
   )
 }
 
@@ -119,9 +130,10 @@
 #let fangsong(body) = _with-font("fang", body)
 
 // Math symbols
-#let ii = math.class("normal", $mono(i)$)
-#let jj = math.class("normal", $mono(j)$)
-#let ee = math.class("normal", $mono(e)$)
+// Upright imaginary units and the base of natural logarithms (GB 3102.11)
+#let ii = math.class("normal", $upright(i)$)
+#let jj = math.class("normal", $upright(j)$)
+#let ee = math.class("normal", $upright(e)$)
 
 #let LaTeX = {
   [L];box(move(dx: -4.2pt, dy: -1.2pt, box(scale(65%)[A])));box(move(dx: -5.7pt, dy: 0pt, [T]));box(move(dx: -7.0pt, dy: 2.7pt, box(scale(100%)[E])));box(move(dx: -8.0pt, dy: 0pt, [X]));h(-8.0pt)

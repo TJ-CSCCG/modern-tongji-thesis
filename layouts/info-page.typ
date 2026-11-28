@@ -1,78 +1,69 @@
 #import "../utils/fonts.typ": TJFONT_INFO, TJFONT_HEADING, TJFONT_BODY
 
-// Info page — matches LaTeX's information page
+// 复选框：与汉字等宽等高的方框，勾选时内含对勾。
+#let tj-checkbox(checked) = box(
+  width: 0.95em, height: 0.95em, baseline: 0.1em, stroke: 0.5pt,
+  if checked { align(center + horizon, text(size: 0.62em, sym.checkmark)) },
+)
+
+// 定宽下划线，内容居中；内容为空时为纯下划线。
+#let tj-underline(width, body) = box(
+  width: width, outset: (bottom: 2.94pt), stroke: (bottom: 0.78pt), align(center, body),
+)
+
+// Info page — matches the LaTeX \MakeInfoPage: the title in 三号 黑体, then
+// the fields in 四号 宋体 28 pt apart, each field 0.5 em below the one before;
+// the content summary in 小四 18 pt apart.
 #let make-info-page(
   title: "", subtitle: "", school: "", major: "", infotype: "thesis",
   infoabstract: "", infodrawings: "", infowordcount: "", infothesiswords: "",
   infomaterials: (), header-text: "毕业设计（论文）", fonts: none,
 ) = {
   let f = fonts
-  set align(center)
-  text(font: f.hei, size: TJFONT_INFO)[同济大学本科#header-text 信息说明页]
-  v(1em)
+  // The title's baseline 13.25 pt below the text area, as in the LaTeX template
+  v(13.25pt - TJFONT_INFO)
+  align(center, text(font: f.hei, size: TJFONT_INFO)[同济大学本科#header-text;信息说明页])
+  // \vspace{1em} below the LaTeX center environment, which adds its own space
+  v(17.98pt)
 
-  set align(left)
-  set par(first-line-indent: 0pt, leading: 1.2em)
   set text(font: f.song, size: TJFONT_HEADING)
+  set par(first-line-indent: 0pt, justify: true, leading: 28pt - 1em, spacing: 28pt - 1em + 0.5em)
 
-  let field-line(key, value) = {
-    [#key： #value]
-    v(0.5em)
-  }
+  // 课题名称：标题（含副标题）换行后与冒号后的第一个字对齐
+  let full-title = if subtitle not in ("", none) { [#title——#subtitle] } else { title }
+  grid(columns: (5em, 1fr), row-gutter: 0pt, [课题名称：], full-title)
 
-  // 课题名称: title — subtitle
-  field-line("课题名称", {
-    let t = title
-    if subtitle != "" { t = t + "——" + subtitle }
-    t
-  })
+  let is-design = infotype in ("design", "engineering")
+  par[成果类型：#tj-checkbox(is-design)#h(1em / 6)毕业设计#h(1em)#tj-checkbox(not is-design)#h(1em / 6)毕业论文]
 
-  // 成果类型: design and engineering both map to 毕业设计
-  let is-design = (infotype == "design" or infotype == "engineering")
-  let check-box(w: 0.8em, h: 0.8em, ..body) = box(
-    width: w, height: h, stroke: 0.5pt, align(center + horizon, ..body),
-    baseline: 0.12em,
-  )
-  let checked-box = check-box(text(size: 0.8em)[✓])
-  let unchecked-box = check-box([])
-  field-line("成果类型", {
-    if is-design { [#checked-box 毕业设计 #h(2em) #unchecked-box 毕业论文] }
-    else { [#unchecked-box 毕业设计 #h(2em) #checked-box 毕业论文] }
-  })
+  par[学科专业：#major]
 
-  field-line("学科专业", major)
-
-  // 内容简述 (300字以内)
-  field-line("内容简述（请用300字以内简要概述）", {
-    v(0.2em)
+  par[内容简述（请用300字以内简要概述）：]
+  block(above: 8.78pt, {
     set text(size: TJFONT_BODY)
-    set par(first-line-indent: 2em, leading: 0.65em)
+    set par(first-line-indent: (amount: 2em, all: true), leading: 18pt - 1em, spacing: 18pt - 1em)
+    // The break makes even a one-paragraph summary a paragraph, so it is indented.
     infoabstract
+    parbreak()
   })
 
-  let ul-box(w, body) = box(
-    width: w, outset: (bottom: 3pt), stroke: (bottom: 0.6pt), align(center, body)
-  )
-
-  // 毕业设计 (if design or engineering): 图纸 + 字数
   if is-design {
-    let dwg = if infodrawings != "" { ul-box(4em, infodrawings) } else { ul-box(4em, []) }
-    let wc = if infowordcount != "" { ul-box(6em, infowordcount) } else { ul-box(6em, []) }
-    field-line("毕业设计", [主要图纸 #dwg 张，正文总字数 #wc 字])
+    par[毕业设计：主要图纸~#tj-underline(4em, infodrawings)~张，正文总字数~#tj-underline(6em, infowordcount)~字]
   } else {
-    let wc = if infothesiswords != "" { ul-box(6em, infothesiswords) } else { ul-box(6em, []) }
-    field-line("毕业论文", [正文总字数 #wc 字])
+    par[毕业论文：正文总字数~#tj-underline(6em, infothesiswords)~字]
   }
 
-  // 随附资料
-  field-line("随附资料", {
-    if infomaterials.len() > 0 {
-      enum(numbering: n => str(n) + ".", ..infomaterials)
-    } else {
-      v(0.5em)
-      []
-    }
-  })
+  par[随附资料：]
+  if infomaterials.len() > 0 {
+    block(above: 28pt - 1em, below: 30.4pt - 1em, {
+      set par(spacing: 30.8pt - 1em)
+      for (i, m) in infomaterials.enumerate() {
+        par[#(i + 1).#h(0.5em)#m]
+      }
+    })
+  } else {
+    v(28pt)
+  }
 
-  [（请列出所有提交的支撑材料名称，如：毕业设计—全套图纸、毕业作品、计算书、程序代码、附录等）]
+  par[（请列出所有提交的支撑材料名称，如：毕业设计-全套图纸、毕业作品、计算书、程序代码、附录等）]
 }

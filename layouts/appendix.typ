@@ -1,6 +1,12 @@
-// Appendix — matches LaTeX
+#import "../utils/numbering.typ": in-appendix, reset-float-counters
+
+// Appendix — matches the LaTeX \appendix: an unnumbered 附录 heading in the
+// table of contents, sections numbered “A.” (science) or “（A）” (humanities)
+// with A.1 subsections, and floats and equations numbered A.1, B.1 within each
+// section.
 #let appendix(humanities: false, body) = {
   heading(level: 1, numbering: none, outlined: true)[附录]
+  in-appendix.update(true)
   set heading(numbering: (..nums) => {
     let pos = nums.pos()
     let lv = pos.len()
@@ -15,24 +21,10 @@
   })
   counter(heading).update(1)
 
-  // Reset appendix figure/table counters at each H2 section
-  show heading: it => {
-    if it.level == 2 {
-      counter(figure.where(kind: table)).update(0)
-      counter(figure.where(kind: image)).update(0)
-      counter(figure.where(kind: raw)).update(0)
-      counter(figure.where(kind: "algo")).update(0)
-    }
+  show heading.where(level: 2): it => {
+    reset-float-counters
     it
   }
-
-  // Appendix figure/table numbering: letter-based per-section (A.1, A.2; B.1, B.2 …)
-  // Uses set rather than show to avoid the recursion/condition problem with non-none numbering.
-  set figure(numbering: n => context {
-    let hc = counter(heading).get()
-    let sec = hc.at(1, default: 1)
-    numbering("A", sec) + "." + str(n)
-  })
 
   body
 }

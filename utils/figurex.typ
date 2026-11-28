@@ -16,7 +16,7 @@
       stroke: none,
       inset: 8pt,
     ),
-    kind: "image",
+    kind: image,
     supplement: [图],
     caption: caption,
     placement: placement,

@@ -6,6 +6,7 @@
 #import "utils/lists.typ": *
 #import "utils/continued-table.typ": *
 #import "utils/figurex.typ": *
+#import "utils/numbering.typ": *
 #import "layouts/cover.typ": *
 #import "layouts/info-page.typ": *
 #import "layouts/abstract.typ": *
@@ -52,10 +53,21 @@
   } else {
     (top: 4.0cm, bottom: 2.7cm, left: 3.3cm, right: 1.8cm)
   }
-  set page(
-    paper: "a4", margin: page-margin, binding: left,
+  set page(paper: "a4", margin: page-margin, binding: left)
+  // Every line is one em tall above its baseline, so the leading alone sets
+  // the distance between lines whatever the font: the body's 1.625 line
+  // spacing of the LaTeX template (Word's 1.5 lines) puts baselines 23.4 pt
+  // apart, and a page's first baseline sits one em below the text area, as
+  // TeX's \topskip puts it.
+  set text(
+    TJFONT_BODY, font: ff.song, lang: "zh", region: "cn",
+    top-edge: 1em, bottom-edge: "baseline",
   )
-  set text(TJFONT_BODY, font: ff.song, lang: "zh", region: "cn")
+  set par(
+    justify: true, first-line-indent: (amount: 2em, all: true),
+    leading: TJ_LINE_PITCH - TJFONT_BODY, spacing: TJ_LINE_PITCH - TJFONT_BODY,
+    justification-limits: (tracking: (min: -0.01em, max: 0.02em)), linebreaks: "optimized",
+  )
 
   make-cover(
     (
@@ -74,40 +86,35 @@
   )
   newpage(twoside: twoside)
 
-  set par(justify: true, first-line-indent: (amount: 2em, all: true), leading: 1.2em, spacing: 1.2em)
-  set par(justification-limits: (tracking: (min: -0.01em, max: 0.02em)), linebreaks: "optimized")
   // Bold CJK text in a set without bold faces is stroked like Word's bold
   // SimSun; Latin text keeps its real bold face.
   show: it => if ff.bold { it } else { show-cn-fakebold(it, stroke: TJ_FAKEBOLD_STROKE) }
   show emph: it => text(font: ff.kai, style: "italic", it.body)
   show raw: set text(font: ff.code)
   show math.equation: set text(font: ff.math)
-  // Display math spacing: 0pt above/below (official spec)
-  show math.equation.where(block: true): it => v(0pt) + it + v(0pt)
+  // Display math as the LaTeX template's 12 pt display skips and 1.625 line
+  // spacing place it: the number's baseline 42.83 pt below the line before a
+  // fraction and the next baseline 42.82 pt below it.
+  show math.equation.where(block: true): set block(above: 24.65pt, below: 18.64pt)
   show: equate.with(breakable: true, sub-numbering: false)
   set underline(offset: 3pt, stroke: 0.6pt)
-  // Circled number footnotes
+  // Footnotes: 小五, numbered ①②③
   set footnote(numbering: n => circled-number(n))
+  show footnote.entry: set text(size: TJFONT_FOOTNOTE)
+  show footnote.entry: set par(leading: 0.5em, spacing: 0.5em)
   // Lists: decoupled-marker layout avoids CJK-Latin baseline offset in items
   set enum(
     numbering: (..nums) => {
       let pos = nums.pos()
       if pos.len() == 1 {
         "（" + str(pos.first()) + "）"
-      } else if pos.len() == 2 {
-        circled-number(pos.last())
       } else {
-        // Deeper nesting — use circled numbers
         circled-number(pos.last())
       }
     },
-    indent: 2em,
-    spacing: 1.2em,
   )
-  set list(indent: 2em, spacing: 1.2em)
-  if fullwidthstop == "dot" {
-    show "。": "．"
-  }
+  // fullwidthstop: "dot" prints every “。” as the full-width “．”
+  show "。": it => if fullwidthstop == "dot" { "．" } else { it }
 
   // Cross-reference formatting — "第 X 章" / "第 X 节" pattern
   show ref: it => {
@@ -116,7 +123,7 @@
       if h.numbering != none {
         let n = numbering(h.numbering, ..counter(heading).at(h.location()))
         let lv = h.level
-        let prefix = if lv == 1 { "第" + n + "章" } else if lv == 2 { "第" + n + "节" } else if lv == 3 { "第" + n + "小节" } else { none }
+        let prefix = if lv == 1 { "第" + n.trim("、") + "章" } else if lv == 2 { "第" + n.trim("（").trim("）") + "节" } else if lv == 3 { "第" + n.trim(".") + "小节" } else { none }
         if prefix != none { link(h.location(), prefix) } else { it }
       } else { it }
     } else {
@@ -124,9 +131,11 @@
     }
   }
 
-  set heading(numbering: (..nums) =>
+  // Heading numbers: science 1 / 1.1 / 1.1.1 / A. / a.;
+  // humanities 一、/（一）/ 1. /（1）/ ①
+  set heading(numbering: (..nums) => {
+    let pos = nums.pos()
     if is-humanities {
-      let pos = nums.pos()
       if pos.len() == 1 {
         chinese-numeral(pos.at(0)) + "、"
       } else if pos.len() == 2 {
@@ -141,83 +150,52 @@
         pos.map(str).join(".")
       }
     } else {
-      if nums.pos().len() <= 3 {
-        nums.pos().map(str).join(".")
-      } else if nums.pos().len() == 4 {
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".at(nums.pos().at(-1) - 1) + "."
-      } else if nums.pos().len() == 5 {
-        "abcdefghijklmnopqrstuvwxyz".at(nums.pos().at(-1) - 1) + "."
+      if pos.len() <= 3 {
+        pos.map(str).join(".")
+      } else if pos.len() == 4 {
+        numbering("A", pos.at(-1)) + "."
+      } else if pos.len() == 5 {
+        numbering("a", pos.at(-1)) + "."
+      } else {
+        pos.map(str).join(".")
       }
     }
-  )
+  })
 
-  show heading: it => context {
-    set par(first-line-indent: 0pt)
+  // Headings, as the LaTeX template sets them: a chapter starts a page (an odd
+  // one in a two-sided thesis), its title centered in 小三 黑体 with its number
+  // one em before it (“一、” with none in the humanities), its baseline
+  // 25.26 pt below the text area; 目录, 参考文献, 附录 and 谢辞 likewise in 四号.
+  // Lower levels are 小四 黑体, the number 0.5 em before the title, the third
+  // and lower levels indented 2 em. Every heading's baseline is 30.6 pt from
+  // the lines around it: the 23.4 pt line pitch plus 0.6 em before and after.
+  show heading: it => {
+    set par(first-line-indent: 0pt, justify: false)
+    set text(font: ff.hei, weight: "regular")
+    let number = if it.numbering != none {
+      numbering(it.numbering, ..counter(heading).at(it.location()))
+    }
     if it.level == 1 {
-      set align(center)
-      let heading-size = if it.numbering != none { TJFONT_CHAPTER } else { TJFONT_HEADING }
-      set text(font: ff.hei, size: heading-size, weight: "regular")
-      v(16pt)
-      if it.numbering != none {
-        numbering(it.numbering, ..counter(heading).get())
-        h(0.6em)
-        it.body
-      } else {
-        it.body
-      }
-      v(0.6em)
-    } else if it.level == 2 {
-      set text(font: ff.hei, size: TJFONT_BODY, weight: "regular")
-      v(0.6em)
-      if it.numbering != none {
-        numbering(it.numbering, ..counter(heading).get())
-        h(0.6em)
-        it.body
-      } else {
-        it.body
-      }
-      v(0.6em)
-    } else if it.level == 3 {
-      set text(font: ff.hei, size: TJFONT_BODY, weight: "regular")
-      v(0.6em)
-      if it.numbering != none {
-        h(2em)
-        numbering(it.numbering, ..counter(heading).get())
-        h(0.6em)
-        it.body
-      } else {
-        h(2em)
-        it.body
-      }
-      v(0.6em)
-    } else if it.level == 4 {
-      set text(font: ff.hei, size: TJFONT_BODY, weight: "regular")
-      v(0.6em)
-      if it.numbering != none {
-        h(2em)
-        numbering(it.numbering, ..counter(heading).get())
-        h(0.6em)
-        it.body
-      } else {
-        h(2em)
-        it.body
-      }
-      v(0.6em)
-    } else if it.level == 5 {
-      set text(font: ff.hei, size: TJFONT_BODY, weight: "regular")
-      v(0.6em)
-      if it.numbering != none {
-        h(2em)
-        numbering(it.numbering, ..counter(heading).get())
-        h(0.6em)
-        it.body
-      } else {
-        h(2em)
-        it.body
-      }
-      v(0.6em)
+      let size = if number != none { TJFONT_CHAPTER } else { TJFONT_HEADING }
+      let baseline = if number != none { 25.26pt } else { 23.31pt }
+      let gap = if is-humanities { 0em } else { 1em }
+      pagebreak(weak: true, to: if twoside { "odd" })
+      // Figures, tables, code and equations are numbered within the chapter;
+      // the appendix numbers them within its sections.
+      context if not in-appendix.get() { reset-float-counters }
+      v(baseline - size)
+      block(width: 100%, above: 0pt, below: 30.6pt - TJFONT_BODY, {
+        set text(size: size)
+        align(center, if number != none { number + h(gap) + it.body } else { it.body })
+      })
     } else {
-      it
+      let spacing = TJ_LINE_PITCH - TJFONT_BODY + 0.6 * TJFONT_BODY
+      block(width: 100%, above: spacing, below: spacing, sticky: true, {
+        set text(size: TJFONT_BODY)
+        if it.level >= 3 { h(2em) }
+        if number != none { number + h(0.5em) }
+        it.body
+      })
     }
   }
 
@@ -237,60 +215,57 @@
   show: show-rem
   show: show-pf
 
-  // Figure auto-center + float spacing matching official spec
-  // Skip theorem-kind figures (handled by theorion)
+  // Floats: centered, with a blank line between them and the text as the
+  // spec asks, spaced as the LaTeX template's \intextsep leaves it: the float
+  // starts 24.39 pt below the last baseline, and the next baseline is 44.6 pt
+  // below a table's bottom rule or 49.36 pt below a figure's caption.
+  // Theorem-kind figures are handled by theorion.
+  let thm-kinds = ("theorem", "lemma", "corollary", "proposition", "conjecture", "assumption", "definition", "example", "remark", "proof")
   show figure: it => {
-    let thm-kinds = ("theorem", "lemma", "corollary", "proposition", "conjecture", "assumption", "definition", "example", "remark", "proof")
-    if it.kind in thm-kinds { it }
-    else if it.kind == "subfigure" { it }
-    else { set align(center); v(1.2em) + it + v(1.2em) }
+    if it.kind in thm-kinds or it.kind == "subfigure" { it } else {
+      set align(center)
+      set par(first-line-indent: 0pt)
+      let below = if it.kind == table { 44.6pt } else { 49.36pt } - TJFONT_BODY
+      block(above: TJ_FLOAT_SKIP + 0.99pt, below: below, breakable: true, it)
+    }
   }
-  show figure: set block(breakable: true)
-  show table: it => it
-  show math.equation.where(block: true): it => it
 
   // Code blocks: syntax highlighting with line numbers
   show: codly-init.with()
   codly(languages: codly-languages)
 
-  // Captions: 五号(10.5pt) 宋体, no indent
+  // Captions: 五号 宋体, the number then two spaces before the title; a table's
+  // caption above it, a figure's below
+  // Caption to figure: the caption's baseline 22.2 pt below a figure, a
+  // table's top rule 14.21 pt below its caption's baseline.
+  set figure.caption(separator: h(0.5em))
+  set figure(gap: 22.2pt - TJFONT_CAPTION)
+  show figure.where(kind: table): set figure(gap: 14.21pt)
   show figure.caption: it => {
     set text(font: ff.song, size: TJFONT_CAPTION)
-    set par(first-line-indent: 0pt)
+    set par(first-line-indent: 0pt, leading: 1.95 * TJFONT_CAPTION - TJFONT_CAPTION)
     it
   }
-
-  // Table text: 小五号(9pt)
-  show figure.where(kind: table): it => {
-    set text(size: TJFONT_TABLE)
-    it
-  }
-
-  show heading: it => {
-    counter(figure.where(kind: image)).update(0)
-    counter(figure.where(kind: table)).update(0)
-    counter(figure.where(kind: raw)).update(0)
-    counter(figure.where(kind: "algo")).update(0)
-    counter(figure.where(kind: "subfigure")).update(0)
-    it
-  }
-  set figure(numbering: n => context {
-    let ch = counter(heading).get().first()
-    str(ch) + "." + str(n)
-  })
-  show math.equation.where(block: true): set math.equation(numbering: n => context {
-    let ch = counter(heading).get().first()
-    numbering("(1.1)", ch, n)
-  })
   show figure.where(kind: table): set figure.caption(position: top)
 
+  // Tables: 五号 text 18 pt apart, as in the LaTeX template's \tjfonttable
+  show table: set text(size: TJFONT_TABLE)
+  show table: set par(leading: 18pt - TJFONT_TABLE, spacing: 18pt - TJFONT_TABLE, first-line-indent: 0pt, justify: false)
+  // Rows 18 pt apart with the baseline 12.6 pt below a row's top, as the
+  // LaTeX \strut places it (0.7 of the row)
+  set table(inset: (x: 6pt, top: 12.6pt - TJFONT_TABLE, bottom: 5.4pt))
+
+  // Figures, tables, code and equations are numbered 1.1 within the chapter
+  // (A.1 within the appendix section); the chapter number is Arabic in the
+  // humanities too, as the spec's “(2.2)” example shows.
+  set figure(numbering: n => context float-number(n))
+  set math.equation(numbering: n => context "(" + float-number(n) + ")")
+
   set page(
-    margin: page-margin, binding: left,
-    numbering: "I", header: make-page-header(ff, twoside, header-text), header-ascent: 20%, footer: context {
-      set align(center)
-      set text(font: ff.song, size: TJFONT_BODY)
-      numbering("I", counter(page).get().first())
-    },
+    margin: page-margin, binding: left, numbering: "I",
+    header: make-page-header(twoside, header-text), header-ascent: 0pt,
+    footer: make-front-footer(), footer-descent: 0pt,
+    background: binding-line(twoside: twoside),
   )
   counter(page).update(1)
 
@@ -315,34 +290,7 @@
   make-outline()
   newpage(twoside: twoside)
 
-  set page(margin: page-margin, binding: left, numbering: "1", header: make-page-header(ff, twoside, header-text), header-ascent: 20%, footer: context {
-    line(stroke: 1.8pt, length: 100%)
-    set text(font: ff.song, size: TJFONT_BODY)
-    v(-0.6em)
-    let is-odd = calc.rem(counter(page).get().first(), 2) != 0
-    let swap = twoside and not is-odd
-    if swap {
-      set align(left)
-      [
-        第#h(1em)
-        #counter(page).display()
-        #h(1em)页#h(1em)
-        共#h(1em)
-        #counter(page).final().at(0)#h(1em)
-        页
-      ]
-    } else {
-      set align(right)
-      [
-        共#h(1em)
-        #counter(page).final().at(0)#h(1em)
-        页#h(1em)
-        第#h(1em)
-        #counter(page).display()
-        #h(1em)页
-      ]
-    }
-  })
+  set page(numbering: "1", footer: make-main-footer(twoside))
   counter(page).update(1)
 
   // Citation ranges use a hyphen, [5-6], as the writing spec's half-width
