@@ -87,6 +87,7 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 | `template/main.typ`                 | 编译入口，配置文档类选项（`field`、`fontset`、`twoside`、`bib-path` 等） |
 | `template/chapters/metadata.typ`    | 封面信息、信息说明页数据、摘要页标题覆盖（可选）                         |
 | `template/chapters/00_abstract.typ` | 中英文摘要内容与关键词                                                   |
+| `template/taskbook.typ`、`proposal.typ`、`midterm.typ` | 任务书、开题报告、中期报告的编译入口，正文在 `chapters/*_body.typ` 中 |
 
 ### 文档类选项
 
@@ -142,6 +143,30 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 | `bib-path` | `string` / `array` | — | 参考文献数据文件路径（BibLaTeX `.bib` 或 Hayagriva `.yml`），可以是多个文件组成的数组 |
 | `infotype` | `string` | `"thesis"`  | 成果类型：`"thesis"` 毕业论文 / `"design"` 毕业设计 / `"engineering"` 工程设计              |
 
+### 任务书、开题报告与中期报告
+
+除论文外，模板还提供三份官方表格，与 LaTeX 模板的 `doctype=taskbook|proposal|midterm` 对应，各自单独编译：
+
+```bash
+typst compile template/taskbook.typ --root . --font-path ./fonts   # 毕业设计（论文）任务书
+typst compile template/proposal.typ --root . --font-path ./fonts   # 开题报告
+typst compile template/midterm.typ --root . --font-path ./fonts    # 中期报告
+```
+
+三者与论文共用 `template/chapters/metadata.typ` 中的课题名称、副标题、学院、专业、学生姓名与学号；指导教师在三份表格中均为手写签字位，不预填。任务书的起讫时间写在 `taskbook-start`、`taskbook-end` 中，周数自动换算（向上取整）；中期报告“专业审核意见”的复选框默认留空，可在 `midterm-decision` 中设为 `"agree"` 或 `"disagree"`。文科专业请在各入口文件中把 `field` 改为 `"humanities"`。
+
+正文写在 `template/chapters/taskbook_body.typ`、`proposal_body.typ`、`midterm_body.typ` 中，用以下命令排版，字体字号由命令负责：
+
+| 命令 | 用途 |
+| ---- | ---- |
+| `#form-section[一、……]` | 一级分节标题：四号黑体，缩进 2 字符 |
+| `#form-subsection[1．……]` | 二级分节标题：小四黑体，缩进 2 字符 |
+| `#form-note[……]` / `#form-hint[……]` | 灰色批注：前者为说明文字，成稿时删除；后者为内容提示，请把“请在此处填写……”换成正文 |
+| `#form-notice[填写说明]`、`#form-notice-body(...)` | 中期报告首页的说明标题（小二黑体加粗）与编号说明（四号） |
+| `#review-box[...]`、`#form-label[……]` | 审核意见方框与框内的字段标签（小四黑体） |
+| `#form-signature([指导教师签名])` | 右对齐的签字行（签名下划线与年月日填空，黑体）；`width:`、`size:` 可调 |
+| `#form-date-blank()`、`#midterm-decision()` | 年月日填空；中期报告的同意/不同意复选框 |
+
 ### 盲审版本
 
 需要提交匿名论文（如学院组织的盲审）时，把 `template/main.typ` 中的 `blind` 改为 `true` 重新编译，不必手工删改内容：
@@ -168,7 +193,6 @@ typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
 - 三线表：顶线、栏目线、底线两侧没有 LaTeX `booktabs` 额外的 3～4 pt 留白。
 - 公式使用 New Computer Modern Math，LaTeX 模板使用 Times 风格的 `newtx`。
 - 代码块使用 `codly` 的样式，与 LaTeX 的 `listings` 不同。
-- 任务书、开题报告与中期报告尚未提供。
 
 ### 从 0.2 升级
 

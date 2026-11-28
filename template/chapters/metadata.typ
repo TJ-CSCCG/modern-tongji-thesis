@@ -13,6 +13,14 @@
 #let subtitle-english = "A guide to typesetting features, academic writing standards, and formatting"
 #let date = datetime(year: datetime.today().year(), month: datetime.today().month(), day: datetime.today().day())
 
+// 任务书起讫时间（仅编译 taskbook.typ 时使用）；周数由起讫日期自动换算（向上取整）
+#let taskbook-start = datetime(year: 2026, month: 9, day: 1)
+#let taskbook-end = datetime(year: 2027, month: 6, day: 30)
+
+// 中期报告“专业审核意见”的同意/不同意复选框（仅编译 midterm.typ 时使用）：
+// none 时两格均留空，供打印后手写勾选；也可设为 "agree" 或 "disagree"
+#let midterm-decision = none
+
 // ============================================================
 //  信息说明页
 // ============================================================

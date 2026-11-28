@@ -56,12 +56,20 @@ jobs:
       - name: Configure humanities variant
         if: matrix.field == 'humanities'
         run: |
-          sed -i 's/^#let field = "science"/#let field = "humanities"/' template/main.typ
-          grep -q '^#let field = "humanities"' template/main.typ
+          for f in main taskbook proposal midterm; do
+            sed -i 's/^#let field = "science"/#let field = "humanities"/' template/$f.typ
+            grep -q '^#let field = "humanities"' template/$f.typ
+          done
 
       - name: Compile thesis
         run: |
           typst compile template/main.typ thesis.pdf --root . --font-path ./fonts
+
+      - name: Compile the task book, proposal and midterm report
+        run: |
+          for f in taskbook proposal midterm; do
+            typst compile template/$f.typ $f.pdf --root . --font-path ./fonts
+          done
 
       - name: Show log on failure
         if: failure()
@@ -69,14 +77,18 @@ jobs:
 
       - name: Rename PDF
         if: success()
-        run: mv thesis.pdf modern-tongji-thesis-${{ matrix.field }}.pdf
+        run: |
+          mv thesis.pdf modern-tongji-thesis-${{ matrix.field }}.pdf
+          for f in taskbook proposal midterm; do
+            mv $f.pdf modern-tongji-thesis-${{ matrix.field }}-$f.pdf
+          done
 
       - name: Upload PDF
         if: success()
         uses: actions/upload-artifact@v7
         with:
           name: document-${{ matrix.field }}
-          path: modern-tongji-thesis-${{ matrix.field }}.pdf
+          path: modern-tongji-thesis-${{ matrix.field }}*.pdf
           retention-days: 30
 
   # fontset "auto" chooses the Word template's fonts when SimSun is installed.
@@ -189,7 +201,9 @@ jobs:
           git add -f thumbnail.png
           git archive "$(git write-tree)" | tar -x -C "$packages/preview/modern-tongji-thesis/$version"
           typst init "@preview/modern-tongji-thesis:$version" "$RUNNER_TEMP/project" --package-path "$packages"
-          typst compile "$RUNNER_TEMP/project/main.typ" --package-path "$packages" --font-path ./fonts
+          for f in main taskbook proposal midterm; do
+            typst compile "$RUNNER_TEMP/project/$f.typ" --package-path "$packages" --font-path ./fonts
+          done
 
       - name: Upload the thumbnail
         uses: actions/upload-artifact@v7
