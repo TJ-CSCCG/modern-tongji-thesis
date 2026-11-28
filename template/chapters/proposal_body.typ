@@ -1,4 +1,4 @@
-#import "../../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.3.0": *
 
 #form-section[一、毕业设计（论文）课题背景]
 #form-note[根据实际情况写为毕业设计或毕业论文，下同（此项成稿删除）]

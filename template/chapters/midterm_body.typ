@@ -1,4 +1,4 @@
-#import "../../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.3.0": *
 
 #form-notice[填写说明]
 

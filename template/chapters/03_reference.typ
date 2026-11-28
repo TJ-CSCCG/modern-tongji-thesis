@@ -1,4 +1,4 @@
-#import "../../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.3.0": *
 
 = 引用 <reference>
 

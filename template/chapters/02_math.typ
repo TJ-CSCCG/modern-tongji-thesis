@@ -1,4 +1,4 @@
-#import "../../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.3.0": *
 
 = 数学环境 <math>
 

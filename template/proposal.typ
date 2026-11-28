@@ -1,4 +1,4 @@
-#import "../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.3.0": *
 #import "chapters/metadata.typ": *
 
 // 毕业设计（论文）开题报告：与论文共用 chapters/metadata.typ 中的课题、学院、专业与学生信息。

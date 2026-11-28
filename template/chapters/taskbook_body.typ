@@ -1,4 +1,4 @@
-#import "../../lib.typ": *
+#import "@preview/modern-tongji-thesis:0.3.0": *
 
 // “毕业设计（论文）”按实际情况写为毕业设计或毕业论文（文科为“毕业论文（设计）”）。
 #form-section[一、毕业设计（论文）的课题背景]
