@@ -14,10 +14,14 @@
 
 // The number of a figure, table, code block or equation: 1.1 in the main
 // matter (an Arabic chapter number in the humanities too, as the spec's
-// “(2.2)” example shows), A.1 in the appendix. Call in a context.
-#let float-number(n) = {
-  let h = counter(heading).get()
-  if in-appendix.get() {
+// “(2.2)” example shows), A.1 in the appendix. `loc` is the element's
+// location, so a reference from another chapter gets the number the element
+// has where it is; without it, the current location is used. Call in a
+// context.
+#let float-number(n, loc: auto) = {
+  let h = if loc == auto { counter(heading).get() } else { counter(heading).at(loc) }
+  let appendix = if loc == auto { in-appendix.get() } else { in-appendix.at(loc) }
+  if appendix {
     numbering("A.1", h.at(1, default: 1), n)
   } else {
     numbering("1.1", h.first(), n)

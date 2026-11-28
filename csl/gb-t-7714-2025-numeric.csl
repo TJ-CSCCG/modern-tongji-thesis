@@ -14,6 +14,9 @@
   - The delimiters and parentheses the style prints are half-width
     (", ", ": ", "(", ")"), and year ranges use "-", as
     《同济大学本科生毕业设计（论文）撰写规范》 requires for reference lists.
+  - The Chinese terms "等" (et-al) and "卷" (volume) start with a word joiner
+    (U+2060), so the template can print "et al." and "vol." in Western
+    entries instead, as GB/T 7714 writes them.
   - The bibliography label starts with a word joiner (U+2060), and entries
     hang (hanging-indent) instead of aligning their second field, so the
     template can set the label in a box at least 0.74 cm wide with the entry
@@ -50,6 +53,9 @@
     <terms>
       <term name="edition" form="short">版</term>
       <term name="version" form="short">v.</term>
+      <!-- Marked with a word joiner (U+2060) so the template can set them for Western entries. -->
+      <term name="et-al">&#8288;等</term>
+      <term name="volume" form="short">&#8288;卷</term>
       <term name="open-quote">“</term>
       <term name="close-quote">”</term>
       <term name="open-inner-quote">‘</term>

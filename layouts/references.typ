@@ -17,8 +17,8 @@
 }
 
 // Cite several entries at once: #multicite("key1", "key2") prints [1,2] or
-// [1-3]. A key may be (key: "...", supplement: [...]) to cite a page.
-// Adjacent @key1 @key2 citations are merged the same way.
+// [1-3], as adjacent @key1 @key2 citations do. A key may be
+// (key: "...", supplement: [...]) to cite a page, which follows its number.
 #let multicite(..keys) = keys.pos().map(k => {
   if type(k) == dictionary {
     cite(label(k.key), supplement: k.at("supplement", default: none))
@@ -38,11 +38,14 @@
 #let render-references(sources) = {
   let sources = if type(sources) == array { sources } else { (sources,) }
   show bibliography: it => {
-    show regex("\p{Latin}, 等"): m => m.text.replace("等", "et al")
-    show regex("(\p{Latin}: )?卷\s*\d+"): m => {
+    // The style marks both terms with a word joiner (U+2060), which a
+    // Chinese entry drops.
+    show "\u{2060}等": "等"
+    show regex("\p{Latin}, \u{2060}等"): m => m.text.replace("\u{2060}等", "et al")
+    show regex("(\p{Latin}: )?\u{2060}卷\s*\d+"): m => {
       let n = m.text.find(regex("\d+"))
       if m.text.starts-with(regex("\p{Latin}")) {
-        m.text.slice(0, m.text.position("卷")) + "vol. " + n
+        m.text.slice(0, m.text.position("\u{2060}")) + "vol. " + n
       } else {
         "第" + n + "卷"
       }

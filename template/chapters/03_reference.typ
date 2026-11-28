@@ -39,6 +39,20 @@
   #h(2em)多个引用 @book1 @online1，或 #multicite("book1", "online1")。
 ])
 
+引用某一页时，把页码写在引用后的方括号中，页码以上标排在序号之后。例如：
+
+#table(columns: (1fr, 1fr), [
+  #set align(center)
+  #strong[代码]
+], [
+  #set align(center)
+  #strong[渲染结果]
+], ```typ
+见文献@qin2021[217-218]。
+  ```, [
+  #h(2em)见文献@qin2021[217-218]。
+])
+
 以下是各类文献的引用示例：
 
 - 普通图书#multicite("book1", "book2")
@@ -105,6 +119,8 @@ Typst 中，可以使用 ```typ <label>``` 命令为文档中的对象添加标�
   ```, [
   #h(2em)请参见@introduction。
 ])
+
+引用其他章的图、表与公式时，编号为它们所在章的编号，如第 4 章的@fig:multifigure1 与@tbl:table1、第 2 章的@eq:harmonic-oscillator。
 
 交叉引用在文档中很常用，可以帮助读者快速定位到相关内容，提高文档的可读性。但是，需要注意标签的唯一性和正确性，以及引用命令的正确使用方式。
 

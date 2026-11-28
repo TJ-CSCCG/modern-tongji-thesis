@@ -46,7 +46,6 @@
 ) = context {
   let is-humanities = (field == "humanities")
   let cover-text = if is-humanities { "毕业论文（设计）" } else { "毕业设计（论文）" }
-  let header-text = cover-text
 
   // Resolve the font set (fontset "auto" probes for SimSun) and share it with
   // songti/heiti/kaiti/fangsong.
@@ -89,7 +88,7 @@
     title: title, subtitle: subtitle, school: school, major: major,
     infotype: infotype, infoabstract: infoabstract, infodrawings: infodrawings,
     infowordcount: infowordcount, infothesiswords: infothesiswords,
-    infomaterials: infomaterials, header-text: header-text, fonts: ff,
+    infomaterials: infomaterials, header-text: cover-text, fonts: ff,
   )
   newpage(twoside: twoside)
 
@@ -123,8 +122,25 @@
   // fullwidthstop: "dot" prints every “。” as the full-width “．”
   show "。": it => if fullwidthstop == "dot" { "．" } else { it }
 
+  let thm-kinds = ("theorem", "lemma", "corollary", "proposition", "conjecture", "assumption", "definition", "example", "remark", "proof")
   // Cross-reference formatting — "第 X 章" / "第 X 节" pattern
   show ref: it => {
+    let el = it.element
+    // Figures, tables, code and equations: the number they have where they
+    // are, which the numbering functions below would otherwise work out at
+    // the reference.
+    if el != none and el.func() in (figure, math.equation) and el.numbering != none and not (el.func() == figure and (el.kind in thm-kinds or el.kind == "subfigure")) {
+      let loc = el.location()
+      let n = if el.func() == figure {
+        counter(figure.where(kind: el.kind)).at(loc).first()
+      } else {
+        counter(math.equation).at(loc).first()
+      }
+      let number = float-number(n, loc: loc)
+      let supplement = if it.supplement != auto { it.supplement } else { el.supplement }
+      let body = if el.func() == math.equation { [(#number)] } else { number }
+      return link(loc, if supplement in (none, []) { body } else { [#supplement~#body] })
+    }
     if it.element != none and it.element.func() == heading {
       let h = it.element
       if h.numbering != none {
@@ -227,7 +243,6 @@
   // starts 24.39 pt below the last baseline, and the next baseline is 44.6 pt
   // below a table's bottom rule or 49.36 pt below a figure's caption.
   // Theorem-kind figures are handled by theorion.
-  let thm-kinds = ("theorem", "lemma", "corollary", "proposition", "conjecture", "assumption", "definition", "example", "remark", "proof")
   show figure: it => {
     if it.kind in thm-kinds or it.kind == "subfigure" { it } else {
       set align(center)
@@ -270,7 +285,7 @@
 
   set page(
     margin: page-margin, binding: left, numbering: "I",
-    header: make-page-header(twoside, header-text), header-ascent: 0pt,
+    header: make-page-header(twoside, cover-text), header-ascent: 0pt,
     footer: make-front-footer(), footer-descent: 0pt,
     background: binding-line(twoside: twoside),
   )
@@ -301,8 +316,13 @@
   counter(page).update(1)
 
   // Citation ranges use a hyphen, [5-6], as the writing spec's half-width
-  // punctuation and the LaTeX template print them.
-  show cite: it => { show "–": "-"; it }
+  // punctuation and the LaTeX template print them; a cited page follows the
+  // brackets in superscript, [4]^{3-5}, as GB/T 7714 places it.
+  show cite: it => {
+    show "–": "-"
+    it
+    if it.supplement != none { super(it.supplement) }
+  }
   // The reference list goes where makereferences() was called
   show metadata.where(value: "tongji-thesis-references"): it => {
     if bib-content != none { render-references(bib-content) }
